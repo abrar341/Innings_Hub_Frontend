@@ -5,7 +5,6 @@ import Layout from './components/Layout';
 import Teams from './pages/Team/Teams';
 import Series from './pages/Series/Series';
 import Players from './pages/Team/pages/Players';
-import MatchesPageLayout from './components/MatchesPageLayout';
 import TeamProfileLayout from './pages/Team/TeamProfileLayout';
 import TeamStats from './pages/Team/pages/TeamStats';
 import TeamSqaud from './pages/Team/pages/TeamSquad'
@@ -17,11 +16,20 @@ import Home from './pages/Home';
 import MatchesLayout from './pages/LiveScore/MatchesLayout'
 import LiveScores from './pages/LiveScore/pages/LiveScores'
 import Schedules from './pages/LiveScore/pages/Schedules'
+import LoginForm from './pages/Account/LoginForm';
+import SignUpForm from './pages/Account/SIgnUpForm';
+import VerificationCodeInput from './pages/Account/VerificationCodeInput';
+// import ForgotPassword from './pages/Forms/ForgotPassword';
+
 function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
+        <Route path="login" element={<LoginForm />} />
+        {/* <Route path="forgot-password" element={<ForgotPassword />} /> */}
+        <Route path="signup" element={<SignUpForm />} />
+        <Route path="verification" element={<VerificationCodeInput />} />
         <Route path="all-matches" element={<MatchesLayout />}>
           {/* <Route  element={<LiveScores />} /> */}
           <Route index element={<LiveScores />} />
