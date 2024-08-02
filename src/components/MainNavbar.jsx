@@ -2,62 +2,109 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
+import UserDropdown from './userDropdown';
 
 const MainNavbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { userInfo } = useSelector((state) => state.auth);
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     useEffect(() => {
         let timer;
+
         if (isMenuOpen) {
             timer = setTimeout(() => setIsMenuOpen(false), 5000); // Auto-close after 5 seconds
         }
         return () => clearTimeout(timer);
     }, [isMenuOpen]);
 
+    const renderNavLinks = (isMobile = false) => (
+        <>
+            <NavLink
+                to="/"
+                className={({ isActive }) =>
+                    `flex items-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2  transition duration-300 ease-in-out ${isActive ? "border-b border-white" : ""}`
+                }
+                onClick={() => isMobile && setIsMenuOpen(false)}
+            >
+                Home
+            </NavLink>
+            <NavLink
+                to="/all-matches"
+                className={({ isActive }) =>
+                    `flex items-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2  transition duration-300 ease-in-out ${isActive ? "border-b border-white" : ""}`
+                }
+                onClick={() => isMobile && setIsMenuOpen(false)}
+            >
+                Live Scores
+            </NavLink>
+            <NavLink
+                to="/team"
+                className={({ isActive }) =>
+                    `flex items-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2  transition duration-300 ease-in-out ${isActive ? "border-b border-white" : ""}`
+                }
+                onClick={() => isMobile && setIsMenuOpen(false)}
+            >
+                Teams
+            </NavLink>
+            <NavLink
+                to="/series"
+                className={({ isActive }) =>
+                    `flex items-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2  transition duration-300 ease-in-out ${isActive ? "border-b border-white" : ""}`
+                }
+                onClick={() => isMobile && setIsMenuOpen(false)}
+            >
+                Competitions
+            </NavLink>
+            <NavLink
+                to="/players"
+                className={({ isActive }) =>
+                    `flex items-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2  transition duration-300 ease-in-out ${isActive ? "border-b border-white" : ""}`
+                }
+                onClick={() => isMobile && setIsMenuOpen(false)}
+            >
+                Players
+            </NavLink>
+        </>
+    );
+
     return (
         <nav className="bg-customDarkBlue p-4 sticky top-0 z-10 shadow-lg">
-            <div className="container mx-auto flex justify-between items-center">
+            <div className="container mx-auto  flex justify-between gap-3 items-center">
                 <div className="text-white text-2xl font-bold tracking-wide">
-                    Cricket App
+                    {/* <img className='h-14 w-14 rounded-full' src={"https://www.freevector.com/uploads/vector/preview/30676/Cool_Cricket_Logo_1.jpg"} alt="" /> */}
+                    CRICKET
+                </div>
+                <div className='md:order-1'>
+                    {userInfo ? (
+                        <UserDropdown />
+                    ) : (
+                        <>
+                            <NavLink
+                                to="/login"
+                                className={({ isActive }) =>
+                                    `font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2  transition duration-300 ease-in-out ${isActive ? "border-b border-white" : ""}`
+                                }
+                            >
+                                Login
+                            </NavLink>
+                            <NavLink
+                                to="/signup"
+                                className={({ isActive }) =>
+                                    `font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2  transition duration-300 ease-in-out ${isActive ? "border-b border-white" : ""}`
+                                }
+                            >
+                                SignUp
+                            </NavLink>
+                        </>
+                    )}
                 </div>
                 <div className="hidden md:flex space-x-8">
-                    <NavLink to="/" className={({ isActive }) =>
-                        `self-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`
-                    }>
-                        Home
-                    </NavLink>
-                    <NavLink to="/all-matches" className={({ isActive }) =>
-                        `self-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`
-                    }>
-                        Live Scores
-                    </NavLink>
-                    <NavLink to="/team" className={({ isActive }) =>
-                        `self-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`
-                    }>
-                        Teams
-                    </NavLink>
-                    <NavLink to="/series" className={({ isActive }) =>
-                        `self-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`
-                    }>
-                        Competitions
-                    </NavLink>
-                    <NavLink to="/players" className={({ isActive }) =>
-                        `self-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`
-                    }>
-                        Players
-                    </NavLink>
-                    <NavLink to="/login" className={({ isActive }) =>
-                        `self-center font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`
-                    }>
-                        <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
-                        Login
-                    </NavLink>
+                    {renderNavLinks(true)}
                 </div>
-                <div className="md:hidden">
+                <div className="md:hidden ">
                     <button onClick={toggleMenu} className="text-white focus:outline-none">
                         {isMenuOpen ? (
                             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -71,33 +118,9 @@ const MainNavbar = () => {
                     </button>
                 </div>
             </div>
-            <div className={`md:hidden overflow-hidden transition-max-height duration-500 ease-in-out ${isMenuOpen ? 'max-h-screen' : 'max-h-0'}`}>
+            <div className={`md:hidden  overflow-hidden transition-max-height duration-500 ease-in-out ${isMenuOpen ? 'max-h-screen' : 'max-h-0'}`}>
                 <div className="flex flex-col space-y-2 mt-4">
-                    <NavLink to="/" className={({ isActive }) =>
-                        `font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`} onClick={() => setIsMenuOpen(false)}>
-                        Home
-                    </NavLink>
-                    <NavLink to="/matches" className={({ isActive }) =>
-                        `font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`} onClick={() => setIsMenuOpen(false)}>
-                        Matches
-                    </NavLink>
-                    <NavLink to="/team" className={({ isActive }) =>
-                        `font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`} onClick={() => setIsMenuOpen(false)}>
-                        Teams
-                    </NavLink>
-                    <NavLink to="/series" className={({ isActive }) =>
-                        `font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`} onClick={() => setIsMenuOpen(false)}>
-                        Competitions
-                    </NavLink>
-                    <NavLink to="/players" className={({ isActive }) =>
-                        `font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`} onClick={() => setIsMenuOpen(false)}>
-                        Players
-                    </NavLink>
-                    <NavLink to="/login" className={({ isActive }) =>
-                        `flex font-bold text-gray-300 text-sm hover:text-gray-200 px-3 py-2 rounded transition duration-300 ease-in-out ${isActive ? "bg-red-500" : ""}`} onClick={() => setIsMenuOpen(false)}>
-                        <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
-                        Login
-                    </NavLink>
+                    {renderNavLinks(true)}
                 </div>
             </div>
         </nav>

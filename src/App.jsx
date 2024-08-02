@@ -20,12 +20,20 @@ import LoginForm from './pages/Account/LoginForm';
 import SignUpForm from './pages/Account/SIgnUpForm';
 import VerificationCodeInput from './pages/Account/VerificationCodeInput';
 // import ForgotPassword from './pages/Forms/ForgotPassword';
+import store from './store';
+import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import ScorerLayout from './pages/Scorer/ScorerLayout';
+import Upcoming from './pages/Scorer/pages/Upcoming';
+import Live from './pages/Scorer/pages/Live';
+import Result from './pages/Scorer/pages/Result';
 
 function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
+        <Route index element={<Home />} />
         <Route path="login" element={<LoginForm />} />
         {/* <Route path="forgot-password" element={<ForgotPassword />} /> */}
         <Route path="signup" element={<SignUpForm />} />
@@ -39,7 +47,6 @@ function App() {
         </Route>
         <Route path="team" element={<Teams />} />
         <Route path='team/:teamName' element={<TeamProfileLayout />}>
-          <Route index element={<Home />} />
           <Route path='squad' element={<TeamSqaud />} />
           <Route path='players' element={<Players />} />
           <Route path='stats' element={<TeamStats />} />
@@ -47,17 +54,25 @@ function App() {
         </Route>
         <Route path="series" element={<Series />} />
         <Route path='series/:tourName' element={<SeriesPageLayout />}>
-          <Route index path='fixtures' element={<Fixtures />} />
+          <Route path='fixtures' element={<Fixtures />} />
           <Route path='results' element={<Results />} />
           <Route path='point-table' element={<PointTable />} />
         </Route>
-
         <Route path="players" element={<Players />} />
+        <Route path='scorer' element={<ScorerLayout />}>
+          {/* on scorer login navigate to "/scorer/live" */}
+          <Route path='live' element={<Live />} />
+          <Route path='upcoming' element={<Upcoming />} />
+          <Route path='results' element={<Result />} />
+        </Route>
       </Route>
     ));
 
   return (
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+
   );
 }
 
