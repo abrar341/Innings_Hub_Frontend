@@ -3,22 +3,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../slices/usersApiSlice';
 import { logout } from '../slices/authSlice';
+import { toast } from 'react-hot-toast';
+
 
 const UserDropdown = () => {
     const { userInfo } = useSelector((state) => state.auth);
     const [isOpen, setIsOpen] = useState(false);
 
+    const data = userInfo._id;
+    console.log(data)
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    // const res = await login(data).unwrap();
+    // dispatch(setCredentials({ ...res }));
     const [logoutApiCall] = useLogoutMutation();
 
     const logoutHandler = async () => {
         try {
-            await logoutApiCall().unwrap();
+            const res = await logoutApiCall().unwrap();
             dispatch(logout());
             setIsOpen(false)
-            navigate('/login');
+            toast.success(res.message)
+            navigate('/account/login');
         } catch (err) {
             console.error(err);
         }
@@ -28,17 +34,20 @@ const UserDropdown = () => {
     };
 
     return (
-        <div className="relative inline-block text-left">
-            <div>
+        <div className="relative  inline-block text-left">
+            <div className='flex'>
+                <div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3URjWpcZfPfzAHxrU_Xms2GzfUJmvWXGjuw&s" className='h-8 rounded-full  w-8 border' alt="" />
+
+                </div>
                 <button
                     type="button"
-                    className="inline-flex justify-center items-center text-start w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none "
+                    className="  text-sm font-medium text-white  focus:outline-none "
                     id="username"
                     aria-expanded={isOpen}
                     aria-haspopup="true"
                     onClick={toggleDropdown}
                 >
-                    {userInfo.name}
                     <svg
                         className="-mr-1 ml-2 h-5 w-5"
                         xmlns="http://www.w3.org/2000/svg"

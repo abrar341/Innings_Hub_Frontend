@@ -5,8 +5,7 @@ import ScorerLayout from './Scorer/ScorerLayout'
 const Home = () => {
     return (
         <div className="flex flex-col justify-center items-center">
-            {/* Home */}
-            <Dashboard />
+            Home
         </div>
     )
 }

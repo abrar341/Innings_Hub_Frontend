@@ -27,6 +27,8 @@ import ScorerLayout from './pages/Scorer/ScorerLayout';
 import Upcoming from './pages/Scorer/pages/Upcoming';
 import Live from './pages/Scorer/pages/Live';
 import Result from './pages/Scorer/pages/Result';
+import Dashboard from './pages/AdminPages/Dashboard';
+import ClubManager from './pages/ClubManager/ClubManager';
 
 function App() {
 
@@ -34,9 +36,11 @@ function App() {
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="login" element={<LoginForm />} />
-        {/* <Route path="forgot-password" element={<ForgotPassword />} /> */}
-        <Route path="signup" element={<SignUpForm />} />
+        <Route path='account' >
+          <Route path="login" element={<LoginForm />} />
+          {/* <Route path="forgot-password" element={<ForgotPassword />} /> */}
+          <Route path="signup" element={<SignUpForm />} />
+        </Route>
         <Route path="verification" element={<VerificationCodeInput />} />
         <Route path="all-matches" element={<MatchesLayout />}>
           {/* <Route  element={<LiveScores />} /> */}
@@ -64,6 +68,10 @@ function App() {
           <Route path='live' element={<Live />} />
           <Route path='upcoming' element={<Upcoming />} />
           <Route path='results' element={<Result />} />
+        </Route>
+        <Route path='admin' element={<Dashboard />}>
+        </Route>
+        <Route path='club-manager' element={<ClubManager />}>
         </Route>
       </Route>
     ));

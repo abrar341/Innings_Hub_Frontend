@@ -1,15 +1,18 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Header from './MainNavbar'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+// import { ToastContainer } from 'react-toastify'
+import { Toaster } from 'react-hot-toast';
+
+// import 'react-toastify/dist/ReactToastify.css';
 
 
 const Layout = () => {
     return (
         <>
             <Header />
-            <ToastContainer />
+            <Toaster
+            />
             <Outlet />
         </>
     )
