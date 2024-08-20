@@ -1,0 +1,146 @@
+{
+    "tournaments": [
+        {
+            "id": 1,
+            "name": "Summer Championship",
+            "shortName": "SUMMER2024",
+            "startDate": "2024-06-15T00:00:00Z",
+            "endDate": "2024-07-15T00:00:00Z",
+            "ballType": "Leather",
+            "tournamentType": "Open",
+            "season": 2024,
+            "format": {
+                "groups": 4,
+                "maxOvers": 20,
+                "rule": "Standard"
+            },
+            "venues": [
+                "Stadium A",
+                "Stadium B"
+            ],
+            "winner": 101,
+            "runnerUp": 102,
+            "leaderboard": {
+                "bat": {
+                    "player": 201,
+                    "runs": 450
+                },
+                "bowl": {
+                    "player": 202,
+                    "wickets": 18
+                }
+            },
+            "teams": [
+                101,
+                102,
+                103
+            ],
+            "schedule": 301,
+            "squad": 401
+        },
+        {
+            "id": 2,
+            "name": "Winter Trophy",
+            "shortName": "WINTER2024",
+            "startDate": "2024-11-01T00:00:00Z",
+            "endDate": "2024-12-01T00:00:00Z",
+            "ballType": "Tennis",
+            "tournamentType": "Club",
+            "season": 2024,
+            "format": {
+                "groups": 2,
+                "maxOvers": 10,
+                "rule": "Custom"
+            },
+            "venues": [
+                "Ground X",
+                "Ground Y"
+            ],
+            "winner": 103,
+            "runnerUp": 104,
+            "leaderboard": {
+                "bat": {
+                    "player": 203,
+                    "runs": 320
+                },
+                "bowl": {
+                    "player": 204,
+                    "wickets": 12
+                }
+            },
+            "teams": [
+                103,
+                104,
+                105
+            ],
+            "schedule": 302,
+            "squad": 402
+        }
+    ],
+    "teams": [
+        {
+            "id": 101,
+            "name": "Team A",
+            "shortName": "A",
+            "location": "City A",
+            "teamType": "Club"
+        },
+        {
+            "id": 102,
+            "name": "Team B",
+            "shortName": "B",
+            "location": "City B",
+            "teamType": "Club"
+        },
+        {
+            "id": 103,
+            "name": "Team C",
+            "shortName": "C",
+            "location": "City C",
+            "teamType": "Club"
+        }
+    ],
+    "players": [
+        {
+            "id": 201,
+            "name": "Player A",
+            "city": "City A",
+            "phone": "1234567890",
+            "email": "playera@example.com"
+        },
+        {
+            "id": 202,
+            "name": "Player B",
+            "city": "City B",
+            "phone": "0987654321",
+            "email": "playerb@example.com"
+        },
+        {
+            "id": 203,
+            "name": "Player C",
+            "city": "City C",
+            "phone": "1122334455",
+            "email": "playerc@example.com"
+        }
+    ],
+    "schedules": [
+        {
+            "id": 301,
+            "description": "Schedule for Summer Championship"
+        },
+        {
+            "id": 302,
+            "description": "Schedule for Winter Trophy"
+        }
+    ],
+    "squads": [
+        {
+            "id": 401,
+            "description": "Squad for Summer Championship"
+        },
+        {
+            "id": 402,
+            "description": "Squad for Winter Trophy"
+        }
+    ]
+}

@@ -29,6 +29,7 @@ import Live from './pages/Scorer/pages/Live';
 import Result from './pages/Scorer/pages/Result';
 import Dashboard from './pages/AdminPages/Dashboard';
 import ClubManager from './pages/ClubManager/ClubManager';
+import CompetitionsLayout from './pages/Competitions/CompetitionsLayout';
 
 function App() {
 
@@ -38,7 +39,6 @@ function App() {
         <Route index element={<Home />} />
         <Route path='account' >
           <Route path="login" element={<LoginForm />} />
-          {/* <Route path="forgot-password" element={<ForgotPassword />} /> */}
           <Route path="signup" element={<SignUpForm />} />
         </Route>
         <Route path="verification" element={<VerificationCodeInput />} />
@@ -69,7 +69,8 @@ function App() {
           <Route path='upcoming' element={<Upcoming />} />
           <Route path='results' element={<Result />} />
         </Route>
-        <Route path='admin' element={<Dashboard />}>
+        <Route path='admin' element={<Dashboard />} />
+        <Route path='admin/competitions' element={<CompetitionsLayout />} >
         </Route>
         <Route path='club-manager' element={<ClubManager />}>
         </Route>

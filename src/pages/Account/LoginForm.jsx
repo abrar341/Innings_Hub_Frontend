@@ -7,7 +7,6 @@ import { useLoginMutation } from '../../slices/usersApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 // import { toast } from 'react-toastify';
 import { toast } from 'react-hot-toast';
-
 import { setCredentials } from '../../slices/authSlice';
 import { FaSpinner, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 

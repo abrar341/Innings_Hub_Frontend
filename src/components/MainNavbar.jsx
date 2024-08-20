@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UserDropdown from './userDropdown';
+import LoginDialog from '../pages/Competitions/LoginDialog';
 
 const MainNavbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -105,6 +106,7 @@ const MainNavbar = () => {
                             >
                                 Login
                             </NavLink>
+                            <LoginDialog />
                         </div>
                     )}
                 </div>
