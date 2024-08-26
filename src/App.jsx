@@ -16,20 +16,17 @@ import Home from './pages/Home';
 import MatchesLayout from './pages/LiveScore/MatchesLayout'
 import LiveScores from './pages/LiveScore/pages/LiveScores'
 import Schedules from './pages/LiveScore/pages/Schedules'
-import LoginForm from './pages/Account/LoginForm';
-import SignUpForm from './pages/Account/SIgnUpForm';
-import VerificationCodeInput from './pages/Account/VerificationCodeInput';
 // import ForgotPassword from './pages/Forms/ForgotPassword';
 import store from './store';
 import { Provider } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
 import ScorerLayout from './pages/Scorer/ScorerLayout';
 import Upcoming from './pages/Scorer/pages/Upcoming';
 import Live from './pages/Scorer/pages/Live';
 import Result from './pages/Scorer/pages/Result';
 import Dashboard from './pages/AdminPages/Dashboard';
 import ClubManager from './pages/ClubManager/ClubManager';
-import CompetitionsLayout from './pages/Competitions/CompetitionsLayout';
+import Competitions from './pages/Competitions/Competitions';
+import TournamentProfileLayout from './pages/Competitions/TournamentProfileLayout';
 
 function App() {
 
@@ -37,11 +34,6 @@ function App() {
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path='account' >
-          <Route path="login" element={<LoginForm />} />
-          <Route path="signup" element={<SignUpForm />} />
-        </Route>
-        <Route path="verification" element={<VerificationCodeInput />} />
         <Route path="all-matches" element={<MatchesLayout />}>
           {/* <Route  element={<LiveScores />} /> */}
           <Route index element={<LiveScores />} />
@@ -70,8 +62,9 @@ function App() {
           <Route path='results' element={<Result />} />
         </Route>
         <Route path='admin' element={<Dashboard />} />
-        <Route path='admin/competitions' element={<CompetitionsLayout />} >
-        </Route>
+        <Route path='admin/competitions' element={<Competitions />} />
+        <Route path='admin/competitions/:id' element={<TournamentProfileLayout />} />
+
         <Route path='club-manager' element={<ClubManager />}>
         </Route>
       </Route>

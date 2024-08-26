@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UserDropdown from './userDropdown';
-import LoginDialog from '../pages/Competitions/LoginDialog';
+import LoginDialog from './LoginDialog';
 
 const MainNavbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,53 +59,6 @@ const MainNavbar = () => {
                         <UserDropdown />
                     ) : (
                         <div className="relative flex items-center">
-                            {/* <NavLink className={({ isActive }) =>
-                                `flex items-center font-semibold py-1 px-3 text-gray-300  ${isActive ? 'border-b border-gray-500 rounded shadow shadow-gray-200' : ''
-                                }`} > Account</NavLink> */}
-                            {/* <button
-                                onClick={toggleDropdown}
-                                className="flex font-semibold text-gray-300 text-sm hover:text-gray-200 px-1 py-2 transition duration-300 ease-in-out focus:outline-none"
-                            >
-                                Account
-                                <svg
-                                    className="-mr-1 ml-2 h-5 w-5"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </button>
-                            {isDropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
-                                    <NavLink
-                                        to="/account/login"
-                                        className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                                        onClick={() => setIsDropdownOpen(false)}
-                                    >
-                                        Login
-                                    </NavLink>
-                                    <NavLink
-                                        to="/account/signup"
-                                        className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                                        onClick={() => setIsDropdownOpen(false)}
-                                    >
-                                        SignUp
-                                    </NavLink>
-                                </div>
-                            )} */}
-                            <NavLink
-                                to="/account/login"
-                                className=" px-3 rounded py-1 text-black bg-gray-200"
-                                onClick={() => setIsDropdownOpen(false)}
-                            >
-                                Login
-                            </NavLink>
                             <LoginDialog />
                         </div>
                     )}
