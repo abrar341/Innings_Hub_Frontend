@@ -1,13 +1,9 @@
 import React from 'react'
-import Dashboard from './AdminPages/Dashboard'
-import ScorerLayout from './Scorer/ScorerLayout'
-import ExamplePage from '../components/ExamplePage'
+import Matches_Scroll from './Match/Matches_Scroll'
 
 const Home = () => {
     return (
-        <div className="flex flex-col justify-center items-center">
-            <ExamplePage />
-        </div>
+        <Matches_Scroll />
     )
 }
 

@@ -53,7 +53,7 @@ const LoginDialog = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <button className="px-4 py-1 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                <button className="px-4 py-1  text-black border border-black rounded-lg hover:bg-">
                     Login
                 </button>
             </DialogTrigger>

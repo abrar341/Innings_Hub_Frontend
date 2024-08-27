@@ -27,6 +27,7 @@ import Dashboard from './pages/AdminPages/Dashboard';
 import ClubManager from './pages/ClubManager/ClubManager';
 import Competitions from './pages/Competitions/Competitions';
 import TournamentProfileLayout from './pages/Competitions/TournamentProfileLayout';
+import PlayerProfile from './pages/Player/PlayerProfile'
 
 function App() {
 
@@ -55,6 +56,9 @@ function App() {
           <Route path='point-table' element={<PointTable />} />
         </Route>
         <Route path="players" element={<Players />} />
+        <Route path="/player/:name" element={<div className="bg-gray-100 p-3 min-w-[200px]">
+          <PlayerProfile />
+        </div>} />
         <Route path='scorer' element={<ScorerLayout />}>
           {/* on scorer login navigate to "/scorer/live" */}
           <Route path='live' element={<Live />} />

@@ -1,10 +1,9 @@
 import React from 'react'
+import PlayerList from '../../Player/PlayerList'
 
 const Players = () => {
     return (
-        <div className="flex justify-center items-center">
-            team Players
-        </div>
+        <PlayerList />
     )
 }
 

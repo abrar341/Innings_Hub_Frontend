@@ -25,7 +25,7 @@ const MainNavbar = () => {
     }, [isMenuOpen]);
 
     const navLinkClass = ({ isActive }) =>
-        `flex items-center font-semibold  text-gray-400 text-sm hover:text-gray-100 hover:border-b hover:border-gray-800 hover:rounded hover:shadow hover:shadow-gray-200 hover:text-gray-200 px-3 py-1  transition duration-300 ease-in-out ${isActive ? 'text-white border-b border-gray-800 rounded shadow shadow-gray-200' : ''
+        `flex items-center font-semibold  text-black text-sm hover:border-b border-black px-3 py-1  transition duration-300 ease-in-out ${isActive ? 'text-black border-b border-gray-800 ' : ''
         }`;
 
     const links = [
@@ -49,9 +49,9 @@ const MainNavbar = () => {
         ));
 
     return (
-        <nav className="bg-customDarkBlue p-4 md:p-3 sticky top-0 z-10 shadow-lg">
+        <nav className="bg-white p-4 md:p-3 sticky top-0 z-10 shadow-lg">
             <div className="container mx-auto flex justify-between gap-3 items-center">
-                <div className="order-1 md:order-0 text-white text-2xl font-semibold tracking-wide">
+                <div className="order-1 md:order-0 text-black text-2xl font-semibold tracking-wide">
                     CRICKET
                 </div>
                 <div className="order-2 flex items-center">
