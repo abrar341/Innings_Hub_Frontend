@@ -4,7 +4,7 @@ import {
     DialogContent,
     DialogTitle,
     DialogClose,
-} from "../../../components/ui/dialog";
+} from "../../../../components/ui/dialog";
 
 const NextStepsDialog = ({ isOpen, onClose, navigateToProfile }) => {
     const handleLetsGo = () => {

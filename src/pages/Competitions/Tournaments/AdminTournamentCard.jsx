@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { FaCalendarAlt, FaUsers, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import { formatDate } from '../../utils/dateFormatter';
+import { formatDate } from '../../../utils/dateFormatter';
 import { Link, useNavigate } from 'react-router-dom';
-import AlertNote from '../../components/AlertNote'; // Import the AlertNote component
-import { useDeleteTournamentMutation } from '../../slices/tournament/tournamentApiSlice';
+import AlertNote from '../../../components/AlertNote'; // Import the AlertNote component
+import { useDeleteTournamentMutation } from '../../../slices/tournament/tournamentApiSlice';
 import { toast } from "react-hot-toast";
 
-const TournamentCard = ({ tournament }) => {
+const AdminTournamentCard = ({ tournament, userType }) => {
   console.log("hello");
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -91,4 +91,4 @@ const TournamentCard = ({ tournament }) => {
   );
 };
 
-export default TournamentCard;
+export default AdminTournamentCard;

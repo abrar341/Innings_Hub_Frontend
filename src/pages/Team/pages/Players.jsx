@@ -1,10 +1,10 @@
 import React from 'react'
 import PlayerList from '../../Player/PlayerList'
 
-const Players = () => {
+const PlayersListing = () => {
     return (
         <PlayerList />
     )
 }
 
-export default Players
+export default PlayersListing

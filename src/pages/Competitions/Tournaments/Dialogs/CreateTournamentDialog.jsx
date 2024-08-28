@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useCreateTournamentMutation } from "../../../slices/tournament/tournamentApiSlice";
+import { useCreateTournamentMutation } from "../../../../slices/tournament/tournamentApiSlice";
 import {
     Dialog,
     DialogTrigger,
     DialogContent,
     DialogTitle,
     DialogClose,
-} from "../../../components/ui/dialog";
+} from "../../../../components/ui/dialog";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -14,11 +14,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaPlus, FaSpinner } from "react-icons/fa";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import NextStepsDialog from "./NextStepsDialog";
 import { useDispatch, useSelector } from 'react-redux';
-import { setTournaments } from "../../../slices/tournament/tornamentSlice";
 
 // Validation schema using yup
 const validationSchema = yup.object().shape({

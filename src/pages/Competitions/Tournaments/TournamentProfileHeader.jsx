@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import tournaments from '../../data/tournaments';
+import tournaments from '../../../data/tournaments';
 import { FaCalendarAlt, FaUsers, FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 const TournamentProfileHeader = () => {

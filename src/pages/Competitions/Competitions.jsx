@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import TournamentsList from './TournamentsList'
-import CreateTournamentDialog from './Dialogs/CreateTournamentDialog'
+import TournamentsList from './Tournaments/TournamentsList'
+import CreateTournamentDialog from './Tournaments/Dialogs/CreateTournamentDialog'
 
 
 

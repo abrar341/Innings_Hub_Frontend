@@ -37,11 +37,12 @@ const DialogContent = React.forwardRef(
     ({ className, removeCloseButton, children, ...props }, ref) => (
         <DialogPortal>
             <DialogOverlay />
-            <div className="fixed inset-0 z-50 flex items-center  justify-center p-4">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <DialogPrimitive.Content
                     ref={ref}
                     className={cn(
                         "relative w-full max-w-lg p-6 bg-white shadow-lg sm:rounded-lg overflow-y-auto max-h-[80vh]",
+                        // "relative w-full max-w-lg p-6 bg-white shadow-lg sm:rounded-lg overflow-y-auto max-h-[80vh]",
                         className
                     )}
                     {...props}

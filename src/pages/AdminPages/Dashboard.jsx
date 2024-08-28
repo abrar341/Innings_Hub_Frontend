@@ -6,7 +6,7 @@ const Dashboard = () => {
     { to: 'competitions', icon: 'fa-trophy', title: 'Competitions' },
     { to: 'competitions', icon: 'fa-address-book', title: 'Matches' },
     { to: 'competitions', icon: 'fa-gears', title: 'Match Rules' },
-    { to: 'competitions', icon: 'fa-users', title: 'Players' },
+    { to: 'players', icon: 'fa-users', title: 'Players' },
     { to: 'competitions', icon: 'fa-briefcase', title: 'Officials' },
     { to: 'competitions', icon: 'fa-group', title: 'Teams' },
   ];

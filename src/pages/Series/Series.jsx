@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import tournaments from '../../data/tournaments';
 import SeriesCard from './SeriesCard';
+import UsersTournamentCard from '../Competitions/Tournaments/UsersTournamentCard';
 
 
 
@@ -38,7 +39,7 @@ const Series = () => {
                 <h2 className="text-xl text-gray-600 font-bold mb-4">Upcoming Tournaments</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {tournaments.map((tournament, index) => (
-                        <SeriesCard key={index} tournament={tournament} />
+                        <UsersTournamentCard key={index} tournament={tournament} />
                     ))}
                 </div>
 

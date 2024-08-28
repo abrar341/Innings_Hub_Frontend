@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaCalendarAlt, FaUsers, FaEdit, FaTrashAlt } from 'react-icons/fa';
 
-const SeriesCard = ({ tournament }) => {
+const UsersTournamentCard = ({ tournament }) => {
     return (
         <Link to={`/series/${tournament.name}/fixtures`} className="p-6 bg-white shadow-md rounded-lg relative transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out">
             <div className="flex justify-between items-start">
@@ -55,4 +55,4 @@ const SeriesCard = ({ tournament }) => {
     );
 };
 
-export default SeriesCard;
+export default UsersTournamentCard;

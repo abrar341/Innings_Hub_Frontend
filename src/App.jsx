@@ -4,7 +4,7 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 import Layout from './components/Layout';
 import Teams from './pages/Team/Teams';
 import Series from './pages/Series/Series';
-import Players from './pages/Team/pages/Players';
+import PlayersListing from './pages/Team/pages/Players';
 import TeamProfileLayout from './pages/Team/TeamProfileLayout';
 import TeamStats from './pages/Team/pages/TeamStats';
 import TeamSqaud from './pages/Team/pages/TeamSquad'
@@ -16,7 +16,6 @@ import Home from './pages/Home';
 import MatchesLayout from './pages/LiveScore/MatchesLayout'
 import LiveScores from './pages/LiveScore/pages/LiveScores'
 import Schedules from './pages/LiveScore/pages/Schedules'
-// import ForgotPassword from './pages/Forms/ForgotPassword';
 import store from './store';
 import { Provider } from 'react-redux';
 import ScorerLayout from './pages/Scorer/ScorerLayout';
@@ -26,8 +25,9 @@ import Result from './pages/Scorer/pages/Result';
 import Dashboard from './pages/AdminPages/Dashboard';
 import ClubManager from './pages/ClubManager/ClubManager';
 import Competitions from './pages/Competitions/Competitions';
-import TournamentProfileLayout from './pages/Competitions/TournamentProfileLayout';
+import TournamentProfileLayout from './pages/Competitions/Tournaments/TournamentProfileLayout';
 import PlayerProfile from './pages/Player/PlayerProfile'
+import Players from './pages/Player/Players';
 
 function App() {
 
@@ -45,7 +45,7 @@ function App() {
         <Route path="team" element={<Teams />} />
         <Route path='team/:teamName' element={<TeamProfileLayout />}>
           <Route path='squad' element={<TeamSqaud />} />
-          <Route path='players' element={<Players />} />
+          <Route path='players' element={<PlayersListing />} />
           <Route path='stats' element={<TeamStats />} />
           {/* <Route path='matches' element={<Matches />} /> */}
         </Route>
@@ -66,7 +66,8 @@ function App() {
           <Route path='results' element={<Result />} />
         </Route>
         <Route path='admin' element={<Dashboard />} />
-        <Route path='admin/competitions' element={<Competitions />} />
+        <Route path='admin/competitions' element={<Competitions isAdmin={true} />} />
+        <Route path='admin/players' element={<Players />} />
         <Route path='admin/competitions/:id' element={<TournamentProfileLayout />} />
 
         <Route path='club-manager' element={<ClubManager />}>
