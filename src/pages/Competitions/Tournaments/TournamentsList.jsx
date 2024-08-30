@@ -5,11 +5,9 @@ import { setTournaments } from '../../../slices/tournament/tornamentSlice'; // C
 import { useDispatch, useSelector } from 'react-redux';
 
 const TournamentsList = () => {
-    const dispatch = useDispatch();
     const { data, isLoading, isError, error } = useGetAllTournamentsQuery();
     const tournaments = useSelector((state) => state.tournaments.tournaments);
-    console.log(data);
-
+    const dispatch = useDispatch();
     useEffect(() => {
         if (!isLoading && !isError && data) {
             dispatch(setTournaments({ data: data.data }));
@@ -17,8 +15,6 @@ const TournamentsList = () => {
     }, [dispatch, data, isLoading, isError]);
 
     if (isLoading) {
-        console.log("loaidng");
-
         return <div>Loading...</div>;
     }
     if (tournaments.length === 0) {

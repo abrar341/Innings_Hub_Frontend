@@ -28,6 +28,7 @@ import Competitions from './pages/Competitions/Competitions';
 import TournamentProfileLayout from './pages/Competitions/Tournaments/TournamentProfileLayout';
 import PlayerProfile from './pages/Player/PlayerProfile'
 import Players from './pages/Player/Players';
+import PlayersPageLayout from './pages/AdminPages/Players/PlayersPageLayout';
 
 function App() {
 
@@ -67,7 +68,7 @@ function App() {
         </Route>
         <Route path='admin' element={<Dashboard />} />
         <Route path='admin/competitions' element={<Competitions isAdmin={true} />} />
-        <Route path='admin/players' element={<Players />} />
+        <Route path='admin/players' element={<PlayersPageLayout />} />
         <Route path='admin/competitions/:id' element={<TournamentProfileLayout />} />
 
         <Route path='club-manager' element={<ClubManager />}>

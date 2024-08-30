@@ -42,7 +42,6 @@ const validationSchema = yup.object().shape({
 });
 
 const CreateTournamentDialog = () => {
-    const dispatch = useDispatch();
     const {
         control,
         handleSubmit,
@@ -53,15 +52,14 @@ const CreateTournamentDialog = () => {
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
-
     const [selectedBall, setSelectedBall] = useState(null);
     const [logoPreview, setLogoPreview] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [nextStepsOpen, setNextStepsOpen] = useState(false);
     const [createTournament, { isLoading }] = useCreateTournamentMutation();
-
     const onSubmit = async (data) => {
         try {
+
             const formattedData = {
                 ...data,
                 start_date: data.start_date.toISOString(),
@@ -130,9 +128,7 @@ const CreateTournamentDialog = () => {
                         <DialogClose asChild />
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-
                             <label className="cursor-pointer border group">
                                 <div className="relative w-full  h-32 rounded-lg border-2 border-gray-300 group-hover:border-green-500 transition-colors">
                                     {logoPreview ? (
@@ -173,6 +169,7 @@ const CreateTournamentDialog = () => {
                                                 placeholder="Competition Title"
                                                 type="text"
                                                 {...field}
+                                                value={field.value || ""}
                                             />
                                             {errors.title && (
                                                 <p className="text-red-500 text-xs mt-1">
@@ -194,6 +191,7 @@ const CreateTournamentDialog = () => {
                                                     placeholder="Short Title"
                                                     type="text"
                                                     {...field}
+                                                    value={field.value || ""}
                                                 />
                                                 {errors.short_title && (
                                                     <p className="text-red-500 text-xs mt-1">
@@ -203,7 +201,6 @@ const CreateTournamentDialog = () => {
                                             </div>
                                         )}
                                     />
-
                                     <Controller
                                         name="season"
                                         control={control}
@@ -215,6 +212,7 @@ const CreateTournamentDialog = () => {
                                                     placeholder="Season"
                                                     type="text"
                                                     {...field}
+                                                    value={field.value || ""}
                                                 />
                                                 {errors.season && (
                                                     <p className="text-red-500 text-xs mt-1">
@@ -227,7 +225,6 @@ const CreateTournamentDialog = () => {
                                 </div>
                             </div>
                         </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                             <div className="grid grid-cols-1 gap-2">
                                 <Controller
@@ -239,6 +236,7 @@ const CreateTournamentDialog = () => {
                                                 className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.type ? "border-red-500" : ""
                                                     }`}
                                                 {...field}
+                                                value={field.value || ""}
                                             >
                                                 <option value="">Select Series Type</option>
                                                 <option value="Open">Open</option>
@@ -295,7 +293,6 @@ const CreateTournamentDialog = () => {
                                         )}
                                     />
                                 </div>
-
                             </div>
                             <Controller
                                 name="ball_type"
@@ -351,10 +348,6 @@ const CreateTournamentDialog = () => {
                                 )}
                             />
                         </div>
-
-
-
-
                         <div className="flex flex-col text-center">
                             <button
                                 type="submit"

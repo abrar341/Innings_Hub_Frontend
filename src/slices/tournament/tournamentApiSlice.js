@@ -7,6 +7,8 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createTournament: builder.mutation({
       query: (data) => {
+        console.log(data);
+
         const formData = new FormData();
         formData.append("season", data.season);
         formData.append("startDate", data.start_date);

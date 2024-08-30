@@ -5,14 +5,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import AlertNote from '../../../components/AlertNote'; // Import the AlertNote component
 import { useDeleteTournamentMutation } from '../../../slices/tournament/tournamentApiSlice';
 import { toast } from "react-hot-toast";
+import { useDispatch } from 'react-redux';
+import { deleteSingleTournament } from '../../../slices/tournament/tornamentSlice';
 
 const AdminTournamentCard = ({ tournament, userType }) => {
-  console.log("hello");
-
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const navigate = useNavigate();
   const [deleteTournament, { isLoading }] = useDeleteTournamentMutation();
-
+  const dispatch = useDispatch()
   const handleTournamentClick = () => {
     navigate(`/admin/competitions/${tournament.id}`);
   };
@@ -26,6 +26,7 @@ const AdminTournamentCard = ({ tournament, userType }) => {
       await deleteTournament(id);
       toast.success("Tournament deleted successfully!");
       setIsAlertOpen(false);
+      dispatch(deleteSingleTournament(id));
     } catch (error) {
       toast.error(error?.data?.message || "Error deleting tournament");
     }

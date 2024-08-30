@@ -14,7 +14,7 @@ const tournamentSlice = createSlice({
         clearTournaments: (state) => {
             state.tournaments = [];
         },
-        deleteTournament: (state, action) => {
+        deleteSingleTournament: (state, action) => {
             const tournamentId = action.payload.id;
             state.tournaments = state.tournaments.filter(tournament => tournament.id !== tournamentId);
         },
@@ -29,7 +29,7 @@ const tournamentSlice = createSlice({
 });
 
 // Export actions for use in components
-export const { setTournaments, clearTournaments, deleteTournament, updateTournament } = tournamentSlice.actions;
+export const { setTournaments, clearTournaments, deleteSingleTournament, updateTournament } = tournamentSlice.actions;
 
 // Export the reducer to be included in the store
 export default tournamentSlice.reducer;

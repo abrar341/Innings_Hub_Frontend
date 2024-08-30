@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { useLogoutMutation } from '../slices/usersApiSlice';
-import { logout } from '../slices/authSlice';
+import { useLogoutMutation } from '../slices/auth/usersApiSlice';
+import { logout } from '../slices/auth/authSlice';
 import { toast } from 'react-hot-toast';
 
 

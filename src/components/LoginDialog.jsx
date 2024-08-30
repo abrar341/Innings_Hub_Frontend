@@ -5,8 +5,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { useLoginMutation } from "../slices/usersApiSlice";
-import { setCredentials } from "../slices/authSlice";
+import { useLoginMutation } from "../slices/auth/usersApiSlice";
+import { setCredentials } from "../slices/auth/authSlice";
 import { toast } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi"; // Import eye icons

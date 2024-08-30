@@ -1,35 +1,45 @@
 import React from 'react';
+import { FaArrowRight, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const UserPlayerCard = ({ player, onClick }) => {
     return (
         <div
-            className="rounded-xl hover:border-customDarkBlue hover:cursor-pointer grid-cols-3 border border-gray-300 overflow-hidden transition duration-300 ease-in group"
+            className="border  rounded-xl border-gray-300 bg-white shadow-full transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out"
             onClick={onClick}
         >
-            <div className="bg-customDarkBlue flex text-xl font-bold justify-between text-white p-4">
-                <div className="text-sm font-bold text-white ">{player.name}</div>
+            <div className="flex justify-between items-center p-3 text-white ">
                 <img
-                    className="max-w-8 h-6 group-hover:scale-105 transition duration-300 ease-in"
+                    className=" w-6 h-6"
                     src="https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_160,q_50/lsci/db/PICTURES/CMS/381800/381894.png"
-                    alt="India Logo"
+                    alt="Country Logo"
                 />
+                <span className="text-sm text-black font-bold">{player.name}</span>
             </div>
 
-            <div className="flex flex-col gap-4 justify-center items-center p-4 space-x-4">
+            <div className="p-2 border-b text-center group">
                 <img
-                    className="h-24 w-24 md:h-32 md:w-32 rounded-full border-4 border-customDarkBlue object-cover transition duration-300 ease-in group-hover:scale-105"
+                    className="h-24 w-24 md:h-28 md:w-28 rounded-lg mx-auto border-2 border-customDarkBlue object-cover transition-transform duration-300 ease-in-out group-hover:rounded-lg group-hover:scale-105"
                     src={player.image}
                     alt={player.name}
                 />
-                <div className='flex border-t group-hover:border-black border-gray-300 pt-4 justify-center items-center gap-2'>
+                <div className="mt-3 flex items-center justify-center space-x-2">
                     <img
-                        className="h-6 group-hover:scale-105 transition duration-300 ease-in"
+                        className="w-5 h-5"
                         src={player.roleImg}
                         alt={player.role}
                     />
-                    <div className="text-sm font-bold group-hover:scale-105 transition duration-300 ease-in">
-                        {player.role}
-                    </div>
+                    <span className="text-sm font-semibold">{player.role}</span>
+                </div>
+                <div className="flex mt-4 justify-center items-center space-x-4">
+                    <Link
+
+                        className="inline-block flex justify-center items-center gap-2 bg-blue-600 text-white rounded px-4 py-1 text-sm font-medium hover:bg-blue-700 transition-colors duration-150"
+                    >
+                        <span>View</span>
+                        <FaArrowRight className="t" />
+
+                    </Link>
                 </div>
             </div>
         </div>
