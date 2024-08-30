@@ -29,6 +29,8 @@ import TournamentProfileLayout from './pages/Competitions/Tournaments/Tournament
 import PlayerProfile from './pages/Player/PlayerProfile'
 import Players from './pages/Player/Players';
 import PlayersPageLayout from './pages/AdminPages/Players/PlayersPageLayout';
+import DrawsAndRounds from './pages/Competitions/Tournaments/DrawsAndRounds';
+import TeamsPageLayout from './pages/AdminPages/Teams/TeamsPageLayout';
 
 function App() {
 
@@ -69,7 +71,10 @@ function App() {
         <Route path='admin' element={<Dashboard />} />
         <Route path='admin/competitions' element={<Competitions isAdmin={true} />} />
         <Route path='admin/players' element={<PlayersPageLayout />} />
-        <Route path='admin/competitions/:id' element={<TournamentProfileLayout />} />
+        <Route path='admin/teams' element={<TeamsPageLayout />} />
+        <Route path='admin/competitions/:id' element={<TournamentProfileLayout />} >
+          <Route path='draws-and-rounds' element={<DrawsAndRounds />} />
+        </Route>
 
         <Route path='club-manager' element={<ClubManager />}>
         </Route>

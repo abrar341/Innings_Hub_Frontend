@@ -8,7 +8,7 @@ const Dashboard = () => {
     { to: 'competitions', icon: 'fa-gears', title: 'Match Rules' },
     { to: 'players', icon: 'fa-users', title: 'Players' },
     { to: 'competitions', icon: 'fa-briefcase', title: 'Officials' },
-    { to: 'competitions', icon: 'fa-group', title: 'Teams' },
+    { to: 'teams', icon: 'fa-group', title: 'Teams' },
   ];
 
   return (

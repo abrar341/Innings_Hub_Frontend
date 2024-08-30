@@ -1,6 +1,7 @@
 import React from 'react'
 import TournamentProfileHeader from './TournamentProfileHeader'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
+import { Outdent } from 'lucide-react'
 
 const TournamentProfileLayout = () => {
     return (
@@ -8,7 +9,7 @@ const TournamentProfileLayout = () => {
             <TournamentProfileHeader />
             <div className=" pt-4  flex flex-row items-center w-full gap-4 overflow-x-auto px-4 border-b border-gray-400 scrollbar-hide">
                 {[
-                    { to: 'fixtures', label: 'DRAWS AND ROUNDS' },
+                    { to: 'draws-and-rounds', label: 'DRAWS AND ROUNDS' },
                     { to: 'results', label: 'TEAMS' },
                     { to: 'point-table', label: 'OFFICALS' },
                     { to: 'point-table', label: 'MATCHES' },
@@ -29,6 +30,7 @@ const TournamentProfileLayout = () => {
                     </div>
                 ))}
             </div>
+            <Outlet />
         </>
     )
 }
