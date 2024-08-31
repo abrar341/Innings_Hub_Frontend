@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useCreateTournamentMutation } from "../../../../slices/tournament/tournamentApiSlice";
+import React, { useEffect, useState } from "react";
+import { useCreateTournamentMutation, useUpdateTournamentMutation } from "../../../../slices/tournament/tournamentApiSlice";
 import {
     Dialog,
     DialogTrigger,
@@ -12,7 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaPlus, FaSpinner } from "react-icons/fa";
+import { FaEdit, FaPlus, FaSpinner } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import NextStepsDialog from "./NextStepsDialog";
 import { useDispatch, useSelector } from 'react-redux';
@@ -41,7 +41,16 @@ const validationSchema = yup.object().shape({
     ball_type: yup.string().required("Ball Type is required"),
 });
 
-const CreateTournamentDialog = () => {
+const CreateTournamentDialog = ({ open, action, tournamentData }) => {
+
+    const [selectedBall, setSelectedBall] = useState(null);
+    const [logoPreview, setLogoPreview] = useState(null);
+    const [isOpen, setIsOpen] = useState(open);
+    const [nextStepsOpen, setNextStepsOpen] = useState(false);
+    const [createTournament, { isLoading: createLoading }] = useCreateTournamentMutation();
+    const [updateTournament, { isLoading: updateLoading }] = useUpdateTournamentMutation();
+
+    const isEditing = action === "edit";
     const {
         control,
         handleSubmit,
@@ -51,35 +60,63 @@ const CreateTournamentDialog = () => {
         formState: { errors },
     } = useForm({
         resolver: yupResolver(validationSchema),
+        defaultValues: tournamentData || {}
     });
-    const [selectedBall, setSelectedBall] = useState(null);
-    const [logoPreview, setLogoPreview] = useState(null);
-    const [isOpen, setIsOpen] = useState(false);
-    const [nextStepsOpen, setNextStepsOpen] = useState(false);
-    const [createTournament, { isLoading }] = useCreateTournamentMutation();
-    const onSubmit = async (data) => {
-        try {
 
-            const formattedData = {
-                ...data,
-                start_date: data.start_date.toISOString(),
-                end_date: data.end_date.toISOString(),
-            };
+    useEffect(() => {
+        if (tournamentData) {
+            setLogoPreview(tournamentData.image ? tournamentData.image : null);
+            const startDate = tournamentData.start_date ? new Date(tournamentData.start_date) : null;
+            const endDate = tournamentData.end_date ? new Date(tournamentData.end_date) : null;
 
-            const response = await createTournament(formattedData).unwrap();
-            console.log(response.data);
-
-
-            if (response) {
-                toast.success(response.message);
-                setIsOpen(false);
-                setNextStepsOpen(true);
-                resetForm();
+            // Ensure the dates are valid before setting them
+            if (!isNaN(startDate)) {
+                setValue("start_date", tournamentData.startDate);
+            } else {
+                console.error("Invalid start date format:", tournamentData.start_date);
             }
+
+            if (!isNaN(endDate)) {
+                setValue("end_date", tournamentData.endDate);
+            } else {
+                console.error("Invalid end date format:", tournamentData.end_date);
+            }
+            if (tournamentData) {
+                setValue("title", tournamentData.name)
+                setValue("short_title", tournamentData.shortName)
+                setValue("season", tournamentData.season)
+                setValue("type", tournamentData.tournamentType)
+                setSelectedBall(tournamentData.ballType || null);
+                setValue("ball_type", tournamentData.ballType || "")
+            }
+        }
+    }, [tournamentData, setValue]);
+
+
+    const onSubmit = async (data) => {
+        const formattedData = {
+            ...data,
+            start_date: data.start_date.toISOString(),
+            end_date: data.end_date.toISOString(),
+        };
+        try {
+            if (isEditing) {
+                console.log("editing true");
+                const response = await updateTournament({ id: tournamentData._id, ...formattedData }).unwrap();
+                toast.success(response.message);
+            }
+            else {
+                const response = await createTournament(formattedData).unwrap();
+                toast.success(response.message);
+                setNextStepsOpen(true);
+            }
+            setIsOpen(false);
+            reset();
         } catch (error) {
             toast.dismiss();
             toast.error(error?.data?.message || "Error creating tournament");
         }
+
     };
 
     const handleBallSelection = (ballType) => {
@@ -112,20 +149,28 @@ const CreateTournamentDialog = () => {
         <>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
-                    <button
-                        onClick={() => setIsOpen(true)}
-                        className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200"
-                    >
-                        <FaPlus className="mr-2" />
-                        Add New
-                    </button>
+                    {isEditing ? (
+                        <button
+                            onClick={() => setIsOpen(true)}
+                            className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                        >
+                            <FaEdit className="text-gray-600" />
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => setIsOpen(true)}
+                            className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200"
+                        >
+                            <FaPlus className="mr-2" />
+                            Add New Tournament
+                        </button>
+                    )}
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl custom-scrollbar w-full p-8 rounded-lg bg-white shadow-2xl hide-scrollbar">
                     <div className="flex justify-between items-center mb-6">
                         <DialogTitle className="text-2xl font-bold text-gray-800">
-                            Create Tournament
+                            {isEditing ? "Edit Tournament" : "Create Tournament"}
                         </DialogTitle>
-                        <DialogClose asChild />
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
@@ -351,19 +396,19 @@ const CreateTournamentDialog = () => {
                         <div className="flex flex-col text-center">
                             <button
                                 type="submit"
-                                disabled={isLoading}
-                                className={`flex self-end justify-center w-full  items-center btn btn-success text-uppercase px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors flex justify-center ${isLoading
+                                disabled={createLoading || updateLoading}
+                                className={`flex self-end justify-center w-full items-center btn btn-success text-uppercase px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors flex justify-center ${createLoading || updateLoading
                                     ? "cursor-not-allowed opacity-50"
                                     : ""
                                     }`}
                             >
-                                {isLoading ? (
+                                {createLoading || updateLoading ? (
                                     <>
                                         <FaSpinner className="animate-spin mr-2" />
-                                        Creating
+                                        {isEditing ? "Updating" : "Creating"}
                                     </>
                                 ) : (
-                                    "Create"
+                                    isEditing ? "Update" : "Create"
                                 )}
                             </button>
                         </div>

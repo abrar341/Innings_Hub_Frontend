@@ -9,6 +9,8 @@ import { useDispatch } from 'react-redux';
 const PlayersPageLayout = () => {
 
     const { data, isLoading, isError, error } = useGetAllPlayersQuery();
+    console.log(data);
+
     const dispatch = useDispatch();
     useEffect(() => {
         if (!isLoading && !isError && data) {

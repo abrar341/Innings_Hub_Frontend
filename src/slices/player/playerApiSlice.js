@@ -51,6 +51,7 @@ export const playerApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Player'], // Provide cache tags for the fetched players
         }),
+
         deletePlayer: builder.mutation({
             query: (playerId) => ({
                 url: `${PLAYERS_URL}/deletePlayer/${playerId}`,
@@ -58,6 +59,33 @@ export const playerApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Player'], // Invalidate the cache when a player is deleted
         }),
+
+        // Add the updatePlayer mutation
+        updatePlayer: builder.mutation({
+            query: ({ id, ...data }) => {
+                const formData = new FormData();
+
+                if (data.playerName) formData.append("playerName", data.playerName);
+                if (data.dob) formData.append("DOB", data.dob);
+                if (data.role) formData.append("role", data.role);
+                if (data.profilePicture) formData.append("profilePicture", data.profilePicture); // Should be a file object
+                if (data.city) formData.append("city", data.city);
+                if (data.email) formData.append("email", data.email);
+                if (data.jerseyNumber) formData.append("jersyNo", data.jerseyNumber);
+                if (data.phone) formData.append("phone", data.phone);
+                if (data.battingStyle) formData.append("battingStyle", data.battingStyle);
+                if (data.bowlingStyle) formData.append("bowlingStyle", data.bowlingStyle);
+
+                return {
+                    url: `${PLAYERS_URL}/updatePlayer/${id}`,
+                    method: "PUT",
+                    body: formData,
+                };
+            },
+            invalidatesTags: ['Player'],
+        }),
+
+
     }),
 });
 
@@ -65,4 +93,5 @@ export const {
     useCreatePlayerMutation,
     useGetAllPlayersQuery,
     useDeletePlayerMutation,
+    useUpdatePlayerMutation, // Export the updatePlayer mutation hook
 } = playerApiSlice;

@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
-// import { deletePlayer } from '../../../slices/player/playerSlice';
 import AlertNote from '../../../components/AlertNote';
 import { useDeletePlayerMutation } from '../../../slices/player/playerApiSlice';
 import toast from 'react-hot-toast';
-import { useDispatch } from 'react-redux'; // Import useDispatch hook
-import { deletePlayerS } from '../../../slices/player/playerSlice'; // Import the action from playerSlice
+import { useDispatch } from 'react-redux';
+import { delete_Player } from '../../../slices/player/playerSlice';
 import CreatePlayerDialog from './CreatePlayerDialog';
-
 
 const AdminPlayerCard = ({ player, onClick }) => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [deletePlayer, { isLoading }] = useDeletePlayerMutation();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const getRoleImageUrl = (role) => {
         const normalizedRole = role.toLowerCase().replace(" ", "-");
         return `https://www.iplt20.com/assets/images/teams-${normalizedRole}-icon.svg`;
@@ -20,23 +19,31 @@ const AdminPlayerCard = ({ player, onClick }) => {
     const handleDeleteClick = () => {
         setIsAlertOpen(true);
     };
+
     const handleConfirmDelete = async (id) => {
         try {
-            await deletePlayer(id);
-            toast.success("Player deleted successfully!");
+            const response = await deletePlayer(id);
+            toast.success(response.message);
             setIsAlertOpen(false);
-            dispatch(deletePlayerS(id));
+            dispatch(delete_Player(id));
         } catch (error) {
             toast.error(error?.data?.message || "Error deleting player");
         }
     };
+
+    const handleEditClick = () => {
+        setIsDialogOpen(true);
+    };
+
+
+
     return (
         <div
-            className="border  rounded-xl border-gray-300 bg-white shadow-full transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out"
+            className="border rounded-xl border-gray-300 bg-white shadow-full transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out"
         >
-            <div className="flex justify-between items-center p-3 text-white ">
+            <div className="flex justify-between items-center p-3 text-white">
                 <img
-                    className=" w-6 h-6"
+                    className="w-6 h-6"
                     src="https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_160,q_50/lsci/db/PICTURES/CMS/381800/381894.png"
                     alt="Country Logo"
                 />
@@ -45,8 +52,8 @@ const AdminPlayerCard = ({ player, onClick }) => {
 
             <div className="p-2 border-b text-center group">
                 <img
-                    className="h-24 w-24 md:h-28 md:w-28 rounded-lg mx-auto border-2 border-customDarkBlue object-cover transition-transform duration-300 ease-in-out group-hover:rounded-lg group-hover:scale-105"
-                    src={player.profilePicture}
+                    className="h-24 w-24 md:h-28 md:w-28 rounded-full mx-auto border-2 border-customDarkBlue object-cover transition-transform duration-300 ease-in-out group-hover:rounded-lg group-hover:scale-105"
+                    src={player.profilePicture || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw4GVTa5rCatvKGw3El6BLqZUks44zL9ezZg&s'}
                     alt={player.name}
                 />
                 <div className="mt-3 flex items-center justify-center space-x-2">
@@ -59,10 +66,13 @@ const AdminPlayerCard = ({ player, onClick }) => {
                 </div>
                 <div className="flex mt-4 justify-center items-center space-x-4">
                     <button
-                        className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
-                        onClick={(e) => { e.stopPropagation(); alert('Edit clicked'); }}
                     >
-                        <FaEdit className="text-gray-600" />
+                        <CreatePlayerDialog
+                            open={isDialogOpen}
+                            onClose={() => setIsDialogOpen(false)}
+                            action="edit"
+                            playerData={player}
+                        />
                     </button>
                     <button
                         className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
@@ -79,6 +89,7 @@ const AdminPlayerCard = ({ player, onClick }) => {
                 content="This action cannot be undone. This will permanently delete the player."
                 isLoading={isLoading}
             />
+
         </div>
     );
 };

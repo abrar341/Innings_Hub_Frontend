@@ -32,11 +32,27 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
     }),
 
     updateTournament: builder.mutation({
-      query: ({ id, ...data }) => ({
-        url: `${TOURNAMENTS_URL}/${id}`,
-        method: 'PUT',
-        body: data,
-      }),
+      query: ({ id, ...data }) => {
+        const formData = new FormData();
+        formData.append("season", data.season);
+        formData.append("startDate", data.start_date);
+        formData.append("endDate", data.end_date);
+        formData.append("name", data.title);
+        formData.append("shortName", data.short_title);
+        formData.append("ballType", data.ball_type);
+        formData.append("tournamentType", data.type);
+
+        if (data.logo) {
+          formData.append("image", data.logo);
+        }
+
+        return {
+          url: `${TOURNAMENTS_URL}/updateTournament/${id}`,
+          method: 'PUT',
+          body: formData,
+
+        };
+      },
       invalidatesTags: ['Tournament'], // Invalidate cache on update
     }),
 

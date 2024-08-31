@@ -7,9 +7,12 @@ import { useDeleteTournamentMutation } from '../../../slices/tournament/tourname
 import { toast } from "react-hot-toast";
 import { useDispatch } from 'react-redux';
 import { deleteSingleTournament } from '../../../slices/tournament/tornamentSlice';
+import CreateTournamentDialog from './Dialogs/CreateTournamentDialog';
 
 const AdminTournamentCard = ({ tournament, userType }) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const navigate = useNavigate();
   const [deleteTournament, { isLoading }] = useDeleteTournamentMutation();
   const dispatch = useDispatch()
@@ -42,10 +45,13 @@ const AdminTournamentCard = ({ tournament, userType }) => {
         </div>
         <div className="flex space-x-2">
           <button
-            className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
-            onClick={() => alert('Edit clicked')}
           >
-            <FaEdit className="text-gray-600" />
+            <CreateTournamentDialog
+              open={isDialogOpen}
+              onClose={() => setIsDialogOpen(false)}
+              action="edit"
+              tournamentData={tournament}
+            />
           </button>
           <button
             className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
@@ -56,7 +62,7 @@ const AdminTournamentCard = ({ tournament, userType }) => {
         </div>
       </div>
       <div className="text-center mt-6">
-        <h5 className="font-semibold text-lg text-bold text-gray-800">{tournament.name}</h5>
+        <h5 className="font-semibold text-lg text-bold text-gray-800">{tournament.name}-S{tournament.season}</h5>
         <div className="text-gray-500 mt-3">
           <p className="flex justify-center items-center">
             <FaCalendarAlt className="text-green-500 mr-2" />

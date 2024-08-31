@@ -34,10 +34,8 @@ const Competitions = () => {
                     </div>
                 </form>
 
-                {/* <AddNewButton handleAddNewClick={handleAddNewClick} /> */}
-
-
-                <CreateTournamentDialog />
+                <CreateTournamentDialog
+                />
             </div>
             <TournamentsList />
         </>

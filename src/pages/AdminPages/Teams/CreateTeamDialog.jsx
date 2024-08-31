@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useCreateTeamMutation } from "../../../slices/team/teamApiSlice"; // Assuming a slice for teams
+import React, { useState, useEffect } from "react";
+import { useCreateTeamMutation, useUpdateTeamMutation } from "../../../slices/team/teamApiSlice";
 import {
     Dialog,
     DialogTrigger,
@@ -10,9 +10,8 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { FaPlus, FaSpinner } from "react-icons/fa";
+import { FaEdit, FaPlus, FaSpinner } from "react-icons/fa";
 import { toast } from "react-hot-toast";
-import { useDispatch, useSelector } from 'react-redux';
 
 // Validation schema using yup
 const validationSchema = yup.object().shape({
@@ -25,7 +24,7 @@ const validationSchema = yup.object().shape({
     location: yup.string().required("Location is required"),
 });
 
-const CreateTeamDialog = () => {
+const CreateTeamDialog = ({ open, action, teamData }) => {
     const {
         control,
         handleSubmit,
@@ -38,24 +37,42 @@ const CreateTeamDialog = () => {
     });
     const [logoPreview, setLogoPreview] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
-    const [createTeam, { isLoading }] = useCreateTeamMutation();
+    const [createTeam, { isLoading: createLoading }] = useCreateTeamMutation();
+    const [updateTeam, { isLoading: updateLoading }] = useUpdateTeamMutation();
+    const isEditing = action === "edit";
+
+    useEffect(() => {
+        if (teamData && isOpen) {
+            console.log(teamData);
+            setValue("teamName", teamData.teamName);
+            setValue("shortName", teamData.shortName);
+            setValue("teamtype", teamData.teamtype);
+            setValue("location", teamData.location);
+            if (teamData.teamLogo) setLogoPreview(teamData.teamLogo);
+        }
+    }, [teamData, isOpen, setValue]);
+
     const onSubmit = async (data) => {
         console.log(data);
 
+        // const formattedData = { ...data };
         try {
-            const formattedData = { ...data };
-
-            const response = await createTeam(formattedData).unwrap();
-            console.log(response.data);
+            let response;
+            if (isEditing) {
+                response = await updateTeam({ id: teamData._id, ...data }).unwrap();
+                toast.success(response.message || "Team updated successfully");
+            } else {
+                response = await createTeam(data).unwrap();
+                toast.success(response.message || "Team created successfully");
+            }
 
             if (response) {
-                toast.success(response.message);
                 setIsOpen(false);
                 resetForm();
             }
         } catch (error) {
             toast.dismiss();
-            toast.error(error?.data?.message || "Error creating team");
+            toast.error(error?.data?.message || "Error saving team");
         }
     };
 
@@ -77,23 +94,31 @@ const CreateTeamDialog = () => {
         setIsOpen(false);
         resetForm();
     };
-
     return (
         <>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
-                    <button
-                        onClick={() => setIsOpen(true)}
-                        className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200"
-                    >
-                        <FaPlus className="mr-2" />
-                        Add New Team
-                    </button>
+                    {isEditing ? (
+                        <button
+                            onClick={() => setIsOpen(true)}
+                            className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                        >
+                            <FaEdit className="text-gray-600" />
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => setIsOpen(true)}
+                            className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200"
+                        >
+                            <FaPlus className="mr-2" />
+                            Add New Team
+                        </button>
+                    )}
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl custom-scrollbar w-full p-8 rounded-lg bg-white shadow-2xl hide-scrollbar">
                     <div className="flex justify-between items-center mb-6">
                         <DialogTitle className="text-2xl font-bold text-gray-800">
-                            Create Team
+                            {isEditing ? "Edit Team" : "Create Team"}
                         </DialogTitle>
                         <DialogClose asChild />
                     </div>
@@ -225,19 +250,19 @@ const CreateTeamDialog = () => {
                         <div className="flex flex-col text-center">
                             <button
                                 type="submit"
-                                disabled={isLoading}
-                                className={`flex self-end justify-center w-full  items-center btn btn-success text-uppercase px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors flex justify-center ${isLoading
+                                disabled={createLoading || updateLoading}
+                                className={`flex self-end justify-center w-full items-center btn btn-success text-uppercase px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors flex justify-center ${createLoading || updateLoading
                                     ? "cursor-not-allowed opacity-50"
                                     : ""
                                     }`}
                             >
-                                {isLoading ? (
+                                {createLoading || updateLoading ? (
                                     <>
                                         <FaSpinner className="animate-spin mr-2" />
-                                        Creating
+                                        {isEditing ? "Updating" : "Creating"}
                                     </>
                                 ) : (
-                                    "Create"
+                                    isEditing ? "Update" : "Create"
                                 )}
                             </button>
                         </div>

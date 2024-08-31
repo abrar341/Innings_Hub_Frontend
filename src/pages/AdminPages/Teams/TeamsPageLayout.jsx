@@ -3,6 +3,7 @@ import { useGetAllTeamsQuery } from '../../../slices/team/teamApiSlice'; // Adju
 import { useDispatch } from 'react-redux';
 import { set_Team } from '../../../slices/team/teamSlice';
 import CreateTeamDialog from './CreateTeamDialog';
+import Teams from './Teams';
 
 const TeamsPageLayout = () => {
 
@@ -31,7 +32,7 @@ const TeamsPageLayout = () => {
 
                 <CreateTeamDialog />
             </div>
-            {/* <PlayerList isAdmin={true} /> */}
+            <Teams />
         </>
     );
 }

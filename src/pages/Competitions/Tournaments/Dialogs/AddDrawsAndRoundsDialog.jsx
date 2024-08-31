@@ -11,7 +11,7 @@ const AddDrawsAndRoundsDialog = ({ isOpen, onClose, onPrevious }) => {
             <DialogContent className="max-w-md w-full p-6 rounded-lg bg-white shadow-2xl">
                 <DialogTitle className="text-xl font-bold text-gray-800">Add Draws and Rounds</DialogTitle>
                 <div className="mt-4">
-                    ksfdfhkdshfk
+                    {/* Content for adding draws and rounds */}
                 </div>
                 <div className="mt-6 flex justify-between">
                     <button

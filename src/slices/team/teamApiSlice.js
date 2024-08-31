@@ -7,15 +7,13 @@ export const teamApiSlice = apiSlice.injectEndpoints({
         // Mutation to create a new team
         createTeam: builder.mutation({
             query: (data) => {
-                console.log(data);
-
                 const formData = new FormData();
-                formData.append("teamName", data.teamName);
-                formData.append("shortName", data.shortName);
-                formData.append("teamtype", data.teamtype);
-                formData.append("location", data.location);
+                if (data.teamName) formData.append("teamName", data.teamName);
+                if (data.shortName) formData.append("shortName", data.shortName);
+                if (data.teamtype) formData.append("teamtype", data.teamtype);
+                if (data.location) formData.append("location", data.location);
                 if (data.logo) {
-                    formData.append("teamLogo", data.logo);
+                    formData.append("teamLogo", data.teamLogo);
                 }
                 return {
                     url: `${TEAMS_URL}/createTeam`,
@@ -46,24 +44,24 @@ export const teamApiSlice = apiSlice.injectEndpoints({
 
         // Mutation to update a team
         updateTeam: builder.mutation({
-            query: ({ teamId, data }) => {
+            query: ({ id, ...data }) => {
                 const formData = new FormData();
-                formData.append("teamName", data.teamName);
-                formData.append("shortName", data.shortName);
-                formData.append("teamType", data.teamType);
-                formData.append("location", data.location);
-                if (data.logo) {
-                    formData.append("logo", data.logo);
-                }
+
+                if (data.teamName) formData.append("teamName", data.teamName);
+                if (data.shortName) formData.append("shortName", data.shortName);
+                if (data.teamtype) formData.append("teamtype", data.teamtype);
+                if (data.location) formData.append("location", data.location);
+                if (data.logo) formData.append("teamLogo", data.logo); // Make sure you're using `data.logo` here
 
                 return {
-                    url: `${TEAMS_URL}/updateTeam/${teamId}`,
+                    url: `${TEAMS_URL}/updateTeam/${id}`,
                     method: 'PUT',
                     body: formData,
                 };
             },
             invalidatesTags: ['Team'], // Invalidate the cache when a team is updated
         }),
+
     }),
 });
 
