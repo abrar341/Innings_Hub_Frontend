@@ -67,7 +67,7 @@ const MainNavbar = () => {
                     {renderNavLinks()}
                 </div>
                 <div className="md:hidden">
-                    <button onClick={toggleMenu} className="text-white focus:outline-none">
+                    <button onClick={toggleMenu} className="text-black focus:outline-none">
                         {isMenuOpen ? (
                             <svg
                                 className="w-8 h-8"

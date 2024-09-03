@@ -33,7 +33,7 @@ const TeamCard = ({ team }) => {
                 className="flex flex-row justify-between items-center p-4 space-x-4"
             >
                 <img
-                    className="h-10 border group-hover:border-black border-gray-300 object-cover transition duration-300 ease-in group-hover:scale-105"
+                    className="h-10 w-12  group-hover:border-black border-gray-300 object-cover transition duration-300 ease-in group-hover:scale-105"
                     src={team.teamLogo}
                     alt={team.name}
                 />

@@ -24,7 +24,7 @@ const UserDropdown = () => {
             dispatch(logout());
             setIsOpen(false)
             toast.success(res.message)
-            navigate('/account/login');
+            navigate('/');
         } catch (err) {
             console.error(err);
         }
@@ -42,7 +42,7 @@ const UserDropdown = () => {
                 </div>
                 <button
                     type="button"
-                    className="  text-sm font-medium text-white  focus:outline-none "
+                    className="  text-sm font-medium text-black  focus:outline-none "
                     id="username"
                     aria-expanded={isOpen}
                     aria-haspopup="true"

@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import tournaments from '../../data/tournaments';
+// import tournaments from '../../data/tournaments';
 import SeriesCard from './SeriesCard';
-import UsersTournamentCard from '../Competitions/Tournaments/UsersTournamentCard';
+import UsersTournamentCard from '../AdminPages/Competitions/Tournaments/UsersTournamentCard';
+import { useGetAllTournamentsQuery } from '../../slices/tournament/tournamentApiSlice';
 
 
 
 const Series = () => {
+    const { data, isLoading, isError, error } = useGetAllTournamentsQuery();
+    const tournaments = data?.data || []; // Extract players with a fallback to an empty array
+
     return (
         <>
             <div className="container bg-gray-100 mx-auto  p-4 pb-0  bg-gray-50 grid-cols-1 md:grid grid-cols-2 ">

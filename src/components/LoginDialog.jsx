@@ -14,7 +14,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi"; // Import eye icons
 // Validation schema
 const schema = yup.object().shape({
     email: yup.string().email('Invalid email format').required('Email is required'),
-    password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+    password: yup.string().min(5, 'Password must be at least 6 characters').required('Password is required'),
 });
 
 const LoginDialog = () => {
@@ -60,7 +60,6 @@ const LoginDialog = () => {
             <DialogContent className="w-full max-w-md">
                 <DialogTitle className="text-2xl font-semibold text-center mb-6">LOGIN</DialogTitle>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    {/* Email */}
                     <div className="relative">
                         <Controller
                             name="email"
@@ -120,7 +119,7 @@ const LoginDialog = () => {
                         {isLoading ? <FaSpinner className="animate-spin mr-2" /> : "LOGIN"}
                     </button>
                 </form>
-                <p className="text-center">OR</p>
+                <p className="text-center my-4">OR</p>
                 <div className="space-y-2">
                     <button className="w-full py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
                         <span className="fab fa-google"></span> Continue with Google

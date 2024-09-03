@@ -4,7 +4,7 @@ import AddDrawsAndRoundsDialog from './Dialogs/AddDrawsAndRoundsDialog'
 const DrawsAndRounds = () => {
     return (
         <div>
-            <AddDrawsAndRoundsDialog />
+            fdsfdsf
         </div>
     )
 }

@@ -30,15 +30,15 @@ const SeriesCard = ({ tournament }) => {
                         <span className='text-base'>4 Teams</span>
                     </p>
                 </div>
-                <div className="mt-6 flex justify-center gap-5">
+                {/* <div className="mt-6 flex justify-center gap-5">
                     <Link
-                        to={`/series/${tournament.name}/fixtures`}
+                        to={`fixtures`}
                         className="transition duration-300 ease-in text-sm border-b border-gray-500 text-center"
                     >
                         Fixtures
                     </Link>
                     <Link
-                        to={`/series/${tournament.name}/results`}
+                        to={`/series/${tournament?._id}/results`}
                         className="transition duration-300 ease-in text-sm border-b border-gray-800 text-center"
                     >
                         Results
@@ -49,7 +49,7 @@ const SeriesCard = ({ tournament }) => {
                     >
                         Points Table
                     </Link>
-                </div>
+                </div> */}
             </div>
         </Link>
     );

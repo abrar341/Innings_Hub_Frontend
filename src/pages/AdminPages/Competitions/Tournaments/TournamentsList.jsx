@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import AdminTournamentCard from './AdminTournamentCard';
-import { useGetAllTournamentsQuery } from '../../../slices/tournament/tournamentApiSlice';
-import { setTournaments } from '../../../slices/tournament/tornamentSlice'; // Corrected import path
+import { useGetAllTournamentsQuery } from '../../../../slices/tournament/tournamentApiSlice';
+import { setTournaments } from '../../../../slices/tournament/tornamentSlice'; // Corrected import path
 import { useDispatch, useSelector } from 'react-redux';
 
 const TournamentsList = () => {

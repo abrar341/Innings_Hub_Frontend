@@ -84,7 +84,13 @@ export const playerApiSlice = apiSlice.injectEndpoints({
             },
             invalidatesTags: ['Player'],
         }),
-
+        AllPlayers: builder.query({
+            query: () => ({
+                url: `${PLAYERS_URL}/allplayers`,
+                method: 'GET',
+            }),
+            providesTags: ['Player'], // Provide cache tags for the fetched players
+        }),
 
     }),
 });
@@ -94,4 +100,5 @@ export const {
     useGetAllPlayersQuery,
     useDeletePlayerMutation,
     useUpdatePlayerMutation, // Export the updatePlayer mutation hook
+    useAllPlayersQuery
 } = playerApiSlice;

@@ -1,16 +1,28 @@
 import React from 'react'
-import TournamentProfileHeader from './TournamentProfileHeader'
-import { NavLink, Outlet } from 'react-router-dom'
-import { Outdent } from 'lucide-react'
+import TournamentProfileHeader from './SingleTournament.jsx/TournamentProfileHeader'
+import { NavLink, Outlet, useParams } from 'react-router-dom'
+import { useGetSingleTournamentDetailQuery } from '../../../../slices/tournament/tournamentApiSlice'
 
 const TournamentProfileLayout = () => {
+    //single tournament api call
+
+    const { id } = useParams();
+    const { data, error, isLoading } = useGetSingleTournamentDetailQuery(id);
+    const tournament = data?.data
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+    if (error) {
+        return <div>error...</div>;
+    }
+
     return (
         <>
-            <TournamentProfileHeader />
+            <TournamentProfileHeader tournament={tournament} />
             <div className=" pt-4  flex flex-row items-center w-full gap-4 overflow-x-auto px-4 border-b border-gray-400 scrollbar-hide">
                 {[
                     { to: 'draws-and-rounds', label: 'DRAWS AND ROUNDS' },
-                    { to: 'results', label: 'TEAMS' },
+                    { to: 'squads', label: 'SQUADS' },
                     { to: 'point-table', label: 'OFFICALS' },
                     { to: 'point-table', label: 'MATCHES' },
                     { to: 'point-table', label: 'RULES' },

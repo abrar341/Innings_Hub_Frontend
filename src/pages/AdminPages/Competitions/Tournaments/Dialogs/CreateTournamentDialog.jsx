@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useCreateTournamentMutation, useUpdateTournamentMutation } from "../../../../slices/tournament/tournamentApiSlice";
-import {
-    Dialog,
-    DialogTrigger,
-    DialogContent,
-    DialogTitle,
-    DialogClose,
-} from "../../../../components/ui/dialog";
+import { useCreateTournamentMutation, useUpdateTournamentMutation } from "../../../../../slices/tournament/tournamentApiSlice";
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogClose } from "../../../../../components/ui/dialog";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";

@@ -71,6 +71,13 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'], // Provide cache on fetch
     }),
+    getAllSquads: builder.query({
+      query: () => ({
+        url: `${TOURNAMENTS_URL}/getAllSquads`,
+        method: 'GET',
+      }),
+      providesTags: ['Tournament'], // Provide cache on fetch
+    }),
 
     getUpcomingTournaments: builder.query({
       query: () => ({
@@ -95,6 +102,13 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'],
     }),
+    getSingleTournamentDetail: builder.query({
+      query: (id) => ({
+        url: `${TOURNAMENTS_URL}/getSingleTournamentDetail/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Tournament'],
+    }),
   }),
 });
 
@@ -106,4 +120,6 @@ export const {
   useGetUpcomingTournamentsQuery,
   useGetOngoingTournamentsQuery,
   useGetConcludedTournamentsQuery,
+  useGetAllSquadsQuery,
+  useGetSingleTournamentDetailQuery
 } = tournamentApiSlice;

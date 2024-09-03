@@ -1,10 +1,5 @@
 import React from "react";
-import {
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    DialogClose,
-} from "../../../../components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogClose } from "../../../../../components/ui/dialog";
 
 const NextStepsDialog = ({ isOpen, onClose, navigateToProfile }) => {
     const handleLetsGo = () => {

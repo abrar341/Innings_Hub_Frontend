@@ -1,10 +1,15 @@
 import React from 'react';
-import teams from '../../data/teams'
+// import teams from '../../data/teams'
 import { Link, useNavigate } from 'react-router-dom';
+import { useGetAllTeamsQuery } from '../../slices/team/teamApiSlice';
 
 
 
 const Teams = () => {
+    const { data, isLoading, isError, error } = useGetAllTeamsQuery();
+    const teams = data?.data || []; // Extract players with a 
+    console.log(teams);
+
     return (
         <>
             <div className="container bg-gray-100 mx-auto  p-4  bg-gray-50 grid-cols-1 ">
@@ -34,15 +39,15 @@ const Teams = () => {
                     <Link
                         to={`/team/${team.name}/players`}
                         key={index}
-                        className="rounded-xl hover:cursor-pointer hover:bg-gray-300 hover:cursor-pointer grid-cols-3 border border-gray-300 overflow-hidden transition duration-300 ease-in group">
+                        className="rounded-xl hover:cursor-pointer  hover:cursor-pointer grid-cols-3 border border-gray-300 overflow-hidden transition duration-300 ease-in group">
                         <div className="flex flex-col gap-4 justify-center items-center p-4 space-x-4">
                             <img
                                 className="h-20 border-b  pb-4 group-hover:border-black border-gray-300 object-cover transition duration-300 ease-in group-hover:scale-105"
-                                src={team.imgSrc}
-                                alt={team.name}
+                                src={team.teamLogo}
+                                alt={team.teamName}
                             />
                             <div className='flex justify-center items-center'>
-                                <div className="text-sm font-bold group-hover:scale-105 transition duration-300 ease-in">{team.name}</div>
+                                <div className="text-sm font-bold group-hover:scale-105 transition duration-300 ease-in">{team.teamName}</div>
                             </div>
                         </div>
                     </Link>

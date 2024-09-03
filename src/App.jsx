@@ -24,13 +24,15 @@ import Live from './pages/Scorer/pages/Live';
 import Result from './pages/Scorer/pages/Result';
 import Dashboard from './pages/AdminPages/Dashboard';
 import ClubManager from './pages/ClubManager/ClubManager';
-import Competitions from './pages/Competitions/Competitions';
-import TournamentProfileLayout from './pages/Competitions/Tournaments/TournamentProfileLayout';
+import Competitions from './pages/AdminPages/Competitions/Competitions';
+// import Competitions from './pages/Competitions/Competitions';
+import TournamentProfileLayout from './pages/AdminPages/Competitions/Tournaments/TournamentProfileLayout';
 import PlayerProfile from './pages/Player/PlayerProfile'
 import Players from './pages/Player/Players';
 import PlayersPageLayout from './pages/AdminPages/Players/PlayersPageLayout';
-import DrawsAndRounds from './pages/Competitions/Tournaments/DrawsAndRounds';
+import DrawsAndRounds from './pages/AdminPages//Competitions/Tournaments/DrawsAndRounds';
 import TeamsPageLayout from './pages/AdminPages/Teams/TeamsPageLayout';
+import Squads from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/Squads';
 
 function App() {
 
@@ -53,7 +55,7 @@ function App() {
           {/* <Route path='matches' element={<Matches />} /> */}
         </Route>
         <Route path="series" element={<Series />} />
-        <Route path='series/:tourName' element={<SeriesPageLayout />}>
+        <Route path='series/:id' element={<SeriesPageLayout />}>
           <Route path='fixtures' element={<Fixtures />} />
           <Route path='results' element={<Results />} />
           <Route path='point-table' element={<PointTable />} />
@@ -74,6 +76,7 @@ function App() {
         <Route path='admin/teams' element={<TeamsPageLayout />} />
         <Route path='admin/competitions/:id' element={<TournamentProfileLayout />} >
           <Route path='draws-and-rounds' element={<DrawsAndRounds />} />
+          <Route path='squads' element={<Squads />} />
         </Route>
 
         <Route path='club-manager' element={<ClubManager />}>

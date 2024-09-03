@@ -1,6 +1,5 @@
 import React from "react";
-import { Dialog, DialogContent, DialogTitle, DialogClose } from "../../../components/ui/dialog";
-
+import { Dialog, DialogContent, DialogTitle, DialogClose } from "../../../../../components/ui/dialog";
 const ManageFixturesDialog = ({ isOpen, onClose, onPrevious }) => {
     const handleSkipOrContinue = () => {
         onClose(); // Close this dialog and move to the tournament profile

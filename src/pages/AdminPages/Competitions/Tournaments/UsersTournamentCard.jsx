@@ -4,7 +4,7 @@ import { FaCalendarAlt, FaUsers, FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 const UsersTournamentCard = ({ tournament }) => {
     return (
-        <Link to={`/series/${tournament.name}/fixtures`} className="p-6 bg-white shadow-md rounded-lg relative transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out">
+        <Link to={`/series/${tournament?._id}/fixtures`} className="p-6 bg-white shadow-md rounded-lg relative transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out">
             <div className="flex justify-between items-start">
                 <span className="bg-green-100 text-green-700 rounded-full px-3 py-1 text-xs font-semibold">
                     Completed
@@ -32,19 +32,19 @@ const UsersTournamentCard = ({ tournament }) => {
                 </div>
                 <div className="mt-6 flex justify-center gap-5">
                     <Link
-                        to={`/series/${tournament.name}/fixtures`}
+                        to={`/series/${tournament._id}/fixtures`}
                         className="transition duration-300 ease-in text-sm border-b border-gray-500 text-center"
                     >
                         Fixtures
                     </Link>
                     <Link
-                        to={`/series/${tournament.name}/results`}
+                        to={`/series/${tournament._id}/results`}
                         className="transition duration-300 ease-in text-sm border-b border-gray-800 text-center"
                     >
                         Results
                     </Link>
                     <Link
-                        to={`/series/${tournament.name}/point-table`}
+                        to={`/series/${tournament._id}/point-table`}
                         className="transition duration-300 ease-in text-sm border-b border-gray-800 text-center"
                     >
                         Points Table

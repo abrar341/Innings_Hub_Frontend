@@ -1,7 +1,6 @@
 import React from "react";
-import { Dialog, DialogContent, DialogTitle, DialogClose } from "../../../../components/ui/dialog";
-
-const AddDrawsAndRoundsDialog = ({ isOpen, onClose, onPrevious }) => {
+import { Dialog, DialogContent, DialogTitle, DialogClose } from "../../../../../components/ui/dialog";
+const AddAndManageTeamsDialog = ({ isOpen, onClose, onPrevious }) => {
     const handleSkipOrContinue = () => {
         onClose(); // Close this dialog and move to the next step
     };
@@ -9,9 +8,9 @@ const AddDrawsAndRoundsDialog = ({ isOpen, onClose, onPrevious }) => {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-md w-full p-6 rounded-lg bg-white shadow-2xl">
-                <DialogTitle className="text-xl font-bold text-gray-800">Add Draws and Rounds</DialogTitle>
+                <DialogTitle className="text-xl font-bold text-gray-800">Add and Manage Teams</DialogTitle>
                 <div className="mt-4">
-                    {/* Content for adding draws and rounds */}
+                    {/* Content for adding and managing teams */}
                 </div>
                 <div className="mt-6 flex justify-between">
                     <button
@@ -40,4 +39,4 @@ const AddDrawsAndRoundsDialog = ({ isOpen, onClose, onPrevious }) => {
     );
 };
 
-export default AddDrawsAndRoundsDialog;
+export default AddAndManageTeamsDialog;

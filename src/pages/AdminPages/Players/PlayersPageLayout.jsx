@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import CreatePlayerDialog from './CreatePlayerDialog';
-import PlayerList from '../../Player/PlayerList';
+import PlayerList from './PlayerList';
 import { useGetAllPlayersQuery } from '../../../slices/player/playerApiSlice';
 import { setPlayers } from '../../../slices/player/playerSlice';
 import { useDispatch } from 'react-redux';
@@ -42,7 +42,7 @@ const PlayersPageLayout = () => {
 
                 <CreatePlayerDialog />
             </div>
-            <PlayerList isAdmin={true} />
+            <PlayerList />
         </>
     );
 }

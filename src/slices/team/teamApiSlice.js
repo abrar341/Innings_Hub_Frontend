@@ -7,14 +7,15 @@ export const teamApiSlice = apiSlice.injectEndpoints({
         // Mutation to create a new team
         createTeam: builder.mutation({
             query: (data) => {
+                console.log(data);
+
                 const formData = new FormData();
-                if (data.teamName) formData.append("teamName", data.teamName);
-                if (data.shortName) formData.append("shortName", data.shortName);
-                if (data.teamtype) formData.append("teamtype", data.teamtype);
-                if (data.location) formData.append("location", data.location);
-                if (data.logo) {
-                    formData.append("teamLogo", data.teamLogo);
-                }
+                formData.append("teamName", data.teamName);
+                formData.append("shortName", data.shortName);
+                formData.append("teamtype", data.teamtype);
+                formData.append("location", data.location);
+                if (data.logo) formData.append("teamLogo", data.logo);
+
                 return {
                     url: `${TEAMS_URL}/createTeam`,
                     method: "POST",

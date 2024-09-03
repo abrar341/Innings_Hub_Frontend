@@ -10,9 +10,9 @@ const Teams = () => {
 
     return (
         <>
-            <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-4 p-4">
+            <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-4">
                 {teams.map((team, index) => (
-                    <TeamCard team={team} />
+                    <TeamCard key={index} team={team} />
                 ))}
             </div>
         </>

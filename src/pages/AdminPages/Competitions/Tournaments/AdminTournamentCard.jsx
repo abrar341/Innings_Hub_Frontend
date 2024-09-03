@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { FaCalendarAlt, FaUsers, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import { formatDate } from '../../../utils/dateFormatter';
+import { formatDate } from '../../../../utils/dateFormatter';
 import { Link, useNavigate } from 'react-router-dom';
-import AlertNote from '../../../components/AlertNote'; // Import the AlertNote component
-import { useDeleteTournamentMutation } from '../../../slices/tournament/tournamentApiSlice';
+import AlertNote from '../../../../components/AlertNote'; // Import the AlertNote component
+import { useDeleteTournamentMutation } from '../../../../slices/tournament/tournamentApiSlice';
 import { toast } from "react-hot-toast";
 import { useDispatch } from 'react-redux';
-import { deleteSingleTournament } from '../../../slices/tournament/tornamentSlice';
+import { deleteSingleTournament } from '../../../../slices/tournament/tornamentSlice';
 import CreateTournamentDialog from './Dialogs/CreateTournamentDialog';
 
 const AdminTournamentCard = ({ tournament, userType }) => {
@@ -17,7 +17,7 @@ const AdminTournamentCard = ({ tournament, userType }) => {
   const [deleteTournament, { isLoading }] = useDeleteTournamentMutation();
   const dispatch = useDispatch()
   const handleTournamentClick = () => {
-    navigate(`/admin/competitions/${tournament.id}`);
+    navigate(`/admin/competitions/${tournament._id}`);
   };
 
   const handleDeleteClick = () => {
