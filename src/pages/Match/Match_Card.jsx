@@ -42,7 +42,7 @@ const Match_Card = ({ matchData }) => {
             {/* Action Buttons */}
             <div className=" flex justify-center bottom-0 bg-gray-100 p-2   items-center border-t border-gray-300">
                 <Link
-                    to="/scorecard"
+                    to="/all-matches/scorecard/summery"
                     title="MATCH CENTRE"
                     className="text-xs font-semibold text-gray-700 border border-gray-300 bg-white rounded px-3 py-1 inline-flex items-center space-x-1 transition-colors hover:bg-gray-200"
                 >

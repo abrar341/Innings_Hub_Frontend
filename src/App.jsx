@@ -33,6 +33,12 @@ import PlayersPageLayout from './pages/AdminPages/Players/PlayersPageLayout';
 import DrawsAndRounds from './pages/AdminPages//Competitions/Tournaments/DrawsAndRounds';
 import TeamsPageLayout from './pages/AdminPages/Teams/TeamsPageLayout';
 import Squads from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/Squads';
+import ScoreCard from './pages/Match/ScoreCard/ScoreCard'
+import MatchSummery from './pages/Match/ScoreCard/MatchSummery';
+import ScoreCard_Innings from './pages/Match/ScoreCard/ScoreCard_Innings';
+import Overs from './pages/Match/ScoreCard/Overs';
+import MatchInfo from './pages/Match/ScoreCard/MatchInfo';
+import PlayingEleven from './pages/Match/ScoreCard/PlayingEleven';
 
 function App() {
 
@@ -46,6 +52,16 @@ function App() {
           <Route index path='live-scores' element={<LiveScores />} />
           <Route path='schedules' element={<Schedules />} />
           <Route path='results' element={<LiveScores />} />
+          <Route
+            path="scorecard"
+            element={<ScoreCard />} >
+            <Route path='summery' element={<MatchSummery />} />
+            <Route path='innings' element={<ScoreCard_Innings />} />
+            <Route path='overs' element={<Overs />} />
+            <Route path='match-info' element={<MatchInfo />} />
+            <Route path='playing-eleven' element={<PlayingEleven />} />
+          </Route>
+
         </Route>
         <Route path="team" element={<Teams />} />
         <Route path='team/:teamName' element={<TeamProfileLayout />}>

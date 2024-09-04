@@ -49,7 +49,7 @@ const MainNavbar = () => {
         ));
 
     return (
-        <nav className="bg-white p-4 md:p-3 sticky top-0 z-10 shadow-lg">
+        <nav className="bg-white p-4 md:p-3 sticky top-0 z-10 border-b">
             <div className="container mx-auto flex justify-between gap-3 items-center">
                 <div className="order-1 md:order-0 text-black text-2xl font-semibold tracking-wide">
                     CRICKET
