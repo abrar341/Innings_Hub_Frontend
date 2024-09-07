@@ -18,7 +18,7 @@ const PlayerList = () => {
         return <div>No player found</div>
     }
     return (
-        <div className="grid gap-4 grid-cols-2 xs-1:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 p-4">
+        <div className="grid gap-4 grid-cols-2 xs-1:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 p-4">
             {players?.map((player, index) => (
                 <AdminPlayerCard key={index} player={player} onClick={handleClick} />
             ))}

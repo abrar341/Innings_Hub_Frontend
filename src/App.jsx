@@ -86,16 +86,19 @@ function App() {
           <Route path='upcoming' element={<Upcoming />} />
           <Route path='results' element={<Result />} />
         </Route>
-        <Route path='admin' element={<Dashboard />} />
-        <Route path='admin/competitions' element={<Competitions isAdmin={true} />} />
-        <Route path='admin/players' element={<PlayersPageLayout />} />
-        <Route path='admin/teams' element={<TeamsPageLayout />} />
-        <Route path='admin/competitions/:id' element={<TournamentProfileLayout />} >
-          <Route path='draws-and-rounds' element={<DrawsAndRounds />} />
-          <Route path='squads' element={<Squads />} />
+        <Route path='admin' element={<Dashboard />} >
+          <Route path='competitions' element={<Competitions isAdmin={true} />} />
+          <Route path='players' element={<PlayersPageLayout />} />
+          <Route path='teams' element={<TeamsPageLayout />} />
+          <Route path='competitions/:id' element={<TournamentProfileLayout />} >
+            <Route path='draws-and-rounds' element={<DrawsAndRounds />} />
+            <Route path='squads' element={<Squads />} />
+          </Route>
         </Route>
 
         <Route path='club-manager' element={<ClubManager />}>
+          <Route path='players' element={<PlayersPageLayout />} />
+          <Route path='teams' element={<TeamsPageLayout />} />
         </Route>
       </Route>
     ));
