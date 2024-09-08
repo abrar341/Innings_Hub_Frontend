@@ -88,8 +88,6 @@ function App() {
         </Route>
         <Route path='admin' element={<Dashboard />} >
           <Route path='competitions' element={<Competitions isAdmin={true} />} />
-          <Route path='players' element={<PlayersPageLayout />} />
-          <Route path='teams' element={<TeamsPageLayout />} />
           <Route path='competitions/:id' element={<TournamentProfileLayout />} >
             <Route path='draws-and-rounds' element={<DrawsAndRounds />} />
             <Route path='squads' element={<Squads />} />

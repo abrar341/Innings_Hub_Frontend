@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink, Outlet } from 'react-router-dom';
 
 const ClubManager = () => {
+    const players = useSelector((state) => state.players.players);
     const cards = [
-        { to: 'players', icon: 'fa-users', title: 'Players' },
+        { to: 'players', icon: 'fa-users', title: `Players(${players?.length})` },
         { to: 'teams', icon: 'fa-group', title: 'Teams' },
     ];
 
@@ -12,6 +14,7 @@ const ClubManager = () => {
         }`;
 
     return (
+
         <>
 
             <div className="container flex justify-center mx-auto my-5">

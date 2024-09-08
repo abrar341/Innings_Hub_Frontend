@@ -18,10 +18,26 @@ const PlayerList = () => {
         return <div>No player found</div>
     }
     return (
-        <div className="grid gap-4 grid-cols-2 xs-1:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 p-4">
-            {players?.map((player, index) => (
-                <AdminPlayerCard key={index} player={player} onClick={handleClick} />
-            ))}
+        <div className="w-full mt-6 overflow-hidden rounded-lg shadow-xs">
+            <div className="w-full overflow-x-auto">
+                <table className="w-full whitespace-no-wrap">
+                    <thead>
+                        <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b  bg-gray-50 ">
+                            <th className="px-4 py-3">Player</th>
+                            <th className="px-4 py-3">Role</th>
+                            <th className="px-4 py-3">Status</th>
+                            <th className="px-4 py-3">DOB</th>
+                            <th className="px-4 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                        {players.map((player, index) => (
+                            <AdminPlayerCard key={index} player={player} onClick={handleClick} />
+
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

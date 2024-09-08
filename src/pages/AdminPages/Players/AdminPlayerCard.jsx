@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { delete_Player } from '../../../slices/player/playerSlice';
 import CreatePlayerDialog from './CreatePlayerDialog';
+import { formatDateToYMD } from '../../../utils/dateUtils';
 
 const AdminPlayerCard = ({ player, onClick }) => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -38,33 +39,35 @@ const AdminPlayerCard = ({ player, onClick }) => {
 
 
     return (
-        <div
-            className="border rounded-xl border-gray-300 bg-white shadow-full transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out"
-        >
-            <div className="flex justify-between items-center p-3 text-white">
-                <img
-                    className="w-6 h-6"
-                    src="https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_160,q_50/lsci/db/PICTURES/CMS/381800/381894.png"
-                    alt="Country Logo"
-                />
-                <span className="text-sm text-black font-bold">{player.playerName}</span>
-            </div>
-
-            <div className="p-2 border-b text-center group">
-                <img
-                    className="h-24 w-24 md:h-28 md:w-28 rounded-full mx-auto border-2 border-customDarkBlue object-cover transition-transform duration-300 ease-in-out group-hover:rounded-lg group-hover:scale-105"
-                    src={player.profilePicture || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw4GVTa5rCatvKGw3El6BLqZUks44zL9ezZg&s'}
-                    alt={player.name}
-                />
-                <div className="mt-3 flex items-center justify-center space-x-2">
-                    <img
-                        className="w-5 h-5"
-                        src={getRoleImageUrl(player.role)}
-                        alt={player.role}
-                    />
-                    <span className="text-sm font-semibold">{player.role}</span>
-                </div>
-                <div className="flex mt-4 justify-center items-center space-x-4">
+        <>
+            <tr className="text-gray-700">
+                <td className="px-4 py-3">
+                    <div className="flex items-center text-sm">
+                        <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                            <img
+                                className="object-cover w-full h-full rounded-full"
+                                src={player.profilePicture}
+                                alt={player.playerName}
+                                loading="lazy"
+                            />
+                            <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
+                        </div>
+                        <div>
+                            <p className="font-semibold">{player.playerName}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400">{player.role}</p>
+                        </div>
+                    </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{player.role}</td>
+                <td className="px-4 py-3 text-xs">
+                    <span
+                        className={`px-2 py-1 font-semibold leading-tight rounded-full ${`bg-green-100`}`}
+                    >
+                        Active
+                    </span>
+                </td>
+                <td className="px-4 py-3 text-sm">{formatDateToYMD(player.DOB)}</td>
+                <td className="px-4 py-3 text-sm"><div className="flex mt-4 justify-center items-center space-x-4">
                     <button
                     >
                         <CreatePlayerDialog
@@ -80,8 +83,8 @@ const AdminPlayerCard = ({ player, onClick }) => {
                     >
                         <FaTrashAlt className="text-gray-600" />
                     </button>
-                </div>
-            </div>
+                </div></td>
+            </tr>
             <AlertNote
                 open={isAlertOpen}
                 setOpen={setIsAlertOpen}
@@ -89,8 +92,7 @@ const AdminPlayerCard = ({ player, onClick }) => {
                 content="This action cannot be undone. This will permanently delete the player."
                 isLoading={isLoading}
             />
-
-        </div>
+        </>
     );
 };
 
