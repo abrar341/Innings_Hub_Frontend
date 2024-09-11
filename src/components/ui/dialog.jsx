@@ -42,9 +42,12 @@ const DialogContent = React.forwardRef(
                     ref={ref}
                     className={cn(
                         "relative w-full max-w-lg p-6 bg-white shadow-lg sm:rounded-lg overflow-y-auto max-h-[80vh]",
-                        // "relative w-full max-w-lg p-6 bg-white shadow-lg sm:rounded-lg overflow-y-auto max-h-[80vh]",
                         className
                     )}
+                    // Prevent closing the dialog on outside click
+                    onInteractOutside={(event) => event.preventDefault()}
+                    // Ensure the dialog remains open when clicking outside
+                    modal={false}
                     {...props}
                 >
                     {children}
@@ -60,6 +63,7 @@ const DialogContent = React.forwardRef(
     )
 );
 DialogContent.displayName = DialogPrimitive.Content.displayName;
+
 
 
 

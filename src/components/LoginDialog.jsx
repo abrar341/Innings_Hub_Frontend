@@ -10,6 +10,7 @@ import { setCredentials } from "../slices/auth/authSlice";
 import { toast } from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi"; // Import eye icons
+import SignUpDialog from './SignUpDialog'
 
 // Validation schema
 const schema = yup.object().shape({
@@ -121,9 +122,7 @@ const LoginDialog = () => {
                 </form>
                 <p className="text-center my-4">OR</p>
                 <div className="space-y-2">
-                    <button className="w-full py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                        <span className="fab fa-google"></span> Continue with Google
-                    </button>
+                    <SignUpDialog />
                 </div>
                 <DialogClose asChild>
                     <button aria-label="Close" className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus:outline-none" />

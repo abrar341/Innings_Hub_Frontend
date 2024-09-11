@@ -4,6 +4,7 @@ import tournamentReducer from './slices/tournament/tornamentSlice';
 import { apiSlice } from './slices/apiSlice';
 import playerReducer from './slices/player/playerSlice'; // Import the player slice
 import teamReducer from './slices/team/teamSlice'; // Import the player slice
+import dialogReducer from './slices/dialogbox/dialogSlice'; // Import the player slice
 
 const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
         tournaments: tournamentReducer,           // Tournament slice
         players: playerReducer,                   // Player slice
         teams: teamReducer,                   // Player slice
+        dialog: dialogReducer,
         // Add other reducers here
     },
     middleware: (getDefaultMiddleware) =>
