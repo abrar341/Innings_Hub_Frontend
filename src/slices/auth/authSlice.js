@@ -1,9 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  userInfo: localStorage.getItem('userInfo')
-    ? JSON.parse(localStorage.getItem('userInfo'))
-    : null,
+  userInfo: null,
+  userType: null,
+  isVerified: false,
+  isAuthenticated: false,
+  loading: false,
+  error: null,
 };
 
 const authSlice = createSlice({
@@ -11,17 +14,31 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      console.log(action.payload)
-      state.userInfo = action.payload.data.user;
-      localStorage.setItem('userInfo', JSON.stringify(action.payload.data.user));
+      const { role, isVerified } = action.payload;
+      state.userInfo = action.payload;
+      state.userType = role;
+      state.isVerified = isVerified;
+      state.isAuthenticated = true;
+      state.error = null;
     },
-    logout: (state, action) => {
+    logout: (state) => {
       state.userInfo = null;
-      localStorage.removeItem('userInfo');
+      state.userType = null;
+      state.isVerified = false;
+      state.isAuthenticated = false;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
+    resetError: (state) => {
+      state.error = null;
     },
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, setLoading, setError, resetError } = authSlice.actions;
 
 export default authSlice.reducer;

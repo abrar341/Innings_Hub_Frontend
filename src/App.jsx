@@ -7,16 +7,16 @@ import Series from './pages/Series/Series';
 import PlayersListing from './pages/Team/pages/Players';
 import TeamProfileLayout from './pages/Team/TeamProfileLayout';
 import TeamStats from './pages/Team/pages/TeamStats';
-import TeamSqaud from './pages/Team/pages/TeamSquad'
+import TeamSqaud from './pages/Team/pages/TeamSquad';
 import SeriesPageLayout from './pages/Series/SeriesProfileLayout';
 import Fixtures from './pages/Series/pages/Fixtures';
 import Results from './pages/Series/pages/Results';
 import PointTable from './pages/Series/pages/PointTable';
 import Home from './pages/Home';
-import MatchesLayout from './pages/LiveScore/MatchesLayout'
-import LiveScores from './pages/LiveScore/pages/LiveScores'
-import Schedules from './pages/LiveScore/pages/Schedules'
-import store from './store';
+import MatchesLayout from './pages/LiveScore/MatchesLayout';
+import LiveScores from './pages/LiveScore/pages/LiveScores';
+import Schedules from './pages/LiveScore/pages/Schedules';
+import { store, persistor } from './store';
 import { Provider } from 'react-redux';
 import ScorerLayout from './pages/Scorer/ScorerLayout';
 import Upcoming from './pages/Scorer/pages/Upcoming';
@@ -25,87 +25,103 @@ import Result from './pages/Scorer/pages/Result';
 import Dashboard from './pages/AdminPages/Dashboard';
 import ClubManager from './pages/ClubManager/ClubManager';
 import Competitions from './pages/AdminPages/Competitions/Competitions';
-// import Competitions from './pages/Competitions/Competitions';
 import TournamentProfileLayout from './pages/AdminPages/Competitions/Tournaments/TournamentProfileLayout';
-import PlayerProfile from './pages/Player/PlayerProfile'
+import PlayerProfile from './pages/Player/PlayerProfile';
 import Players from './pages/Player/Players';
 import PlayersPageLayout from './pages/AdminPages/Players/PlayersPageLayout';
-import DrawsAndRounds from './pages/AdminPages//Competitions/Tournaments/DrawsAndRounds';
+import DrawsAndRounds from './pages/AdminPages/Competitions/Tournaments/DrawsAndRounds';
 import TeamsPageLayout from './pages/AdminPages/Teams/TeamsPageLayout';
 import Squads from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/Squads';
-import ScoreCard from './pages/Match/ScoreCard/ScoreCard'
+import ScoreCard from './pages/Match/ScoreCard/ScoreCard';
 import MatchSummery from './pages/Match/ScoreCard/MatchSummery';
 import ScoreCard_Innings from './pages/Match/ScoreCard/ScoreCard_Innings';
 import Overs from './pages/Match/ScoreCard/Overs';
 import MatchInfo from './pages/Match/ScoreCard/MatchInfo';
 import PlayingEleven from './pages/Match/ScoreCard/PlayingEleven';
+import LoginPage from './components/LoginPage';
+import SignUpPage from './components/SignUpPage';
+import EmailVerificationPage from './components/EmailVerificationPage';
+import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
+import { PersistGate } from 'redux-persist/integration/react';
+
 
 function App() {
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
+        <Route path='account'>
+          <Route path='login' element={<LoginPage />} />
+          <Route path='signup' element={<SignUpPage />} />
+          <Route path='verify' element={<EmailVerificationPage />} />
+        </Route>
+
+        {/* Public Routes */}
         <Route index element={<Home />} />
         <Route path="all-matches" element={<MatchesLayout />}>
-          {/* <Route  element={<LiveScores />} /> */}
           <Route index element={<LiveScores />} />
-          <Route index path='live-scores' element={<LiveScores />} />
+          <Route path='live-scores' element={<LiveScores />} />
           <Route path='schedules' element={<Schedules />} />
           <Route path='results' element={<LiveScores />} />
-          <Route
-            path="scorecard"
-            element={<ScoreCard />} >
+          <Route path="scorecard" element={<ScoreCard />}>
             <Route path='summery' element={<MatchSummery />} />
             <Route path='innings' element={<ScoreCard_Innings />} />
             <Route path='overs' element={<Overs />} />
             <Route path='match-info' element={<MatchInfo />} />
             <Route path='playing-eleven' element={<PlayingEleven />} />
           </Route>
-
         </Route>
+
+        {/* Role-Specific Protected Routes */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          <Route path='admin' element={<Dashboard />} >
+            <Route path='competitions' element={<Competitions isAdmin={true} />} />
+            <Route path='competitions/:id' element={<TournamentProfileLayout />} >
+              <Route path='draws-and-rounds' element={<DrawsAndRounds />} />
+              <Route path='squads' element={<Squads />} />
+            </Route>
+          </Route>
+        </Route>
+
+        <Route element={<ProtectedRoute allowedRoles={['club-manager']} />}>
+          <Route path='club-manager' element={<ClubManager />} >
+            <Route path='players' element={<PlayersPageLayout />} />
+            <Route path='teams' element={<TeamsPageLayout />} />
+          </Route>
+        </Route>
+
+        <Route element={<ProtectedRoute allowedRoles={['scorer']} />}>
+          <Route path='scorer' element={<ScorerLayout />}>
+            <Route path='live' element={<Live />} />
+            <Route path='upcoming' element={<Upcoming />} />
+            <Route path='results' element={<Result />} />
+          </Route>
+        </Route>
+
+        {/* Public Routes */}
         <Route path="team" element={<Teams />} />
-        <Route path='team/:teamName' element={<TeamProfileLayout />}>
+        <Route path='team/:teamName' element={<TeamProfileLayout />} >
           <Route path='squad' element={<TeamSqaud />} />
           <Route path='players' element={<PlayersListing />} />
           <Route path='stats' element={<TeamStats />} />
-          {/* <Route path='matches' element={<Matches />} /> */}
         </Route>
         <Route path="series" element={<Series />} />
-        <Route path='series/:id' element={<SeriesPageLayout />}>
+        <Route path='series/:id' element={<SeriesPageLayout />} >
           <Route path='fixtures' element={<Fixtures />} />
           <Route path='results' element={<Results />} />
           <Route path='point-table' element={<PointTable />} />
         </Route>
         <Route path="players" element={<Players />} />
-        <Route path="/player/:name" element={<div className="bg-gray-100 p-3 min-w-[200px]">
-          <PlayerProfile />
-        </div>} />
-        <Route path='scorer' element={<ScorerLayout />}>
-          {/* on scorer login navigate to "/scorer/live" */}
-          <Route path='live' element={<Live />} />
-          <Route path='upcoming' element={<Upcoming />} />
-          <Route path='results' element={<Result />} />
-        </Route>
-        <Route path='admin' element={<Dashboard />} >
-          <Route path='competitions' element={<Competitions isAdmin={true} />} />
-          <Route path='competitions/:id' element={<TournamentProfileLayout />} >
-            <Route path='draws-and-rounds' element={<DrawsAndRounds />} />
-            <Route path='squads' element={<Squads />} />
-          </Route>
-        </Route>
-
-        <Route path='club-manager' element={<ClubManager />}>
-          <Route path='players' element={<PlayersPageLayout />} />
-          <Route path='teams' element={<TeamsPageLayout />} />
-        </Route>
+        <Route path="/player/:name" element={<PlayerProfile />} />
       </Route>
-    ));
+    )
+  );
 
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <PersistGate loading={null} persistor={persistor}>
+        <RouterProvider router={router} />
+      </PersistGate>
     </Provider>
-
   );
 }
 

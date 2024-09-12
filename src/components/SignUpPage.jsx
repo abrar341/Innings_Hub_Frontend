@@ -3,85 +3,212 @@ import Input from "./Input";
 import { Loader, Lock, Mail, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useRegisterMutation } from "../slices/auth/usersApiSlice";
+import { toast } from "react-hot-toast";
+import useDialog from "../hooks/useDialog";
+import EmailVerificationDialog from "./verifyDialog"
+
+// Validation schema
+const schema = yup.object().shape({
+    name: yup.string().required('Full name is required'),
+    email: yup.string().email('Invalid email format').required('Email is required'),
+    username: yup.string().required('Username is required'),
+    password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+    confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm password is required'),
+    clubManager: yup.boolean(),
+});
 
 const SignUpPage = () => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const { control, handleSubmit, formState: { errors, isDirty } } = useForm({
+        resolver: yupResolver(schema),
+        mode: 'onChange',
+    });
 
-    const error = false;
-    const isLoading = false;
-    const handleSignUp = async (e) => {
-        e.preventDefault();
+    const [register, { isLoading }] = useRegisterMutation();
+    const { isVerifyDialogOpen, openVerifyDialog } = useDialog()
+    const [email, setEmail] = useState("")
 
+    const onSubmit = async (data) => {
         try {
-            navigate("/verify-email");
-        } catch (error) {
-            console.log(error);
+            const { name, email, username, password, confirmPassword, clubManager } = data;
+            const role = clubManager ? 'Club-Manager' : 'Regular-User';
+
+            const requestData = {
+                name,
+                email,
+                username,
+                password,
+                confirmPassword,
+                role,
+            };
+
+            const res = await register(requestData).unwrap();
+            // toast.success("Account created successfully!");
+            setEmail(res.data?.email)
+
+            openVerifyDialog();
+            if (role === 'Club-Manager') {
+                toast.dismiss()
+                toast.info("Your club manager request has been submitted for approval.");
+            }
+
+            // navigate("/account/verify");
+        } catch (err) {
+            toast.dismiss()
+            toast.error(err?.data?.message || "Error occurred while creating account");
         }
     };
+
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className='max-w-md w-full bg-gray-700 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl 
-			overflow-hidden'
-        >
-            <div className='p-8'>
-                <h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
-                    Create Account
-                </h2>
+        <div className="flex justify-center items-center bg-gray-900 min-h-screen py-2">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className='max-w-lg w-full bg-gray-700 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'
+            >
+                <div className='p-8'>
+                    <h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
+                        Create Account
+                    </h2>
 
-                <form onSubmit={handleSignUp}>
-                    <Input
-                        icon={User}
-                        type='text'
-                        placeholder='Full Name'
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <Input
-                        icon={Mail}
-                        type='email'
-                        placeholder='Email Address'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <Input
-                        icon={Lock}
-                        type='password'
-                        placeholder='Password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    {error && <p className='text-red-500 font-semibold mt-2'>{error}</p>}
-                    {/* <PasswordStrengthMeter password={password} /> */}
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <Controller
+                            name="name"
+                            control={control}
+                            render={({ field }) => (
+                                <div>
+                                    <Input
+                                        icon={User}
+                                        type='text'
+                                        placeholder='Full Name'
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        error={errors.name?.message}
+                                    />
+                                    {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+                                </div>
+                            )}
+                        />
 
-                    <motion.button
-                        className='mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
-						font-bold rounded-lg shadow-lg hover:from-green-600
-						hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
-						 focus:ring-offset-gray-900 transition duration-200'
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        type='submit'
-                        disabled={isLoading}
-                    >
-                        {isLoading ? <Loader className=' animate-spin mx-auto' size={24} /> : "Sign Up"}
-                    </motion.button>
-                </form>
-            </div>
-            <div className='px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center'>
-                <p className='text-sm text-gray-400'>
-                    Already have an account?{" "}
-                    <Link to={"/login"} className='text-green-400 hover:underline'>
-                        Login
-                    </Link>
-                </p>
-            </div>
-        </motion.div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <Controller
+                                name="email"
+                                control={control}
+                                render={({ field }) => (
+                                    <div>
+                                        <Input
+                                            icon={Mail}
+                                            type='email'
+                                            placeholder='Email Address'
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            error={errors.email?.message}
+                                        />
+                                        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+                                    </div>
+                                )}
+                            />
+
+                            <Controller
+                                name="username"
+                                control={control}
+                                render={({ field }) => (
+                                    <div>
+                                        <Input
+                                            icon={User}
+                                            type='text'
+                                            placeholder='Username'
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            error={errors.username?.message}
+                                        />
+                                        {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
+                                    </div>
+                                )}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <Controller
+                                name="password"
+                                control={control}
+                                render={({ field }) => (
+                                    <div>
+                                        <Input
+                                            icon={Lock}
+                                            type='password'
+                                            placeholder='Password'
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            error={errors.password?.message}
+                                        />
+                                        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+                                    </div>
+                                )}
+                            />
+
+                            <Controller
+                                name="confirmPassword"
+                                control={control}
+                                render={({ field }) => (
+                                    <div>
+                                        <Input
+                                            icon={Lock}
+                                            type='password'
+                                            placeholder='Confirm Password'
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            error={errors.confirmPassword?.message}
+                                        />
+                                        {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+                                    </div>
+                                )}
+                            />
+                        </div>
+
+                        <Controller
+                            name="clubManager"
+                            control={control}
+                            render={({ field }) => (
+                                <div className="flex items-center mt-4">
+                                    <input
+                                        type="checkbox"
+                                        className="mr-2"
+                                        {...field}
+                                    />
+                                    <label htmlFor="clubManager" className="text-gray-200">Sign up as Club Manager</label>
+                                </div>
+                            )}
+                        />
+
+                        <motion.button
+                            className='mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200'
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            type='submit'
+                            disabled={isLoading}
+                        >
+                            {isLoading ? <Loader className='animate-spin mx-auto' size={24} /> : "Sign Up"}
+                        </motion.button>
+                    </form>
+                </div>
+                <div className='px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center'>
+                    <p className='text-sm text-gray-400'>
+                        Already have an account?{" "}
+                        <Link to={"/account/login"} className='text-green-400 hover:underline'>
+                            Login
+                        </Link>
+                    </p>
+                </div>
+            </motion.div>
+            <EmailVerificationDialog email={email} setEmail={setEmail} />
+        </div>
     );
 };
+
 export default SignUpPage;

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UserDropdown from './userDropdown';
-import LoginDialog from './LoginDialog';
 
 const MainNavbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,9 +57,9 @@ const MainNavbar = () => {
                     {userInfo ? (
                         <UserDropdown />
                     ) : (
-                        <div className="relative flex items-center">
-                            <LoginDialog />
-                        </div>
+                        <Link to={'/account/login'} className="relative flex items-center">
+                            Login
+                        </Link>
                     )}
                 </div>
                 <div className="hidden order-0 md:order-1 md:flex space-x-8">

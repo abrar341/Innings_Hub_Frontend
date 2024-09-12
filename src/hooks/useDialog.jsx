@@ -7,20 +7,20 @@ const useDialog = () => {
     const isSignupDialogOpen = useSelector((state) => state.dialog.isSignupDialogOpen);
     const isLoginDialogOpen = useSelector((state) => state.dialog.isLoginDialogOpen);
 
-    const showVerifyDialog = () => {
+    const openVerifyDialog = () => {
         dispatch(showVerifyDialog());
     };
 
     const closeVerifyDialog = () => {
         dispatch(hideVerifyDialog());
     };
-    const showLoginDialog = () => {
+    const openLoginDialog = () => {
         dispatch(showLoginDialog());
     };
     const closeLoginDialog = () => {
         dispatch(hideLoginDialog());
     };
-    const showSignupDialog = () => {
+    const openSignupDialog = () => {
         dispatch(showSignupDialog());
     };
     const closeSignupDialog = () => {
@@ -31,9 +31,9 @@ const useDialog = () => {
         isVerifyDialogOpen,
         isLoginDialogOpen,
         isSignupDialogOpen,
-        showVerifyDialog,
-        showLoginDialog,
-        showSignupDialog,
+        openVerifyDialog,
+        openLoginDialog,
+        openSignupDialog,
         closeVerifyDialog,
         closeLoginDialog,
         closeSignupDialog,
