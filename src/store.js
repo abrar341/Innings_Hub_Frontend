@@ -12,9 +12,9 @@ import storage from 'redux-persist/lib/storage'; // Use local storage for persis
 
 // Persist configuration for the auth slice
 const authPersistConfig = {
-    key: 'auth',        // The key to be stored in local storage
-    storage,            // Use local storage
-    whitelist: ['userInfo', 'isAuthenticated', 'userType', 'isVerified'], // Only persist specific parts of the state
+    key: 'auth',
+    storage,
+    whitelist: ['userInfo', 'isAuthenticated', 'userType', 'isVerified'],
 };
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
@@ -27,6 +27,7 @@ const store = configureStore({
         players: playerReducer,                   // Player slice
         teams: teamReducer,                       // Team slice
         dialog: dialogReducer,                    // Dialog slice
+        // club: clubReducer,                    // Club slice
         // Add other reducers here
     },
     middleware: (getDefaultMiddleware) =>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import UserDropdown from '../../components/userDropdown';
 import ClubRegistrationForm from '../../components/ClubRegistrationForm';  // Assuming you have this component
 
@@ -29,12 +29,32 @@ const ClubManager = () => {
         return <ClubRegistrationForm />;
     }
 
+    // If the club registration status is pending, show a message
+    if (userInfo.club.registrationStatus === 'pending') {
+        return (
+            <div className="flex flex-col items-center justify-center h-screen">
+                <h2 className="text-2xl font-bold text-yellow-500 mb-4">
+                    Your club registration status is Pending.
+                </h2>
+                <p className="text-gray-600">
+                    Please wait for approval from the association before accessing the dashboard.
+                </p>
+            </div>
+        );
+    }
+
     // Otherwise, render the Club Manager dashboard
     return (
         <>
-            <h2 className='text-3xl mt-6 font-bold mb-6 text-center text-gray-700'>
-                Club Manager
-            </h2>
+            <div className='flex items-center justify-between'>
+                <Link to={"/"} className='underline text-blue-500 p-2'>see as regualr user</Link>
+                <h2 className='text-3xl mt-6 font-bold mb-6 text-center text-gray-500'>
+                    Club Manager
+                </h2>
+                <div className='z-30'>
+                    <UserDropdown />
+                </div>
+            </div>
             <div className="px-2 flex justify-between gap-6 mx-auto my-5">
                 <div className="flex justify-center items-center gap-6">
                     {cards.map((card, index) => (
@@ -43,9 +63,7 @@ const ClubManager = () => {
                         </NavLink>
                     ))}
                 </div>
-                <div className='z-30'>
-                    <UserDropdown />
-                </div>
+
             </div>
             <Outlet />
         </>

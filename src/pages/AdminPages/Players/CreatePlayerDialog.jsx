@@ -70,6 +70,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
     };
 
     const onSubmit = async (data) => {
+        console.log(data);
 
         const formattedData = {
             ...data,
