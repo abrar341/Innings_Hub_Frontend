@@ -40,8 +40,17 @@ const LoginPage = () => {
 
 			console.log(user);
 			dispatch(setCredentials({ ...user }));
-			navigate(`/${res.data.user.role}`);
 
+			const role = res.data.user.role;
+			console.log(role);
+
+
+			if (role === 'admin' || role === 'club-manager' || role === 'scorer') {
+				navigate(`/${role}/dashboard`);
+			} else {
+				navigate('/');
+			}
+			toast.dismiss();
 			toast.success(res.message);
 		} catch (err) {
 			toast.dismiss();
@@ -78,7 +87,6 @@ const LoginPage = () => {
 									/>
 								)}
 							/>
-							{errors.email && <p className='text-red-500 text-sm mt-1'>{errors.email.message}</p>}
 						</div>
 
 						{/* Password Input */}
@@ -96,7 +104,6 @@ const LoginPage = () => {
 									/>
 								)}
 							/>
-							{errors.password && <p className='text-red-500 text-sm mt-1'>{errors.password.message}</p>}
 						</div>
 
 						<div className='flex items-center mb-6'>

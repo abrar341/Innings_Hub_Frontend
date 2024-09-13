@@ -6,7 +6,7 @@ import UserDropdown from './userDropdown';
 const MainNavbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const { userInfo } = useSelector((state) => state.auth);
+    const { isAuthenticated } = useSelector((state) => state.auth);
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -33,6 +33,7 @@ const MainNavbar = () => {
         { to: '/team', label: 'TEAMS' },
         { to: '/series', label: 'COMPETITIONS' },
         { to: '/players', label: 'PLAYERS' },
+        { to: '/clubs', label: 'CLUBS' },
     ];
 
     const renderNavLinks = (isMobile = false) =>
@@ -54,10 +55,10 @@ const MainNavbar = () => {
                     CRICKET
                 </div>
                 <div className="order-2 flex items-center">
-                    {userInfo ? (
+                    {isAuthenticated ? (
                         <UserDropdown />
                     ) : (
-                        <Link to={'/account/login'} className="relative flex items-center">
+                        <Link to={'/account/login'} className="border border-gray-600 px-2 py-1 relative flex items-center">
                             Login
                         </Link>
                     )}

@@ -1,5 +1,6 @@
 import React from 'react'
 import Matches_Scroll from './Match/Matches_Scroll'
+import ClubRegistrationForm from '../components/ClubRegistrationForm'
 
 const Home = () => {
     return (

@@ -7,6 +7,8 @@ import { useVerifyEmailMutation } from "../slices/auth/usersApiSlice";
 import { useNavigate } from "react-router-dom";
 
 const EmailVerificationDialog = ({ email, setEmail }) => {
+    console.log(email);
+
     const [code, setCode] = useState(["", "", "", "", "", ""]);
     const inputRefs = useRef([]);
     const navigate = useNavigate();
@@ -67,12 +69,16 @@ const EmailVerificationDialog = ({ email, setEmail }) => {
     const { closeVerifyDialog, isVerifyDialogOpen } = useDialog();
 
     return (
-        <Dialog open={isVerifyDialogOpen} onOpenChange={() => closeVerifyDialog()}>
+        <Dialog open={isVerifyDialogOpen} onOpenChange={() => {
+            closeVerifyDialog();
+            setCode(["", "", "", "", "", ""])
+        }}>
             <DialogContent className="max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
                 <DialogTitle className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
                     Verify Your Email
                 </DialogTitle>
-                <p className="text-center text-gray-300 mb-6">Enter the 6-digit code sent to your email address.</p>
+                <p className="text-center text-gray-300 mb-6">Enter the 6-digit code sent to<span className="font-bold text-base bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">{email}</span>
+                </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex justify-between">
@@ -102,7 +108,6 @@ const EmailVerificationDialog = ({ email, setEmail }) => {
                 </form>
 
                 <DialogClose asChild>
-                    <button aria-label="Close" className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus:outline-none">X</button>
                 </DialogClose>
             </DialogContent>
         </Dialog>

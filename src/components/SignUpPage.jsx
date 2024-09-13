@@ -35,7 +35,7 @@ const SignUpPage = () => {
     const onSubmit = async (data) => {
         try {
             const { name, email, username, password, confirmPassword, clubManager } = data;
-            const role = clubManager ? 'Club-Manager' : 'Regular-User';
+            const role = clubManager ? 'club-manager' : 'Regular-User';
 
             const requestData = {
                 name,
@@ -47,16 +47,14 @@ const SignUpPage = () => {
             };
 
             const res = await register(requestData).unwrap();
-            // toast.success("Account created successfully!");
-            setEmail(res.data?.email)
+            setEmail(requestData.email);
+            console.log(email);
 
+            // Wait for email to be set before opening dialog
             openVerifyDialog();
-            if (role === 'Club-Manager') {
-                toast.dismiss()
-                toast.info("Your club manager request has been submitted for approval.");
-            }
+            toast.dismiss();
+            toast.success(res.message);
 
-            // navigate("/account/verify");
         } catch (err) {
             toast.dismiss()
             toast.error(err?.data?.message || "Error occurred while creating account");
@@ -64,12 +62,12 @@ const SignUpPage = () => {
     };
 
     return (
-        <div className="flex justify-center items-center bg-gray-900 min-h-screen py-2">
+        <div className="flex  justify-center items-center bg-gray-900 min-h-screen py-2">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className='max-w-lg w-full bg-gray-700 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'
+                className='max-w-lg sm:w-full bg-gray-700 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'
             >
                 <div className='p-8'>
                     <h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
@@ -90,48 +88,45 @@ const SignUpPage = () => {
                                         onChange={field.onChange}
                                         error={errors.name?.message}
                                     />
-                                    {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+
                                 </div>
                             )}
                         />
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <Controller
-                                name="email"
-                                control={control}
-                                render={({ field }) => (
-                                    <div>
-                                        <Input
-                                            icon={Mail}
-                                            type='email'
-                                            placeholder='Email Address'
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            error={errors.email?.message}
-                                        />
-                                        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-                                    </div>
-                                )}
-                            />
+                        <Controller
+                            name="email"
+                            control={control}
+                            render={({ field }) => (
+                                <div>
+                                    <Input
+                                        icon={Mail}
+                                        type='email'
+                                        placeholder='Email Address'
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        error={errors.email?.message}
+                                    />
+                                </div>
+                            )}
+                        />
 
-                            <Controller
-                                name="username"
-                                control={control}
-                                render={({ field }) => (
-                                    <div>
-                                        <Input
-                                            icon={User}
-                                            type='text'
-                                            placeholder='Username'
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            error={errors.username?.message}
-                                        />
-                                        {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
-                                    </div>
-                                )}
-                            />
-                        </div>
+                        <Controller
+                            name="username"
+                            control={control}
+                            render={({ field }) => (
+                                <div>
+                                    <Input
+                                        icon={User}
+                                        type='text'
+                                        placeholder='Username'
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        error={errors.username?.message}
+                                    />
+
+                                </div>
+                            )}
+                        />
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <Controller
@@ -147,7 +142,7 @@ const SignUpPage = () => {
                                             onChange={field.onChange}
                                             error={errors.password?.message}
                                         />
-                                        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+
                                     </div>
                                 )}
                             />
@@ -165,7 +160,7 @@ const SignUpPage = () => {
                                             onChange={field.onChange}
                                             error={errors.confirmPassword?.message}
                                         />
-                                        {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+
                                     </div>
                                 )}
                             />

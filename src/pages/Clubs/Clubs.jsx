@@ -1,25 +1,11 @@
-import React, { useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import CreatePlayerDialog from './CreatePlayerDialog';
-import PlayerList from './PlayerList';
-import { useGetAllPlayersQuery } from '../../../slices/player/playerApiSlice';
-import { setPlayers } from '../../../slices/player/playerSlice';
-import { useDispatch } from 'react-redux';
+import React from 'react'
+import { FaPlus } from 'react-icons/fa'
+import { Link, Navigate, Outlet } from 'react-router-dom'
 
-const PlayersPageLayout = () => {
-
-    const { data, isLoading, isError, error } = useGetAllPlayersQuery();
-    console.log(data);
-
-    const dispatch = useDispatch();
-    useEffect(() => {
-        if (!isLoading && !isError && data) {
-            dispatch(setPlayers({ data: data.data }));
-        }
-    }, [dispatch, data, isLoading, isError]);
+const Clubs = () => {
     return (
         <>
-            <div className="z-0 bg-gray-100 mx-auto gap-3 p-4 pb-0 bg-gray-50 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mb-3 z-0 bg-gray-100 mx-auto gap-3 p-4 pb-0 bg-gray-50 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 <form className="order-last sm:col-span-2 lg:col-span-2 lg:order-none">
                     <div className="relative w-full">
                         <input type="search" className="focus:outline-none block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border border-gray-300 rounded-s-lg" placeholder="Search players, teams, or names..." required />
@@ -32,11 +18,17 @@ const PlayersPageLayout = () => {
                     </div>
                 </form>
 
-                <CreatePlayerDialog />
+                <Link to={"/account/register-club"}
+
+                    className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200"
+                >
+                    <FaPlus className="mr-2" />
+                    Register Your Club
+                </Link>
             </div>
-            <PlayerList />
+            {/* <Outlet /> */}
         </>
-    );
+    )
 }
 
-export default PlayersPageLayout;
+export default Clubs

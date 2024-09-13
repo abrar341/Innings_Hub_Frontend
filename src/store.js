@@ -14,7 +14,7 @@ import storage from 'redux-persist/lib/storage'; // Use local storage for persis
 const authPersistConfig = {
     key: 'auth',        // The key to be stored in local storage
     storage,            // Use local storage
-    whitelist: ['isAuthenticated', 'userType', 'isVerified'], // Only persist specific parts of the state
+    whitelist: ['userInfo', 'isAuthenticated', 'userType', 'isVerified'], // Only persist specific parts of the state
 };
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);

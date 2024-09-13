@@ -43,6 +43,9 @@ import SignUpPage from './components/SignUpPage';
 import EmailVerificationPage from './components/EmailVerificationPage';
 import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
 import { PersistGate } from 'redux-persist/integration/react';
+import ClubManagerDashboard from './pages/ClubManager/ClubManagerDashboard';
+import Clubs from './pages/Clubs/Clubs';
+import ClubRegistrationForm from './components/ClubRegistrationForm';
 
 
 function App() {
@@ -53,6 +56,7 @@ function App() {
           <Route path='login' element={<LoginPage />} />
           <Route path='signup' element={<SignUpPage />} />
           <Route path='verify' element={<EmailVerificationPage />} />
+          <Route path='register-club' element={<ClubRegistrationForm />} />
         </Route>
 
         {/* Public Routes */}
@@ -83,11 +87,13 @@ function App() {
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['club-manager']} />}>
-          <Route path='club-manager' element={<ClubManager />} >
+          <Route path='club-manager' element={<ClubManager />}>
+            <Route path='dashboard' element={<ClubManagerDashboard />} />
             <Route path='players' element={<PlayersPageLayout />} />
             <Route path='teams' element={<TeamsPageLayout />} />
           </Route>
         </Route>
+
 
         <Route element={<ProtectedRoute allowedRoles={['scorer']} />}>
           <Route path='scorer' element={<ScorerLayout />}>
@@ -98,6 +104,7 @@ function App() {
         </Route>
 
         {/* Public Routes */}
+        <Route path="clubs" element={<Clubs />} />
         <Route path="team" element={<Teams />} />
         <Route path='team/:teamName' element={<TeamProfileLayout />} >
           <Route path='squad' element={<TeamSqaud />} />
