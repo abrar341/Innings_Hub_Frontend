@@ -1,15 +1,18 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import UserDropdown from '../../components/userDropdown';
 import ClubRegistrationForm from '../../components/ClubRegistrationForm';  // Assuming you have this component
+import toast from 'react-hot-toast';
+import { setCredentials } from '../../slices/auth/authSlice';
+import { useGetUserInfoQuery } from '../../slices/auth/usersApiSlice';
 
 const ClubManager = () => {
-    const { userInfo } = useSelector((state) => state.auth);  // Access userInfo from Redux
-    const players = useSelector((state) => state.players.players);
-    console.log(userInfo.club);
+    const dispatch = useDispatch();
 
     // Define navigation cards for club manager dashboard
+    const { userInfo } = useSelector((state) => state.auth);  // Access userInfo from Redux
+
     const cards = [
         { to: 'dashboard', icon: 'fa-users', title: `Dashboard` },
         { to: 'players', icon: 'fa-users', title: `Players` },
@@ -18,52 +21,69 @@ const ClubManager = () => {
 
     // Class for active and inactive NavLink
     const navLinkClass = ({ isActive }) =>
-        `px-6 py-2 rounded text-sm font-semibold transition-all duration-300 ease-in-out transform
+        `px-3 py-1  gap-3 text-sm font-semibold transition-all duration-300 ease-in-out transform
         ${isActive
-            ? 'text-white bg-blue-600 shadow-lg scale-105 hover:bg-blue-700'
+            ? 'text-white bg-blue-600 rounded  border-blue-600 shadow-lg  '
             : 'text-gray-600 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-800 hover:scale-105 hover:shadow-md'
         }`;
 
-    // If userInfo's club is null, render the registration form
+    // Shared part that should render for everyone
+    const sharedHeader = (
+        <div className='flex items-center justify-between'>
+            <Link to={"/"} className='underline text-blue-500 p-2'>see as regular user</Link>
+            <h2 className='text-3xl   mt-6 font-bold mb-6 text-center text-gray-700'>
+                Club Manager
+            </h2>
+            <div className='z-30 mr-4'>
+                <UserDropdown profile={"/club-manager/profile"} />
+            </div>
+        </div>
+    );
+
+    // Conditional rendering based on club registration status
     if (!userInfo?.club) {
-        return <ClubRegistrationForm />;
+        toast.dismiss();
+        toast(
+            "Oops! It looks like you haven’t registered a club yet. Please complete the club registration to get started.",
+            {
+                duration: 5000,
+            }
+        );
+        return (
+            < >
+                <ClubRegistrationForm />
+            </>
+        );
     }
 
-    // If the club registration status is pending, show a message
     if (userInfo.club.registrationStatus === 'pending') {
         return (
-            <div className="flex flex-col items-center justify-center h-screen">
-                <h2 className="text-2xl font-bold text-yellow-500 mb-4">
-                    Your club registration status is Pending.
-                </h2>
-                <p className="text-gray-600">
-                    Please wait for approval from the association before accessing the dashboard.
-                </p>
-            </div>
+            <>
+                {sharedHeader}
+                <div className="flex flex-col items-center justify-center h-[300px]">
+                    <h2 className="text-2xl font-bold text-yellow-500 mb-4">
+                        Your club registration status is Pending.
+                    </h2>
+                    <p className="text-gray-600">
+                        Please wait for approval from the association before accessing the dashboard.
+                    </p>
+                </div>
+            </>
         );
     }
 
     // Otherwise, render the Club Manager dashboard
     return (
         <>
-            <div className='flex items-center justify-between'>
-                <Link to={"/"} className='underline text-blue-500 p-2'>see as regualr user</Link>
-                <h2 className='text-3xl mt-6 font-bold mb-6 text-center text-gray-500'>
-                    Club Manager
-                </h2>
-                <div className='z-30'>
-                    <UserDropdown />
-                </div>
-            </div>
-            <div className="px-2 flex justify-between gap-6 mx-auto my-5">
+            {sharedHeader}
+            <div className="px-2 pb-2 border-b border-gray-300  flex justify-between gap-6 mx-auto my-2">
                 <div className="flex justify-center items-center gap-6">
                     {cards.map((card, index) => (
                         <NavLink to={card.to} key={index} className={navLinkClass}>
-                            <span>{card.title}</span>
+                            <span className='text-base font-bold transition duration-300 ease-in group-hover:scale-102 group-hover:text-black'>{card.title}</span>
                         </NavLink>
                     ))}
                 </div>
-
             </div>
             <Outlet />
         </>

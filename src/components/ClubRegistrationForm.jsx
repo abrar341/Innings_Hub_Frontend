@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Input from "./Input";
-import { ArrowRight, ArrowLeft, User, MapPin, Calendar, Phone, Mail, Home, Link, ImageIcon } from "lucide-react";
+import { ArrowRight, ArrowLeft, User, MapPin, Calendar, Phone, Mail, Home, Link, ImageIcon, ArrowLeftCircle } from "lucide-react";
 import { useRegisterClubMutation } from "../slices/club/clubApiSlice";
 import { setCredentials } from "../slices/auth/authSlice";
 import toast from "react-hot-toast";
@@ -18,6 +18,7 @@ const steps = [
 ];
 
 const ClubRegistrationForm = () => {
+
     const { control, handleSubmit, setValue, formState: { errors }, watch } = useForm({
         mode: 'onChange',
     });

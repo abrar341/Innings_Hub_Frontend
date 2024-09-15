@@ -56,7 +56,7 @@ const MainNavbar = () => {
                 </div>
                 <div className="order-2 flex items-center">
                     {isAuthenticated ? (
-                        <UserDropdown />
+                        <UserDropdown profile={"/club-manager/profile"} />
                     ) : (
                         <Link to={'/account/login'} className="border border-gray-600 px-2 py-1 relative flex items-center">
                             Login

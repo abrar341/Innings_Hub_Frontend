@@ -1,9 +1,28 @@
-import React from 'react';
+import { useState, useEffect } from "react";
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from './MainNavbar';
 import { Toaster } from 'react-hot-toast';
+import { useDispatch, useSelector } from "react-redux";
+import { useGetUserInfoQuery } from '../slices/auth/usersApiSlice';
+import { setCredentials } from '../slices/auth/authSlice';
+
+
 
 const Layout = () => {
+    const dispatch = useDispatch();
+
+    const { userInfo } = useSelector((state) => state.auth);
+    const id = userInfo?._id
+    const { data, isLoading, isError, error } = useGetUserInfoQuery(id);
+    const user = data?.data;
+
+    useEffect(() => {
+        if (user) {
+            // Dispatch the action to store the user information in Redux state
+            dispatch(setCredentials({ ...user }));
+        }
+    }, [isLoading, dispatch]);
+
     const location = useLocation();
 
     // Array of paths where the navbar should not be displayed

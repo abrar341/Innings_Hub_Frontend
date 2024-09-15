@@ -6,7 +6,9 @@ import { logout } from '../slices/auth/authSlice';
 import { toast } from 'react-hot-toast';
 import { User, LogOut, ChevronUp, ChevronDown } from 'lucide-react';  // Import the icons from lucide-react
 
-const UserDropdown = () => {
+const UserDropdown = ({ profile }) => {
+    console.log(profile);
+
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -17,6 +19,7 @@ const UserDropdown = () => {
         try {
             const res = await logoutApiCall().unwrap();
             dispatch(logout());
+
             setIsOpen(false);
             toast.success(res.message);
             navigate('/account/login');
@@ -67,7 +70,7 @@ const UserDropdown = () => {
                 >
                     <div className="py-1" role="none">
                         <Link
-                            to="/profile"
+                            to={profile}
                             className="text-gray-700 flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200"
                             role="menuitem"
                         >

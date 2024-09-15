@@ -4,7 +4,6 @@ const CLUBS_URL = '/api/club';
 
 export const clubApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        // Mutation to register a club
         registerClub: builder.mutation({
             query: (data) => {
                 console.log(data);
@@ -33,8 +32,6 @@ export const clubApiSlice = apiSlice.injectEndpoints({
             },
             invalidatesTags: ['Club'], // Invalidate the cache after registering a club
         }),
-
-        // Query to fetch club details
         getClubDetails: builder.query({
             query: (clubId) => ({
                 url: `${CLUBS_URL}/details/${clubId}`,
@@ -42,10 +39,18 @@ export const clubApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Club'], // Provide cache for club details
         }),
+        getClubPlayers: builder.query({
+            query: () => ({
+                url: `${CLUBS_URL}/getPlayersByClub`,
+                method: 'GET',
+            }),
+            providesTags: ['Player'], // Provide cache for club details
+        }),
     }),
 });
 
 export const {
     useRegisterClubMutation,
     useGetClubDetailsQuery,
+    useGetClubPlayersQuery
 } = clubApiSlice;

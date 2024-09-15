@@ -45,6 +45,12 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: { email, code }, // Send email and code in the body
       }),
     }),
+    getUserInfo: builder.query({
+      query: (id) => ({
+        url: `${USERS_URL}/userProfile/${id}`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -53,5 +59,6 @@ export const {
   useLogoutMutation,
   useRegisterMutation,
   useUpdateUserMutation,
-  useVerifyEmailMutation
+  useVerifyEmailMutation,
+  useGetUserInfoQuery,
 } = userApiSlice;

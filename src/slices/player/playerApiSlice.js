@@ -33,6 +33,7 @@ export const playerApiSlice = apiSlice.injectEndpoints({
                 if (data.bowlingStyle) {
                     formData.append("bowlingStyle", data.bowlingStyle);
                 }
+                formData.append("associatedClub", data.clubId);
 
                 return {
                     url: `${PLAYERS_URL}/createPlayer`,
@@ -51,6 +52,8 @@ export const playerApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Player'], // Provide cache tags for the fetched players
         }),
+
+
 
         deletePlayer: builder.mutation({
             query: (playerId) => ({

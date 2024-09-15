@@ -1,23 +1,30 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import EmailVerificationDialog from './verifyDialog';
-import useDialog from '../hooks/useDialog';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGetUserInfoQuery } from '../slices/auth/usersApiSlice';
+import { useEffect } from 'react';
+import { setCredentials } from '../slices/auth/authSlice';
 
 const ProtectedRoute = ({ allowedRoles }) => {
     const { isAuthenticated, userType, isVerified } = useSelector((state) => state.auth);
-    console.log(isVerified);
-    console.log(isAuthenticated);
-
 
     if (!isAuthenticated) {
-        // If the user is not authenticated, redirect to the login page.
         return <Navigate to="/account/login" replace />;
     }
+    // if (isAuthenticated) {
+    //     const dispatch = useDispatch();
+    //     const { data, isLoading, isError, error } = useGetUserInfoQuery();
+    //     const user = data?.data;
+    //     console.log(user);
+    //     useEffect(() => {
+    //         if (user) {
+    //             // Dispatch the action to store the user information in Redux state
+    //             dispatch(setCredentials({ ...user }));
+    //         }
+    //     }, [user, dispatch]);
+    // }
     if (allowedRoles && !allowedRoles.includes(userType)) {
         return <Navigate to={`/`} replace />;
     }
-
 
     return <Outlet />;
 };

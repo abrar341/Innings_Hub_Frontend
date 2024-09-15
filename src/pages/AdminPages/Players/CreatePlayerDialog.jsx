@@ -16,7 +16,7 @@ import { FaPlus, FaEdit, FaSpinner } from "react-icons/fa";
 import validationSchema from "./validationSchema"; // Assuming you've stored the schema in a separate file
 import { useCreatePlayerMutation, useUpdatePlayerMutation } from "../../../slices/player/playerApiSlice";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const CreatePlayerDialog = ({ open, action, playerData }) => {
     const [isOpen, setIsOpen] = useState(open);
@@ -24,6 +24,8 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
     const [createPlayer, { isLoading: createLoading }] = useCreatePlayerMutation();
     const [updatePlayer, { isLoading: updateLoading }] = useUpdatePlayerMutation();
     const dispatch = useDispatch();
+    const { userInfo } = useSelector((state) => state.auth);
+    console.log(userInfo.club?._id);
 
     const isEditing = action === "edit";
     const {
@@ -68,15 +70,15 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
             setValue("profilePicture", file);
         }
     };
+    const clubId = userInfo.club?._id;
 
     const onSubmit = async (data) => {
-        console.log(data);
 
+        // Include the club ID in the formatted data
         const formattedData = {
             ...data,
-            dob: data.dob.toISOString(),
+            clubId, // Add club ID to the data being sent to the backend
         };
-
         try {
             if (isEditing) {
                 const response = await updatePlayer({ id: playerData._id, ...formattedData }).unwrap();
@@ -109,7 +111,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                     ) : (
                         <button
                             onClick={() => setIsOpen(true)}
-                            className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200"
+                            className="flex col-span-3 sm:col-span-2  w-full items-center bg-green-500 text-white text-sm font-medium py-2.5 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200"
                         >
                             <FaPlus className="mr-2" />
                             Add New Player

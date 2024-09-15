@@ -1,5 +1,6 @@
 // src/App.jsx
 import React from 'react';
+import Cookies from 'js-cookie';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import Layout from './components/Layout';
 import Teams from './pages/Team/Teams';
@@ -17,7 +18,7 @@ import MatchesLayout from './pages/LiveScore/MatchesLayout';
 import LiveScores from './pages/LiveScore/pages/LiveScores';
 import Schedules from './pages/LiveScore/pages/Schedules';
 import { store, persistor } from './store';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import ScorerLayout from './pages/Scorer/ScorerLayout';
 import Upcoming from './pages/Scorer/pages/Upcoming';
 import Live from './pages/Scorer/pages/Live';
@@ -44,11 +45,15 @@ import EmailVerificationPage from './components/EmailVerificationPage';
 import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
 import { PersistGate } from 'redux-persist/integration/react';
 import ClubManagerDashboard from './pages/ClubManager/ClubManagerDashboard';
-import Clubs from './pages/Clubs/Clubs';
 import ClubRegistrationForm from './components/ClubRegistrationForm';
-
+import Profile from './pages/ClubManager/Profile';
+import Clubs from './pages/AdminPages/Clubs/Clubs';
+import { useGetUserInfoQuery } from './slices/auth/usersApiSlice';
 
 function App() {
+
+
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
@@ -79,6 +84,7 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route path='admin' element={<Dashboard />} >
             <Route path='competitions' element={<Competitions isAdmin={true} />} />
+            <Route path='clubs' element={<Clubs />} />
             <Route path='competitions/:id' element={<TournamentProfileLayout />} >
               <Route path='draws-and-rounds' element={<DrawsAndRounds />} />
               <Route path='squads' element={<Squads />} />
@@ -91,6 +97,7 @@ function App() {
             <Route path='dashboard' element={<ClubManagerDashboard />} />
             <Route path='players' element={<PlayersPageLayout />} />
             <Route path='teams' element={<TeamsPageLayout />} />
+            <Route path='profile' element={<Profile />} />
           </Route>
         </Route>
 
@@ -104,7 +111,7 @@ function App() {
         </Route>
 
         {/* Public Routes */}
-        <Route path="clubs" element={<Clubs />} />
+        {/* <Route path="clubs" element={<Clubs />} /> */}
         <Route path="team" element={<Teams />} />
         <Route path='team/:teamName' element={<TeamProfileLayout />} >
           <Route path='squad' element={<TeamSqaud />} />

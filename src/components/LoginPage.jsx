@@ -37,13 +37,20 @@ const LoginPage = () => {
 		try {
 			const res = await login(data).unwrap();
 			const { user } = res?.data;
-
+			// const { data, isLoading, isError, error } = useGetUserInfoQuery();
+			//     const user = data?.data;
+			//     console.log(user);
+			//     useEffect(() => {
+			//         if (user) {
+			//             // Dispatch the action to store the user information in Redux state
+			//             dispatch(setCredentials({ ...user }));
+			//         }
+			//     }, [user, dispatch]);
 			console.log(user);
 			dispatch(setCredentials({ ...user }));
 
 			const role = res.data.user.role;
 			console.log(role);
-
 
 			if (role === 'admin' || role === 'club-manager' || role === 'scorer') {
 				navigate(`/${role}/dashboard`);
