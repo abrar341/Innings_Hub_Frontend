@@ -76,7 +76,7 @@ const ClubManager = () => {
     return (
         <>
             {sharedHeader}
-            <div className="px-2 pb-2 border-b border-gray-300  flex justify-between gap-6 mx-auto my-2">
+            <div className="px-2 py-2 border-b border-gray-300  flex justify-between gap-6 mx-auto my-2">
                 <div className="flex justify-center items-center gap-6">
                     {cards.map((card, index) => (
                         <NavLink to={card.to} key={index} className={navLinkClass}>
