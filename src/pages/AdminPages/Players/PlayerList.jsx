@@ -13,6 +13,7 @@ import CreatePlayerDialog from './CreatePlayerDialog';
 const PlayerList = () => {
     const players = useSelector((state) => state.players.players);
     const navigate = useNavigate();
+    console.log(players);
 
     // Filter states
     const [statusFilter, setStatusFilter] = useState('');
@@ -117,6 +118,7 @@ const PlayerList = () => {
                     </form>
                 </div>
                 <CreatePlayerDialog />
+                {players.length}
                 {/* Status Filter */}
                 <div className="col-span-1 sm:col-span-2">
 
@@ -162,7 +164,7 @@ const PlayerList = () => {
                     </button>
                 </div>
             </div>
-            {players.length === 0 ? (
+            {players?.length == 0 ? (
                 <div className="text-center py-4 text-gray-500">
                     No players found.
                 </div>

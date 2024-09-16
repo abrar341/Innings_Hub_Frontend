@@ -25,13 +25,6 @@ const LoginPage = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [login, { isLoading }] = useLoginMutation();
-	const { userInfo } = useSelector((state) => state.auth);
-
-	// useEffect(() => {
-	// 	if (userInfo) {
-	// 		navigate('/');
-	// 	}
-	// }, [userInfo, navigate]);
 
 	const onSubmit = async (data) => {
 		try {
