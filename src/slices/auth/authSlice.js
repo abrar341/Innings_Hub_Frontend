@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { persistor } from '../../store';
 
 const initialState = {
   userInfo: null,
@@ -28,7 +27,6 @@ const authSlice = createSlice({
       state.isVerified = false;
       state.isAuthenticated = false;
 
-      persistor.purge();
     },
     setLoading: (state, action) => {
       state.loading = action.payload;
