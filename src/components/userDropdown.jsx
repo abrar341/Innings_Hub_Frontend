@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../slices/auth/usersApiSlice';
 import { logout } from '../slices/auth/authSlice';
 import { toast } from 'react-hot-toast';
 import { User, LogOut, ChevronUp, ChevronDown } from 'lucide-react';  // Import the icons from lucide-react
+import { clearPlayers } from '../slices/clubManager/clubManagerSlice';
+import { clearClubs } from '../slices/admin/adminSlice';
 
 const UserDropdown = ({ profile }) => {
-    console.log(profile);
+    const { userInfo } = useSelector((state) => state.auth);
 
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
@@ -19,7 +21,8 @@ const UserDropdown = ({ profile }) => {
         try {
             const res = await logoutApiCall().unwrap();
             dispatch(logout());
-
+            dispatch(clearPlayers());
+            dispatch(clearClubs());
             setIsOpen(false);
             toast.success(res.message);
             navigate('/account/login');
@@ -70,7 +73,7 @@ const UserDropdown = ({ profile }) => {
                 >
                     <div className="py-1" role="none">
                         <Link
-                            to={profile}
+                            to={`/${userInfo?.role}/profile`}
                             className="text-gray-700 flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200"
                             role="menuitem"
                         >

@@ -6,7 +6,7 @@ import ClubRegistrationForm from '../../components/ClubRegistrationForm';  // As
 import toast from 'react-hot-toast';
 import { setCredentials } from '../../slices/auth/authSlice';
 import { useGetUserInfoQuery } from '../../slices/auth/usersApiSlice';
-import { setPlayers } from '../../slices/player/playerSlice';
+import { setPlayers } from '../../slices/clubManager/clubManagerSlice';
 import { useGetClubPlayersQuery } from '../../slices/club/clubApiSlice';
 
 const ClubManager = () => {
@@ -14,14 +14,17 @@ const ClubManager = () => {
 
     // Define navigation cards for club manager dashboard
     const { userInfo } = useSelector((state) => state.auth);
-    const { data, isLoading, isError, error } = useGetClubPlayersQuery();
+    console.log(userInfo);
 
-
-    useEffect(() => {
-        if (!isLoading && !isError && data) {
-            dispatch(setPlayers({ data: data.data }));
-        }
-    }, [dispatch, data]);  // Access userInfo from Redux
+    if (userInfo?.club) {
+        const id = userInfo?.club._id
+        const { data, isLoading, isError, error } = useGetClubPlayersQuery(id);
+        useEffect(() => {
+            if (data) {
+                dispatch(setPlayers({ data: data.data }));
+            }
+        }, [dispatch, data, userInfo]);  // Access userInfo from Redux
+    }
 
     const cards = [
         { to: 'dashboard', icon: 'fa-users', title: `Dashboard` },
@@ -41,9 +44,9 @@ const ClubManager = () => {
     const sharedHeader = (
         <div className='flex items-center justify-between'>
             <Link to={"/"} className='underline text-blue-500 p-2'>see as regular user</Link>
-            <h2 className='text-3xl   mt-6 font-bold mb-6 text-center text-gray-700'>
-                {userInfo.club.clubName}
-            </h2>
+            {/* <h2 className='text-3xl   mt-6 font-bold mb-6 text-center text-gray-700'>
+                {userInfo?.club.clubName}
+            </h2> */}
             <div className='z-30 mr-4'>
                 <UserDropdown profile={"/club-manager/profile"} />
             </div>

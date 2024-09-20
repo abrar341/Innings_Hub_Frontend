@@ -40,8 +40,8 @@ export const clubApiSlice = apiSlice.injectEndpoints({
             providesTags: ['Club'], // Provide cache for club details
         }),
         getClubPlayers: builder.query({
-            query: () => ({
-                url: `${CLUBS_URL}/getPlayersByClub`,
+            query: (id) => ({
+                url: `${CLUBS_URL}/getPlayersByClub/${id}`,
                 method: 'GET',
             }),
             providesTags: ['Player'], // Provide cache for club details

@@ -49,6 +49,7 @@ import ClubRegistrationForm from './components/ClubRegistrationForm';
 import Profile from './pages/ClubManager/Profile';
 import Clubs from './pages/AdminPages/Clubs/Clubs';
 import { useGetUserInfoQuery } from './slices/auth/usersApiSlice';
+import DashboardLayout from './pages/AdminPages/DashboardLayout';
 
 function App() {
 
@@ -82,10 +83,12 @@ function App() {
 
         {/* Role-Specific Protected Routes */}
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-          <Route path='admin' element={<Dashboard />} >
-            <Route path='competitions' element={<Competitions isAdmin={true} />} />
-            <Route path='clubs' element={<Clubs />} />
-            <Route path='competitions/:id' element={<TournamentProfileLayout />} >
+
+          <Route element={<DashboardLayout />} >
+            <Route path='admin' element={<Dashboard />} />
+            <Route path='/admin/competitions' element={<Competitions isAdmin={true} />} />
+            <Route path='/admin/clubs' element={<Clubs />} />
+            <Route path='/admin/competitions/:id' element={<TournamentProfileLayout />} >
               <Route path='draws-and-rounds' element={<DrawsAndRounds />} />
               <Route path='squads' element={<Squads />} />
             </Route>

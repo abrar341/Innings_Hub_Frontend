@@ -43,10 +43,8 @@ const LoginPage = () => {
 			dispatch(setCredentials({ ...user }));
 
 			const role = res.data.user.role;
-			console.log(role);
-
 			if (role === 'admin' || role === 'club-manager' || role === 'scorer') {
-				navigate(`/${role}/dashboard`);
+				navigate(`/${role}/profile`);
 			} else {
 				navigate('/');
 			}

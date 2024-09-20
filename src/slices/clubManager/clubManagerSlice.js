@@ -12,6 +12,9 @@ const clubManagerSlice = createSlice({
         setPlayers: (state, action) => {
             state.players = action.payload.data;
         },
+        clearPlayers: (state) => {
+            state.players = initialState.players; // Reset to initial state
+        },
         deletePlayer: (state, action) => {
             const playerId = action.payload.id;
             state.players = state.players.filter(player => player.id !== playerId);

@@ -11,7 +11,7 @@ import { formatDateToYMD } from '../../../utils/dateUtils';
 import CreatePlayerDialog from './CreatePlayerDialog';
 
 const PlayerList = () => {
-    const players = useSelector((state) => state.players.players);
+    const players = useSelector((state) => state.clubManager.players);
     const navigate = useNavigate();
     console.log(players);
 
@@ -56,10 +56,6 @@ const PlayerList = () => {
                     </div>
                 </div>
             )
-        },
-        {
-            accessorKey: 'role',
-            header: 'Role',
         },
         {
             accessorKey: 'status',
@@ -118,7 +114,6 @@ const PlayerList = () => {
                     </form>
                 </div>
                 <CreatePlayerDialog />
-                {players.length}
                 {/* Status Filter */}
                 <div className="col-span-1 sm:col-span-2">
 

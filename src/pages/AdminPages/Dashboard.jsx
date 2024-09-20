@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import UserDropdown from '../../components/userDropdown';
+import Profile from './Profile';
+
 
 const AdminDashboard = () => {
   const cards = [
@@ -11,6 +13,8 @@ const AdminDashboard = () => {
     { to: 'clubs', icon: 'fa-trophy', title: 'Clubs' },
     { to: 'coetitions', icon: 'fa-briefcase', title: 'Officials' },
   ];
+  const navigate = useNavigate();
+
   const navLinkClass = ({ isActive }) =>
     `px-3 py-1  gap-3 text-sm font-semibold transition-all duration-300 ease-in-out transform
     ${isActive
@@ -19,30 +23,25 @@ const AdminDashboard = () => {
     }`;
   return (
     <>
-      <h2 className='text-3xl  mt-6 font-bold mb-6 text-center text-gray-700'>
-        Admin
-      </h2>
-      <div className="container flex items-end pb-2 border-b border-gray-300 justify-between mx-auto my-5">
-        <div className="flex  gap-2  pl-4 pb-4 ">
+
+      <div className=" grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+        <div className="col-span-1 grid grid-cols-2 gap-3 md:col-span-2  ">
           {cards.map((card, index) => (
-            <NavLink to={card.to} key={index} className={navLinkClass
+            <div onClick={() => {
+              navigate(`/admin/${card.to}`);
+            }} key={index} className={navLinkClass
             }
             >
-
-              <div className="flex items-center  cursor-pointer  ">
+              <div className="realtive hover:bg-gray-100 h-full group w-full flex border border-gray-400 rounded p-4 items-center cursor-pointer  ">
                 {/* <i className={`fa ${card.icon} text-4xl`}></i> */}
                 <img className='transition duration-300 ease-in group-hover:scale-110' src={"fffff"} alt="" />
-                <div className="text-base font-bold transition duration-300 ease-in group-hover:scale-102 group-hover:text-black">{card.title}</div>
+                <div className="text-base text-gray-700 font-semibold transition duration-300 ease-in  group-hover:border-gray-700 group-hover:scale-102 group-hover:text-black">{card.title}</div>
               </div>
-            </NavLink>
+            </div>
           ))}
         </div>
-        <div className='mr-2'>
-
-          <UserDropdown />
-        </div>
+        <Profile />
       </div>
-      <Outlet />
     </>
 
   );

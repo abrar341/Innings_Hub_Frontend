@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
-
-import players from '../../data/players'
 import { useParams } from 'react-router-dom';
-
 
 const playerData = {
     profile: {
         name: 'VIRAT KOHLI',
         country: 'INDIA',
         image: 'https://static.cricbuzz.com/a/img/v1/152x152/i1/c170661/rohit-sharma.jpg',
+        roleImg: 'https://www.iplt20.com/assets/images/teams-batsman-icon.svg'
     },
     personalInfo: {
         born: 'Nov 05, 1988',
@@ -37,152 +35,123 @@ const playerData = {
 
 const PlayerProfile = () => {
     const { name } = useParams();
-    const player = players.find(p => p.name === name);
-    console.log(name)
-    console.log(player)
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-    if (!player) {
-        return <div>Player not found</div>;
-    }
+    const player = playerData;
+
     return (
-        <div className="max-w-4xl  mx-auto overflow-hidden ">
-            <div className="grid grid-cols-1 md:grid-cols-2   justify-between items-start mb-4 gap-1">
-                {/* Player Profile Section */}
-                <div className="flex flex-col justify-between  border md:min-h-[336.667px] border-gray-300">
-                    <div className="bg-customDarkBlue flex text-xl font-bold justify-between text-white p-4">
-                        <div className="text-xl font-bold text-white">{player.name}</div>
-                        <div className="text-lg text-white">{player.country}</div>
+        <div className="p-4 mx-auto bg-white shadow-md rounded-lg">
+            {/* Player Profile Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4  mb-3">
+                <div className="flex flex-col justify-between bg-gray-50 border rounded shadow-md overflow-hidden">
+                    <div className="bg-customDarkBlue text-white  text-center text-lg font-bold  p-4">{player.profile.name}
                     </div>
-                    <div className='flex justify-center w-a items-center p-4'>
-                        <img className="h-38 w-38 self-center mr-4 rounded-full border-4 border-customDarkBlue" src={player.image} alt={playerData.profile.name} />
-                        <img className="h-20 mb-2  shadow-md"
-                            src="https://dnd3y8e5nonx2.cloudfront.net/teams/avatars/33718/1697119124/profile."
-                            alt="India Logo" />
+                    <div className="flex flex-col items-center p-6">
+                        <img className="w-36 h-36 rounded-full border-4 border-blue-900 mb-4" src={player.profile.image} alt={player.profile.name} />
                     </div>
-                    <div className='flex border-t p-4 border-gray-300 justify-center items-center gap-2'>
-                        <img
-                            className="h-6  group-hover:scale-105 transition duration-300 ease-in"
-                            src={player.roleImg}
-                            alt="India Logo"
-                        />
-                        <div className="text-sm font-bold group-hover:scale-105 transition duration-300 ease-in">{player.role}</div>
+                    <div className="bg-gray-100 p-4 flex justify-center items-center gap-2 border-t">
+                        <img className="h-6" src={player.profile.roleImg} alt="Role" />
+                        <span className="text-sm text-gray-800 font-bold">{player.personalInfo.role}</span>
                     </div>
                 </div>
 
                 {/* Personal Information Section */}
-                <div className="border border-gray-300  overflow-hidden">
-                    <div className="bg-customDarkBlue flex items-center justify-between text-white p-4 ">
-                        <span className="text-xl font-bold">Personal Information</span>
+                <div className="bg-gray-50 rounded shadow-md overflow-hidden">
+                    <div className="bg-customDarkBlue text-white  text-lg font-bold p-4">
+                        Personal Information
                     </div>
-                    <div className="text-base text-gray-700 p-4">
-                        {Object.entries(playerData.personalInfo).map(([key, value]) => (
-                            <div key={key} className="flex items-center justify-between py-2 border-b border-gray-200 last:border-b-0">
-                                <div className="flex items-center space-x-2">
-                                    <strong className="capitalize text-gray-800">{key.replace(/([A-Z])/g, ' $1')}:</strong>
-                                </div>
-                                <span className="text-right">{value}</span>
+                    <div className="p-4">
+                        {Object.entries(player.personalInfo).map(([key, value]) => (
+                            <div key={key} className="flex justify-between py-2 border-b last:border-b-0">
+                                <span className="capitalize font-semibold text-gray-800">{key.replace(/([A-Z])/g, ' $1')}:</span>
+                                <span className="text-gray-700">{value}</span>
                             </div>
                         ))}
                     </div>
                 </div>
-
-
-
+                <div className="md:col-span-2 lg:col-span-1 bg-gray-50 rounded shadow-md overflow-hidden">
+                    <div className="bg-customDarkBlue text-white  text-lg font-bold p-4">
+                        Teams
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-2 gap-2 p-2">
+                        {player.careerInfo.teams.map((team, index) => (
+                            <div key={index} className="bg-gray-100 text-sm text-gray-900 rounded px-4 py-2">
+                                {team}
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
 
             {/* Career Information Section */}
-            <div className="flex flex-col gap-2">
-                <div className="bg-customDarkBlue flex text-2xl font-bold justify-between text-white p-4">Career Information</div>
-                <div className="border border-gray-300  overflow-hidden">
-                    <div className="bg-gray-300 p-4 ">
-                        <h2 className="text-xl font-bold">Teams</h2>
-                    </div>
-                    <div className="p-4 bg-white">
-                        <div className="flex gap-x-6 flex-wrap">
-                            {playerData.careerInfo.teams.map((team, index) => (
-                                <div key={index} className="flex-shrink-0 text-start	">
-                                    <span className="text-gray-800 font-semibold">{team}</span>
-                                </div>
+            <div className="bg-white shadow-md rounded mb-2">
+                <div className="bg-customDarkBlue rounded text-white  text-2xl font-bold p-4">Career Information</div>
+
+            </div>
+
+            {/* Batting Career Summary Section */}
+            <div className="bg-white shadow-md rounded mb-2">
+                <div className="bg-gray-300 text-xl text-gray-700 font-bold p-4 rounded">Batting Career Summary</div>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full table-auto divide-y divide-gray-200">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                {['Format', 'M', 'Inn', 'Runs', 'Avg', 'SR', '100', '50'].map((header) => (
+                                    <th key={header} className="px-4 py-2 text-left">{header}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {player.battingCareer.map((career, index) => (
+                                <tr key={index}>
+                                    <td className="px-4 py-2 font-bold">{career.format}</td>
+                                    <td className="px-4 py-2">{career.matches}</td>
+                                    <td className="px-4 py-2">{career.innings}</td>
+                                    <td className="px-4 py-2">{career.runs}</td>
+                                    <td className="px-4 py-2">{career.average}</td>
+                                    <td className="px-4 py-2">{career.strikeRate}</td>
+                                    <td className="px-4 py-2">{career.hundreds}</td>
+                                    <td className="px-4 py-2">{career.fifties}</td>
+                                </tr>
                             ))}
-                        </div>
-                    </div>
-                </div>
-
-
-                {/* Batting Career Summary Section */}
-                <div className=" border border-gray-300">
-                    <div className="text-xl font-bold bg-gray-300 p-4 text-black p-4">Batting Career Summary</div>
-                    <div className="overflow-x-auto hide-scrollbar">
-                        <table className="min-w-full divide-y divide-gray-200 ">
-                            <thead className="bg-customDarkGray">
-                                <tr>
-                                    <th className="px-4 py-2">Format</th>
-                                    <th className="px-4 py-2">M</th>
-                                    <th className="px-4 py-2">Inn</th>
-                                    <th className="px-4 py-2">Runs</th>
-                                    <th className="px-4 py-2">Avg</th>
-                                    <th className="px-4 py-2">SR</th>
-                                    <th className="px-4 py-2">100</th>
-                                    <th className="px-4 py-2">50</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                                {playerData.battingCareer.map((career, index) => (
-                                    <tr key={index}>
-                                        <td className="px-4 py-2 font-bold">{career.format}</td>
-                                        <td className="px-4 py-2">{career.matches}</td>
-                                        <td className="px-4 py-2">{career.innings}</td>
-                                        <td className="px-4 py-2">{career.runs}</td>
-                                        <td className="px-4 py-2">{career.average}</td>
-                                        <td className="px-4 py-2">{career.strikeRate}</td>
-                                        <td className="px-4 py-2">{career.hundreds}</td>
-                                        <td className="px-4 py-2">{career.fifties}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                {/* Bowling Career Summary Section */}
-                <div className=" border border-gray-300">
-                    <div className="text-xl font-bold bg-customDarkBlue p-4 bg-gray-300 p-4 text-black">Bowling Career Summary</div>
-                    <div className="overflow-x-auto hide-scrollbar">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-customDarkGray">
-                                <tr>
-                                    <th className="px-4 py-2">Format</th>
-                                    <th className="px-4 py-2">M</th>
-                                    <th className="px-4 py-2">Inn</th>
-                                    <th className="px-4 py-2">Runs</th>
-                                    <th className="px-4 py-2">Wkts</th>
-                                    <th className="px-4 py-2">BBI</th>
-                                    <th className="px-4 py-2">Econ</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                                {playerData.bowlingCareer.map((career, index) => (
-                                    <tr key={index}>
-                                        <td className="px-4 py-2">{career.format}</td>
-                                        <td className="px-4 py-2">{career.matches}</td>
-                                        <td className="px-4 py-2">{career.innings}</td>
-                                        <td className="px-4 py-2">{career.runs}</td>
-                                        <td className="px-4 py-2">{career.wickets}</td>
-                                        <td className="px-4 py-2">{career.best}</td>
-                                        <td className="px-4 py-2">{career.economy}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
+            {/* Bowling Career Summary Section */}
+            <div className="bg-white  shadow-md rounded">
+                <div className="rounded bg-gray-300 text-xl text-gray-700 font-bold p-4">Bowling Career Summary</div>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full table-auto divide-y divide-gray-200">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                {['Format', 'M', 'Inn', 'Runs', 'Wkts', 'BBI', 'Econ'].map((header) => (
+                                    <th key={header} className="px-4 py-2 text-left">{header}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {player.bowlingCareer.map((career, index) => (
+                                <tr key={index}>
+                                    <td className="px-4 py-2 font-bold">{career.format}</td>
+                                    <td className="px-4 py-2">{career.matches}</td>
+                                    <td className="px-4 py-2">{career.innings}</td>
+                                    <td className="px-4 py-2">{career.runs}</td>
+                                    <td className="px-4 py-2">{career.wickets}</td>
+                                    <td className="px-4 py-2">{career.best}</td>
+                                    <td className="px-4 py-2">{career.economy}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 };
 
-export default PlayerProfile
+export default PlayerProfile;
