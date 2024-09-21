@@ -5,7 +5,7 @@ import teams from '../../data/teams';
 
 const TeamProfile = () => {
     const { teamName } = useParams();
-    const team = teams?.find(p => p.name === teamName);
+    const team = teams?.find(p => p.name === "England");
     console.log(team)
 
     if (!teams) {

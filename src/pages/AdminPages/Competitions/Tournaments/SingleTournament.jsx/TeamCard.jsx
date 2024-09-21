@@ -20,12 +20,11 @@ const TeamCard = ({ squad }) => {
                         className="rounded-lg mr-3"
                         height="60"
                         width="60"
-                        src={team.teamLogo}
-                        alt={team.teamName}
+                        src={team?.teamLogo}
+                        alt={team?.teamName}
                     />
                     <div className="text-left">
-                        <h5 className="text-lg font-semibold">{team.teamName}</h5>
-                        <p className="mb-0">{team.location}</p>
+                        <h5 className="text-lg font-semibold">{team?.teamName}</h5>
                     </div>
                 </div>
 

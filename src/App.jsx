@@ -30,7 +30,6 @@ import TournamentProfileLayout from './pages/AdminPages/Competitions/Tournaments
 import PlayerProfile from './pages/Player/PlayerProfile';
 import Players from './pages/Player/Players';
 import PlayersPageLayout from './pages/AdminPages/Players/PlayersPageLayout';
-import DrawsAndRounds from './pages/AdminPages/Competitions/Tournaments/DrawsAndRounds';
 import TeamsPageLayout from './pages/AdminPages/Teams/TeamsPageLayout';
 import Squads from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/Squads';
 import ScoreCard from './pages/Match/ScoreCard/ScoreCard';
@@ -89,7 +88,6 @@ function App() {
             <Route path='/admin/competitions' element={<Competitions isAdmin={true} />} />
             <Route path='/admin/clubs' element={<Clubs />} />
             <Route path='/admin/competitions/:id' element={<TournamentProfileLayout />} >
-              <Route path='draws-and-rounds' element={<DrawsAndRounds />} />
               <Route path='squads' element={<Squads />} />
             </Route>
           </Route>

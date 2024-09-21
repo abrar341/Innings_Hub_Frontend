@@ -6,7 +6,7 @@ import {
     getCoreRowModel,
     flexRender
 } from '@tanstack/react-table';
-import AdminPlayerCard from './AdminPlayerCard';
+import ActionButtons from './ActionButtons';
 import { formatDateToYMD } from '../../../utils/dateUtils';
 import CreatePlayerDialog from './CreatePlayerDialog';
 
@@ -82,7 +82,7 @@ const PlayerList = () => {
         },
         {
             header: 'Actions',
-            cell: ({ row }) => <AdminPlayerCard player={row.original} />
+            cell: ({ row }) => <ActionButtons player={row.original} />
         }
     ], []);
 

@@ -1,23 +1,192 @@
-import React from 'react';
-// import teams from '../../../data/teams'
-import TeamCard from './TeamCard';
+import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import {
+    useReactTable,
+    getCoreRowModel,
+    flexRender
+} from '@tanstack/react-table';
+import CreateTeamDialog from './CreateTeamDialog'; // Dialog for creating teams
+import ActionButtons from './ActionButtons';
 
+const Team = () => {
+    const teams = useSelector((state) => state.teams.teams); // Fetch teams from Redux
+    const navigate = useNavigate();
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+    // Search and filter states
+    const [searchQuery, setSearchQuery] = useState('');
+    const [statusFilter, setStatusFilter] = useState('');
 
-const Teams = () => {
-    const teams = useSelector((state) => state.teams.teams);
+    // Filtered list of teams based on search and status
+    const filteredTeams = useMemo(() => {
+        return teams.filter(team => {
+            const matchesSearch = team.teamName.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesStatus = statusFilter ? team.status === statusFilter : true;
+            return matchesSearch && matchesStatus;
+        });
+    }, [teams, searchQuery, statusFilter]);
+
+    // Columns for the table
+    const columns = useMemo(() => [
+        {
+            accessorKey: 'teamName',
+            header: 'Team',
+            cell: ({ row }) => (
+                <div className="flex items-center text-sm">
+                    <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                        <img
+                            className="object-cover w-full h-full rounded-full"
+                            src={row.original.teamLogo || '/default-logo.png'} // Default logo if none
+                            alt={row.original.teamName}
+                            loading="lazy"
+                        />
+                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
+                    </div>
+                    <div>
+                        <p className="font-semibold">{row.original.teamName}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">{row.original.teamtype}</p>
+                    </div>
+                </div>
+            )
+        },
+
+        {
+            accessorKey: 'status',
+            header: 'Status',
+            cell: ({ row }) => {
+                const status = row.original?.status;
+                const statusClasses = status === 'Active'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800';
+
+                return (
+                    <div className={`px-2 py-1 text-center w-[90px] font-semibold leading-tight rounded-full ${statusClasses}`}>
+                        {status}
+                    </div>
+                );
+            },
+        },
+        {
+            accessorKey: 'createdAt',
+            header: 'Created At',
+            cell: ({ row }) => (
+                <span>{new Date(row.original.createdAt).toLocaleDateString()}</span>
+            ),
+        },
+        {
+            accessorKey: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => (
+                <div className="space-x-2">
+                    <ActionButtons team={row.original} />
+                </div>
+            )
+        }
+    ], [navigate]);
+
+    // Table configuration using TanStack Table
+    const table = useReactTable({
+        data: filteredTeams,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+    });
+
+    // Function to handle team deletion
+    const handleDeleteTeam = (teamId) => {
+        // You can dispatch an action here to delete the team
+        console.log(`Deleting team with id: ${teamId}`);
+    };
 
     return (
-        <>
-            <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-4">
-                {teams.map((team, index) => (
-                    <TeamCard key={index} team={team} />
-                ))}
-            </div>
-        </>
+        <div className="w-full h-screen mt-0 rounded-lg shadow-xs px-4">
+            {/* Filters */}
+            <div className="grid grid-cols-3 py-2 border-b sm:grid-cols-5 gap-3 sm:gap-4 mb-3 items-end sticky top-0 bg-white z-10">
+                <div className="col-span-3 sm:col-span-3">
+                    <form className="relative">
+                        <input
+                            type="search"
+                            id="searchQuery"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search teams..."
+                            required
+                            className="focus:outline-none w-full block p-2.5 z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
+                        />
+                    </form>
+                </div>
 
+                <CreateTeamDialog />
+
+                {/* Status Filter */}
+                <div className="col-span-2 sm:col-span-3">
+                    <select
+                        id="statusFilter"
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="block px-3 w-full py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-100 focus:border-blue-500 sm:text-sm"
+                    >
+                        <option value="">Filter By Status</option>
+                        <option value="Active">Active</option>
+                        <option value="inActive">Inactive</option>
+                    </select>
+                </div>
+
+                {/* Reset Button */}
+                <div className="flex sm:col-span-2 justify-center">
+                    <button
+                        onClick={() => {
+                            setStatusFilter('');
+                            setSearchQuery('');
+                        }}
+                        className="px-4 py-2 w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-md shadow-sm transition-all duration-200"
+                    >
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+            {/* Team List Table */}
+            {filteredTeams.length === 0 ? (
+                <div className="text-center py-4 text-gray-500">
+                    No teams found.
+                </div>
+            ) : (
+                <div className="w-full overflow-x-auto">
+                    <table className="w-full whitespace-no-wrap">
+                        <thead>
+                            {table.getHeaderGroups().map(headerGroup => (
+                                <tr key={headerGroup.id} className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50">
+                                    {headerGroup.headers.map(header => (
+                                        <th key={header.id} className="px-4 py-3">
+                                            {flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                        </th>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                            {table.getRowModel().rows.map(row => (
+                                <tr key={row.id} className="text-gray-700">
+                                    {row.getVisibleCells().map(cell => (
+                                        <td key={cell.id} className="px-4 py-3">
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
     );
 };
 
-export default Teams;
+export default Team;

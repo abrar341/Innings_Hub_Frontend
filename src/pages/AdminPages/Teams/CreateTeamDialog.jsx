@@ -12,6 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FaEdit, FaPlus, FaSpinner } from "react-icons/fa";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 // Validation schema using yup
 const validationSchema = yup.object().shape({
@@ -21,10 +22,11 @@ const validationSchema = yup.object().shape({
         .max(3, "Short Name must be less than 4 characters")
         .required("Short Name is required"),
     teamtype: yup.string().required("Team Type is required"),
-    location: yup.string().required("Location is required"),
 });
 
 const CreateTeamDialog = ({ open, action, teamData }) => {
+    console.log(teamData);
+
     const {
         control,
         handleSubmit,
@@ -40,6 +42,9 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
     const [createTeam, { isLoading: createLoading }] = useCreateTeamMutation();
     const [updateTeam, { isLoading: updateLoading }] = useUpdateTeamMutation();
     const isEditing = action === "edit";
+    const { userInfo } = useSelector((state) => state.auth);
+    console.log(userInfo.club?._id);
+    const clubId = userInfo.club?._id;
 
     useEffect(() => {
         if (teamData && isOpen) {
@@ -47,7 +52,6 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
             setValue("teamName", teamData.teamName);
             setValue("shortName", teamData.shortName);
             setValue("teamtype", teamData.teamtype);
-            setValue("location", teamData.location);
             if (teamData.teamLogo) setLogoPreview(teamData.teamLogo);
         }
     }, [teamData, isOpen, setValue]);
@@ -58,11 +62,19 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
         // const formattedData = { ...data };
         try {
             let response;
+            const formattedData = {
+                ...data,
+                clubId, // Add club ID to the data being sent to the backend
+            };
+            console.log(formattedData);
+
             if (isEditing) {
-                response = await updateTeam({ id: teamData._id, ...data }).unwrap();
+                response = await updateTeam({ id: teamData._id, ...formattedData }).unwrap();
                 toast.success(response.message || "Team updated successfully");
             } else {
-                response = await createTeam(data).unwrap();
+                console.log(clubId);
+
+                response = await createTeam(formattedData).unwrap();
                 toast.success(response.message || "Team created successfully");
             }
 
@@ -108,7 +120,7 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                     ) : (
                         <button
                             onClick={() => setIsOpen(true)}
-                            className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200"
+                            className="flex col-span-3 sm:col-span-2 h-full items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200"
                         >
                             <FaPlus className="mr-2" />
                             Add New Team
@@ -174,50 +186,27 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                                         </div>
                                     )}
                                 />
-                                <div className="grid grid-cols-2 gap-4">
-                                    <Controller
-                                        name="shortName"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <div>
-                                                <input
-                                                    className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.shortName ? "border-red-500" : ""
-                                                        }`}
-                                                    placeholder="Short Name"
-                                                    type="text"
-                                                    {...field}
-                                                    value={field.value || ""}
-                                                />
-                                                {errors.shortName && (
-                                                    <p className="text-red-500 text-xs mt-1">
-                                                        {errors.shortName.message}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        )}
-                                    />
-                                    <Controller
-                                        name="location"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <div>
-                                                <input
-                                                    className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.location ? "border-red-500" : ""
-                                                        }`}
-                                                    placeholder="Location"
-                                                    type="text"
-                                                    {...field}
-                                                    value={field.value || ""}
-                                                />
-                                                {errors.location && (
-                                                    <p className="text-red-500 text-xs mt-1">
-                                                        {errors.location.message}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        )}
-                                    />
-                                </div>
+                                <Controller
+                                    name="shortName"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <div>
+                                            <input
+                                                className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.shortName ? "border-red-500" : ""
+                                                    }`}
+                                                placeholder="Short Name"
+                                                type="text"
+                                                {...field}
+                                                value={field.value || ""}
+                                            />
+                                            {errors.shortName && (
+                                                <p className="text-red-500 text-xs mt-1">
+                                                    {errors.shortName.message}
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+                                />
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
@@ -233,10 +222,9 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                                             value={field.value || ""}
                                         >
                                             <option value="">Select Team Type</option>
-                                            <option value="National">National</option>
-                                            <option value="Club">Club</option>
-                                            <option value="School">School</option>
-                                            <option value="Corporate">Corporate</option>
+                                            <option value="senior">senior</option>
+                                            <option value="junior">junior</option>
+                                            <option value="other">other</option>
                                         </select>
                                         {errors.teamtype && (
                                             <p className="text-red-500 text-xs mt-1">

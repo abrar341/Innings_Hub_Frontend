@@ -21,11 +21,9 @@ const TournamentProfileLayout = () => {
             <TournamentProfileHeader tournament={tournament} />
             <div className=" pt-4  flex flex-row items-center w-full gap-4 overflow-x-auto px-4 border-b border-gray-400 scrollbar-hide">
                 {[
-                    { to: 'draws-and-rounds', label: 'DRAWS AND ROUNDS' },
-                    { to: 'squads', label: 'SQUADS' },
-                    { to: 'point-table', label: 'OFFICALS' },
-                    { to: 'point-table', label: 'MATCHES' },
-                    { to: 'point-table', label: 'RULES' },
+                    { to: 'squads', label: 'SQUADS/TEAMS' },
+                    { to: 'matches', label: 'MATCHES' },
+                    { to: 'point-table', label: 'POINT-TABLE' },
                 ].map(({ to, label }) => (
                     <div className="shrink-0  relative group" key={to}>
                         <NavLink

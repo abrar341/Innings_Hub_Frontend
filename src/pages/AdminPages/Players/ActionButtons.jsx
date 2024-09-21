@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { delete_Player } from '../../../slices/player/playerSlice';
 import CreatePlayerDialog from './CreatePlayerDialog';
 
-const AdminPlayerCard = ({ player }) => {
+const ActionButtons = ({ player }) => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [deletePlayer, { isLoading }] = useDeletePlayerMutation();
@@ -57,4 +57,4 @@ const AdminPlayerCard = ({ player }) => {
     );
 };
 
-export default AdminPlayerCard;
+export default ActionButtons;

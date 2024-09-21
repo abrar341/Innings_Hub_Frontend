@@ -46,11 +46,19 @@ export const clubApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Player'], // Provide cache for club details
         }),
+        getClubTeams: builder.query({
+            query: (id) => ({
+                url: `${CLUBS_URL}/getTeamsByClub/${id}`,
+                method: 'GET',
+            }),
+            providesTags: ['Team'], // Provide cache for club details
+        }),
     }),
 });
 
 export const {
     useRegisterClubMutation,
     useGetClubDetailsQuery,
-    useGetClubPlayersQuery
+    useGetClubPlayersQuery,
+    useGetClubTeamsQuery
 } = clubApiSlice;

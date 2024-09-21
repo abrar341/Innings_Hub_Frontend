@@ -7,23 +7,31 @@ import toast from 'react-hot-toast';
 import { setCredentials } from '../../slices/auth/authSlice';
 import { useGetUserInfoQuery } from '../../slices/auth/usersApiSlice';
 import { setPlayers } from '../../slices/clubManager/clubManagerSlice';
-import { useGetClubPlayersQuery } from '../../slices/club/clubApiSlice';
+import { useGetClubPlayersQuery, useGetClubTeamsQuery } from '../../slices/club/clubApiSlice';
+import { set_Team } from '../../slices/team/teamSlice';
 
 const ClubManager = () => {
     const dispatch = useDispatch();
-
     // Define navigation cards for club manager dashboard
     const { userInfo } = useSelector((state) => state.auth);
-    console.log(userInfo);
 
     if (userInfo?.club) {
         const id = userInfo?.club._id
-        const { data, isLoading, isError, error } = useGetClubPlayersQuery(id);
+        console.log(id);
+
+        const { data, isLoading: isLoadingPlayers } = useGetClubPlayersQuery(id);
+
+        const { data: teams, isLoading, isError, error } = useGetClubTeamsQuery(id);
+        console.log(teams);
+
         useEffect(() => {
             if (data) {
                 dispatch(setPlayers({ data: data.data }));
             }
-        }, [dispatch, data, userInfo]);  // Access userInfo from Redux
+            if (teams) {
+                dispatch(set_Team({ data: teams.data }));
+            }
+        }, [dispatch, data, teams, userInfo]);  // Access userInfo from Redux
     }
 
     const cards = [

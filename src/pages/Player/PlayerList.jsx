@@ -16,7 +16,7 @@ const PlayerList = ({ searchQuery }) => {
 
     // Filter players based on the search query
     const filteredPlayers = players.filter((player) =>
-        player.playerName?.toLowerCase().includes(searchQuery.toLowerCase())
+        player.playerName?.includes(searchQuery)
     );
 
     if (isLoading) {

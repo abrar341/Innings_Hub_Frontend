@@ -13,7 +13,7 @@ export const teamApiSlice = apiSlice.injectEndpoints({
                 formData.append("teamName", data.teamName);
                 formData.append("shortName", data.shortName);
                 formData.append("teamtype", data.teamtype);
-                formData.append("location", data.location);
+                formData.append("associatedClub", data.clubId);
                 if (data.logo) formData.append("teamLogo", data.logo);
 
                 return {
