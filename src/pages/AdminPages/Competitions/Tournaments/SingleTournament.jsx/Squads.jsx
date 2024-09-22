@@ -1,18 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { useGetAllSquadsQuery } from '../../../../../slices/tournament/tournamentApiSlice';
+import { useGetAllSquadsQuery, useGetSingleTournamentSquadsQuery, useRemoveTeamFromTournamentMutation } from '../../../../../slices/tournament/tournamentApiSlice';
 import { Spinner } from 'flowbite-react'; // Optional loading spinner
-import { FaPlus } from 'react-icons/fa'; // Plus icon for the Add Team button
 import AddTeamToTournamentDialog from './AddTeamToTournamentDialog';
+import { useOutletContext } from 'react-router-dom';
+import AddPlayerToSqaud from './AddPlayerToSqaud';
 
 const Squads = () => {
-    const { data, isLoading, isError, error } = useGetAllSquadsQuery();
-    const squads = data?.data || []; // Extract squads data
+    const context = useOutletContext();
+    let tournament = context;
+    const [squads, setSquads] = useState([])
+    console.log(squads?.length);
+
+    const tournamentId = tournament?._id;
+    console.log(tournamentId);
+
+
+    const { data, isLoading, isError, error, refetch } = useGetSingleTournamentSquadsQuery(tournamentId);
+    console.log(data);
+    useEffect(() => {
+        if (data) {
+            setSquads(data?.data);
+        }
+        if (!data) {
+            setSquads([]);
+        }
+    }, [data]);
+    useEffect(() => {
+        refetch()
+    }, [squads]);
+    const [removeTeamFromTournament] = useRemoveTeamFromTournamentMutation(); // Initialize mutation
 
     const [openSquad, setOpenSquad] = useState(null); // State to track which squad is open
 
     const toggleSquad = (index) => {
         setOpenSquad(openSquad === index ? null : index); // Toggle the squad on click
+    };
+
+    const handleRemoveTeam = async (squadId) => {
+        try {
+            const res = await removeTeamFromTournament({ tournamentId, squadId }).unwrap();
+            setOpenSquad(false)
+        } catch (error) {
+            console.error('Failed to remove the team:', error);
+            alert('Error removing team.');
+        }
     };
 
     if (isLoading) {
@@ -32,14 +64,14 @@ const Squads = () => {
             {/* Header with Add Team button */}
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold text-gray-800">Squads</h1>
-                <AddTeamToTournamentDialog />
+                <AddTeamToTournamentDialog tournamentId={tournamentId} />
             </div>
 
-            {squads.length === 0 ? (
+            {squads?.length === 0 ? (
                 <div className="p-4 text-lg text-gray-600">No squads available at the moment.</div>
             ) : (
-                squads.map((squad, index) => {
-                    const { name, players, team } = squad;
+                squads?.map((squad, index) => {
+                    const { name, players, team, _id: squadId } = squad; // Extract squadId
                     const isOpen = openSquad === index;
 
                     return (
@@ -48,10 +80,11 @@ const Squads = () => {
                             className={`card bg-white p-4 border rounded-lg mb-4 shadow-lg transition-transform duration-300 transform `}
                         >
                             {/* Squad Header */}
+
                             <div
-                                className="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition-colors duration-300 rounded-lg"
+                                className="flex justify-between items-center p-4 cursor-pointer  rounded-lg"
                                 id={`team-${index}`}
-                                onClick={() => toggleSquad(index)} // Handle the click to toggle
+
                             >
                                 <div className="flex items-center">
                                     <img
@@ -66,8 +99,9 @@ const Squads = () => {
                                     </div>
                                 </div>
 
+
                                 {/* Arrow icon changes based on open/close state */}
-                                <div className="flex items-center">
+                                <div className="flex" onClick={() => toggleSquad(index)} >
                                     <span className="text-gray-500 mr-2 text-sm">Players: {players.length}</span>
                                     {!isOpen ? (
                                         <IoIosArrowDown className="cursor-pointer text-xl" />
@@ -75,45 +109,64 @@ const Squads = () => {
                                         <IoIosArrowUp className="cursor-pointer text-xl" />
                                     )}
                                 </div>
+
+                                <div className='flex flex-col gap-2'>
+                                    {
+                                        !isOpen && (
+                                            <AddPlayerToSqaud />
+
+                                        )
+                                    }
+                                    <button
+                                        className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 transition-colors duration-300"
+                                        onClick={() => handleRemoveTeam(squadId)} // Call the remove function
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Players list */}
-                            {isOpen && (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                                    {players.length === 0 ? (
-                                        <div className="col-span-full text-xl text-gray-500">No Players Added Yet</div>
-                                    ) : (
-                                        players.map((player) => (
-                                            <div key={player.id} className="p-4 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300 shadow-sm">
-                                                <div className="flex items-center">
-                                                    <img
-                                                        className="mr-3 h-12 w-12 rounded-full"
-                                                        src={player.profilePicture || '/default-avatar.png'} // Default avatar if none
-                                                        alt={player.playerName}
-                                                    />
-                                                    <div>
-                                                        <h5 className="text-md font-semibold text-gray-800">{player.playerName}</h5>
-                                                        <p className="text-sm text-gray-500">{player.role}</p>
+                            {
+                                isOpen && (
+                                    <div className='flex items-center flex-col'>
+                                        <div className='self-end'>
+                                            <AddPlayerToSqaud />
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                                            {players.length === 0 ? (
+                                                <div className="col-span-full text-base text-gray-500">No Players Added Yet</div>
+                                            ) : (
+                                                players.map((player) => (
+                                                    <div key={player.id} className="p-4 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300 shadow-sm">
+                                                        <div className="flex items-center">
+                                                            <img
+                                                                className="mr-3 h-12 w-12 rounded-full"
+                                                                src={player.profilePicture || '/default-avatar.png'} // Default avatar if none
+                                                                alt={player.playerName}
+                                                            />
+                                                            <div>
+                                                                <h5 className="text-md font-semibold text-gray-800">{player.playerName}</h5>
+                                                                <p className="text-sm text-gray-500">{player.role}</p>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
-                                </div>
-                            )}
+                                                ))
+                                            )}
+                                        </div>
 
-                            {/* Optional action buttons */}
-                            {isOpen && (
-                                <div className="flex justify-end gap-3 mt-4">
-                                    <button className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600 transition-colors duration-300">View Details</button>
-                                    <button className="bg-gray-200 text-gray-800 py-1 px-4 rounded hover:bg-gray-300 transition-colors duration-300">Edit Squad</button>
-                                </div>
-                            )}
+                                    </div>
+
+
+                                )
+                            }
+
+
                         </div>
                     );
                 })
             )}
-        </div>
+        </div >
     );
 };
 

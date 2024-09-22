@@ -73,7 +73,7 @@ const AdminTournamentCard = ({ tournament, userType }) => {
           </p>
           <p className="flex justify-center items-center mt-2">
             <FaUsers className="text-green-500 mr-2" />
-            <span className='text-base'>4 Teams</span>
+            <span className='text-base'>{tournament?.squads.length} Teams</span>
           </p>
         </div>
         <div className="mt-6">

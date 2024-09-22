@@ -109,6 +109,45 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'],
     }),
+    getAvailableTeamsForTournament: builder.query({
+      query: (id) => ({
+        url: `${TOURNAMENTS_URL}/getAvailableTeamsForTournament/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Tournament'],
+    }),
+    addTeamsToTournaments: builder.mutation({
+      query: ({ tournamentId, teamIds }) => ({
+        url: `${TOURNAMENTS_URL}/addTeamsToTournament`,
+        method: 'POST',
+        body: { tournamentId, teamIds }, // Pass the tournamentId and teamIds in the body
+      }),
+      invalidatesTags: ['Tournament'], // Invalidate the tournament data to refetch after adding teams
+    }),
+    addPlayerToSquad: builder.mutation({
+      query: (squadId) => ({
+        url: `${TOURNAMENTS_URL}/addPlayerToSquad`,
+        method: 'POST',
+        body: squadId, // Pass the tournamentId and teamIds in the body
+      }),
+      invalidatesTags: ['Tournament'], // Invalidate the tournament data to refetch after adding teams
+    }),
+    removeTeamFromTournament: builder.mutation({
+      query: ({ tournamentId, squadId }) => ({
+        url: `${TOURNAMENTS_URL}/removeTeamFromTournament`,
+        method: 'POST',
+        body: { tournamentId, squadId }, // Pass the tournamentId and teamIds in the body
+      }),
+      invalidatesTags: ['Tournament'], // Invalidate the tournament data to refetch after adding teams
+    }),
+    getSingleTournamentSquads: builder.query({
+      query: (id) => ({
+        url: `${TOURNAMENTS_URL}/getSingleTournamentSquads/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Tournament'], // Provide cache on fetch
+    }),
+
   }),
 });
 
@@ -121,5 +160,9 @@ export const {
   useGetOngoingTournamentsQuery,
   useGetConcludedTournamentsQuery,
   useGetAllSquadsQuery,
-  useGetSingleTournamentDetailQuery
+  useGetSingleTournamentDetailQuery,
+  useGetAvailableTeamsForTournamentQuery,
+  useAddTeamsToTournamentsMutation,
+  useRemoveTeamFromTournamentMutation,
+  useGetSingleTournamentSquadsQuery
 } = tournamentApiSlice;

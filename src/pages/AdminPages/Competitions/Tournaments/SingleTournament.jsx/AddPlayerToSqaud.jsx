@@ -4,34 +4,34 @@ import { Dialog, DialogContent, DialogTitle, DialogClose, DialogTrigger } from "
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
-import { useAddTeamsToTournamentsMutation, useGetAvailableTeamsForTournamentQuery } from "../../../../../slices/tournament/tournamentApiSlice";
+// import { useAddTeamsToTournamentsMutation, useGetAvailableTeamsForTournamentQuery } from "../../../../../slices/tournament/tournamentApiSlice";
 
-const AddTeamToTournamentDialog = ({ tournamentId }) => {
+const AddPlayerToSqaud = ({ tournamentId }) => {
     const [teams, setTeams] = useState([]);
     const [selectedTeams, setSelectedTeams] = useState([]);
-    const [addTeamsToTournament, { isLoading: createLoading }] = useAddTeamsToTournamentsMutation();
+    // const [addPlayerToSquad, { isLoading: createLoading }] = useAddPlayerToSquadMutation();
 
 
     console.log(selectedTeams);
 
     const [isDialogOpen, setIsDialogOpen] = useState(false); // Track dialog state
 
-    const { data, isLoading, isError, error, refetch } = useGetAvailableTeamsForTournamentQuery(tournamentId);
+    // const { data, isLoading, isError, error, refetch } = useGetAvailablePlayersForTournamentQuery(tournamentId);
 
     // Fetch teams when the dialog opens
-    useEffect(() => {
-        if (isDialogOpen) {
-            refetch(); // Trigger API call
-        }
-    }, [isDialogOpen, refetch]);
+    // useEffect(() => {
+    //     if (isDialogOpen) {
+    //         refetch(); // Trigger API call
+    //     }
+    // }, [isDialogOpen, refetch]);
 
     // Use useEffect to set teams when the data is fetched successfully
-    useEffect(() => {
-        if (data) {
-            setTeams(data?.data);
-        }
-    }, [data]);
-
+    // useEffect(() => {
+    //     if (data) {
+    //         setTeams(data?.data);
+    //     }
+    // }, [data]);
+    const isLoading = true;
     const navigate = useNavigate();
 
     const handleSelectTeam = (teamId) => {
@@ -46,15 +46,12 @@ const AddTeamToTournamentDialog = ({ tournamentId }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log(tournamentId, selectedTeams);
-
-            const res = await addTeamsToTournament({
-                tournamentId,
-                teamIds: selectedTeams // Send selected teams
+            const res = await addPlayerToSquad({
+                sqaudId
             }).unwrap();
 
             toast.dismiss();
-            toast.success("Teams added successfully!");
+            toast.success("Player added to Squad successfully!");
             setSelectedTeams([]);
             setIsDialogOpen(false)
         } catch (err) {
@@ -66,18 +63,18 @@ const AddTeamToTournamentDialog = ({ tournamentId }) => {
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <button className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded hover:bg-green-600 transition-colors duration-200">
+                <button className=" flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded hover:bg-green-600 transition-colors duration-200">
                     <FaPlus className="mr-2" />
-                    Add Teams to Tournament
+                    Add Player
                 </button>
             </DialogTrigger>
 
             <DialogContent className="max-w-lg w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
                 <DialogTitle className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
-                    Add Teams to Tournament
+                    Add Player to Squad
                 </DialogTitle>
                 <p className="text-center text-gray-300 mb-6">
-                    Select the teams to add to the tournament.
+                    Select the player to add to the squad.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -117,4 +114,4 @@ const AddTeamToTournamentDialog = ({ tournamentId }) => {
     );
 };
 
-export default AddTeamToTournamentDialog;
+export default AddPlayerToSqaud;
