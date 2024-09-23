@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { deleteSingleTournament } from '../../../../slices/tournament/tornamentSlice';
 import CreateTournamentDialog from './Dialogs/CreateTournamentDialog';
 
-const AdminTournamentCard = ({ tournament, userType }) => {
+const AdminTournamentCard = ({ tournament }) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 

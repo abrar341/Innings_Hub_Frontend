@@ -1,7 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import tournaments from '../../data/tournaments';
-import SeriesCard from './SeriesCard';
 import UsersTournamentCard from '../AdminPages/Competitions/Tournaments/UsersTournamentCard';
 import { useGetAllTournamentsQuery } from '../../slices/tournament/tournamentApiSlice';
 

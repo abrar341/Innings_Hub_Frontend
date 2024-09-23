@@ -8,7 +8,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
     const { isAuthenticated, userType, isVerified } = useSelector((state) => state.auth);
 
     if (!isAuthenticated) {
-        return <Navigate to="/account/login" replace />;
+        return <Navigate to="/" replace />;
     }
     // if (isAuthenticated) {
     //     const dispatch = useDispatch();

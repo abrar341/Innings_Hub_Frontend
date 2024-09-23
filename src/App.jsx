@@ -10,8 +10,6 @@ import TeamProfileLayout from './pages/Team/TeamProfileLayout';
 import TeamStats from './pages/Team/pages/TeamStats';
 import TeamSqaud from './pages/Team/pages/TeamSquad';
 import SeriesPageLayout from './pages/Series/SeriesProfileLayout';
-import Fixtures from './pages/Series/pages/Fixtures';
-import Results from './pages/Series/pages/Results';
 import PointTable from './pages/Series/pages/PointTable';
 import Home from './pages/Home';
 import MatchesLayout from './pages/LiveScore/MatchesLayout';
@@ -49,6 +47,7 @@ import Profile from './pages/ClubManager/Profile';
 import Clubs from './pages/AdminPages/Clubs/Clubs';
 import { useGetUserInfoQuery } from './slices/auth/usersApiSlice';
 import DashboardLayout from './pages/AdminPages/DashboardLayout';
+import Matches from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/Matches';
 
 function App() {
 
@@ -89,6 +88,7 @@ function App() {
             <Route path='/admin/clubs' element={<Clubs />} />
             <Route path='/admin/competitions/:id' element={<TournamentProfileLayout />} >
               <Route path='squads' element={<Squads />} />
+              <Route path='matches' element={<Matches />} />
             </Route>
           </Route>
         </Route>
@@ -121,8 +121,7 @@ function App() {
         </Route>
         <Route path="series" element={<Series />} />
         <Route path='series/:id' element={<SeriesPageLayout />} >
-          <Route path='fixtures' element={<Fixtures />} />
-          <Route path='results' element={<Results />} />
+          <Route path='fixtures' element={<Matches />} />
           <Route path='point-table' element={<PointTable />} />
         </Route>
         <Route path="players" element={<Players />} />

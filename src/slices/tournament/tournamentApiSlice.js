@@ -124,14 +124,6 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Tournament'], // Invalidate the tournament data to refetch after adding teams
     }),
-    addPlayerToSquad: builder.mutation({
-      query: (squadId) => ({
-        url: `${TOURNAMENTS_URL}/addPlayerToSquad`,
-        method: 'POST',
-        body: squadId, // Pass the tournamentId and teamIds in the body
-      }),
-      invalidatesTags: ['Tournament'], // Invalidate the tournament data to refetch after adding teams
-    }),
     removeTeamFromTournament: builder.mutation({
       query: ({ tournamentId, squadId }) => ({
         url: `${TOURNAMENTS_URL}/removeTeamFromTournament`,
@@ -146,6 +138,36 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
         method: 'GET',
       }),
       providesTags: ['Tournament'], // Provide cache on fetch
+    }),
+    getAvailablePlayersForTournament: builder.query({
+      query: ({ tournamentId, teamId }) => ({
+        url: `${TOURNAMENTS_URL}/getAvailablePlayersForTournament/${tournamentId}/${teamId}`,
+        method: 'GET',
+      }),
+      providesTags: ['Tournament'], // This will help in caching
+    }),
+    addPlayerToSquad: builder.mutation({
+      query: ({ squadId, playerIds }) => ({
+        url: `${TOURNAMENTS_URL}/addPlayerToSquad`,
+        method: 'POST',
+        body: { squadId, playerIds }, // Sending both squadId and playerIds
+      }),
+      invalidatesTags: ['Tournament'], // Invalidate tournament data to refetch after adding players
+    }),
+    removePlayerFromSquad: builder.mutation({
+      query: ({ squadId, playerId }) => ({
+        url: `${TOURNAMENTS_URL}/removePlayerFromSquad`,
+        method: 'POST',
+        body: { squadId, playerId }, // Send the squadId and playerId in the body
+      }),
+      invalidatesTags: ['Tournament'], // Invalidate tournament data to refresh
+    }),
+    getTeamsInTournament: builder.query({
+      query: (tournamentId) => ({
+        url: `${TOURNAMENTS_URL}/getTeamsInTournament/${tournamentId}`,
+        method: 'GET',
+      }),
+      providesTags: ['Tournament'], // This will help in caching
     }),
 
   }),
@@ -164,5 +186,9 @@ export const {
   useGetAvailableTeamsForTournamentQuery,
   useAddTeamsToTournamentsMutation,
   useRemoveTeamFromTournamentMutation,
-  useGetSingleTournamentSquadsQuery
+  useGetSingleTournamentSquadsQuery,
+  useGetAvailablePlayersForTournamentQuery,
+  useAddPlayerToSquadMutation,
+  useRemovePlayerFromSquadMutation,
+  useGetTeamsInTournamentQuery
 } = tournamentApiSlice;

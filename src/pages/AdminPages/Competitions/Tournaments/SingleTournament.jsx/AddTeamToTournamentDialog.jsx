@@ -83,7 +83,7 @@ const AddTeamToTournamentDialog = ({ tournamentId }) => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="max-h-60 overflow-y-auto grid grid-cols-1 gap-4">
                         {teams.map((team) => (
-                            <div key={team.id} className="flex items-center space-x-4">
+                            <div key={team._id} className="flex items-center space-x-4">
                                 <input
                                     type="checkbox"
                                     id={`team-${team.id}`}

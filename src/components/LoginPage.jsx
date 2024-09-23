@@ -44,7 +44,7 @@ const LoginPage = () => {
 
 			const role = res.data.user.role;
 			if (role === 'admin' || role === 'club-manager' || role === 'scorer') {
-				navigate(`/${role}/profile`);
+				navigate(`/${role}`);
 			} else {
 				navigate('/');
 			}

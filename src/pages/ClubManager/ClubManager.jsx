@@ -77,7 +77,7 @@ const ClubManager = () => {
         );
     }
 
-    if (userInfo.club.registrationStatus === 'pending') {
+    if (userInfo?.club.registrationStatus === 'pending') {
         return (
             <>
                 {sharedHeader}
@@ -87,6 +87,21 @@ const ClubManager = () => {
                     </h2>
                     <p className="text-gray-600">
                         Please wait for approval from the association before accessing the dashboard.
+                    </p>
+                </div>
+            </>
+        );
+    }
+    if (userInfo?.club.registrationStatus === 'rejected') {
+        return (
+            <>
+                {sharedHeader}
+                <div className="flex flex-col items-center justify-center h-[300px]">
+                    <h2 className="text-2xl font-bold text-yellow-500 mb-4">
+                        Your club registration application is rejected.
+                    </h2>
+                    <p className="text-gray-600">
+                        Please review your application and submit again.
                     </p>
                 </div>
             </>

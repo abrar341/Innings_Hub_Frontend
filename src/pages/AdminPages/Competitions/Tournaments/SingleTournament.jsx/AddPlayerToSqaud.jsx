@@ -4,56 +4,56 @@ import { Dialog, DialogContent, DialogTitle, DialogClose, DialogTrigger } from "
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
-// import { useAddTeamsToTournamentsMutation, useGetAvailableTeamsForTournamentQuery } from "../../../../../slices/tournament/tournamentApiSlice";
+import { useAddPlayerToSquadMutation, useGetAvailablePlayersForTournamentQuery } from "../../../../../slices/tournament/tournamentApiSlice";
+// import { useAddPlayerToSquadMutation, useGetAvailablePlayersForTournamentQuery } from "../../../../../slices/tournament/tournamentApiSlice";
 
-const AddPlayerToSqaud = ({ tournamentId }) => {
-    const [teams, setTeams] = useState([]);
-    const [selectedTeams, setSelectedTeams] = useState([]);
-    // const [addPlayerToSquad, { isLoading: createLoading }] = useAddPlayerToSquadMutation();
-
-
-    console.log(selectedTeams);
-
+const AddPlayerToSquad = ({ tournamentId, teamId, squadId }) => {
+    const [players, setPlayers] = useState([]); // Update state to hold players instead of teams
+    const [selectedPlayers, setSelectedPlayers] = useState([]); // Track selected players
     const [isDialogOpen, setIsDialogOpen] = useState(false); // Track dialog state
-
-    // const { data, isLoading, isError, error, refetch } = useGetAvailablePlayersForTournamentQuery(tournamentId);
-
-    // Fetch teams when the dialog opens
-    // useEffect(() => {
-    //     if (isDialogOpen) {
-    //         refetch(); // Trigger API call
-    //     }
-    // }, [isDialogOpen, refetch]);
-
-    // Use useEffect to set teams when the data is fetched successfully
-    // useEffect(() => {
-    //     if (data) {
-    //         setTeams(data?.data);
-    //     }
-    // }, [data]);
-    const isLoading = true;
+    const { data, isLoading, isError, error, refetch } = useGetAvailablePlayersForTournamentQuery({ tournamentId, teamId });
+    const [addPlayerToSquad, { isLoading: createLoading }] = useAddPlayerToSquadMutation();
     const navigate = useNavigate();
+    // Fetch players when the dialog opens
+    useEffect(() => {
+        if (isDialogOpen) {
+            refetch(); // Trigger API call to fetch players
+        }
+    }, [isDialogOpen, refetch]);
 
-    const handleSelectTeam = (teamId) => {
-        setSelectedTeams((prevSelected) => {
-            if (prevSelected.includes(teamId)) {
-                return prevSelected.filter((id) => id !== teamId);
+    // Set players when data is fetched
+    useEffect(() => {
+        if (data) {
+            setPlayers(data?.data || []); // Set players list
+        }
+    }, [data]);
+
+    const handleSelectPlayer = (playerId) => {
+        setSelectedPlayers((prevSelected) => {
+            if (prevSelected.includes(playerId)) {
+                return prevSelected.filter((id) => id !== playerId);
             }
-            return [...prevSelected, teamId];
+            return [...prevSelected, playerId];
         });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(squadId, selectedPlayers);
+
         try {
             const res = await addPlayerToSquad({
-                sqaudId
+                squadId,
+                playerIds: selectedPlayers, // Send selected players to API
             }).unwrap();
 
+            console.log(res);
+
+
             toast.dismiss();
-            toast.success("Player added to Squad successfully!");
-            setSelectedTeams([]);
-            setIsDialogOpen(false)
+            toast.success("Player(s) added to Squad successfully!");
+            setSelectedPlayers([]);
+            setIsDialogOpen(false);
         } catch (err) {
             toast.dismiss();
             toast.error(err?.data?.message || "Error occurred");
@@ -63,7 +63,7 @@ const AddPlayerToSqaud = ({ tournamentId }) => {
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <button className=" flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded hover:bg-green-600 transition-colors duration-200">
+                <button className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded hover:bg-green-600 transition-colors duration-200">
                     <FaPlus className="mr-2" />
                     Add Player
                 </button>
@@ -74,23 +74,23 @@ const AddPlayerToSqaud = ({ tournamentId }) => {
                     Add Player to Squad
                 </DialogTitle>
                 <p className="text-center text-gray-300 mb-6">
-                    Select the player to add to the squad.
+                    Select the player(s) to add to the squad.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="max-h-60 overflow-y-auto grid grid-cols-1 gap-4">
-                        {teams.map((team) => (
-                            <div key={team.id} className="flex items-center space-x-4">
+                        {players.map((player) => (
+                            <div key={player.id} className="flex items-center space-x-4">
                                 <input
                                     type="checkbox"
-                                    id={`team-${team.id}`}
-                                    value={team.id}
-                                    checked={selectedTeams.includes(team._id)}
-                                    onChange={() => handleSelectTeam(team._id)}
+                                    id={`player-${player.id}`}
+                                    value={player.id}
+                                    checked={selectedPlayers.includes(player._id)}
+                                    onChange={() => handleSelectPlayer(player._id)}
                                     className="h-5 w-5 text-green-600 bg-gray-700 border-gray-600 rounded-lg focus:ring-green-500"
                                 />
-                                <label htmlFor={`team-${team.id}`} className="text-gray-300 font-medium">
-                                    {team.teamName}
+                                <label htmlFor={`player-${player._id}`} className="text-gray-300 font-medium">
+                                    {player.playerName}
                                 </label>
                             </div>
                         ))}
@@ -100,18 +100,21 @@ const AddPlayerToSqaud = ({ tournamentId }) => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         type="submit"
-                        disabled={isLoading || selectedTeams.length === 0}
+                        disabled={createLoading || selectedPlayers.length === 0}
                         className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50"
                     >
-                        {isLoading ? "Adding Teams..." : "Add Teams"}
+                        {createLoading ? "Adding Players..." : "Add Players"}
                     </motion.button>
                 </form>
 
                 <DialogClose asChild>
+                    <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-500">
+                        X
+                    </button>
                 </DialogClose>
             </DialogContent>
         </Dialog>
     );
 };
 
-export default AddPlayerToSqaud;
+export default AddPlayerToSquad;

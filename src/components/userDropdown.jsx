@@ -8,7 +8,7 @@ import { User, LogOut, ChevronUp, ChevronDown } from 'lucide-react';  // Import 
 import { clearPlayers } from '../slices/clubManager/clubManagerSlice';
 import { clearClubs } from '../slices/admin/adminSlice';
 
-const UserDropdown = ({ profile }) => {
+const UserDropdown = () => {
     const { userInfo } = useSelector((state) => state.auth);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -24,8 +24,8 @@ const UserDropdown = ({ profile }) => {
             dispatch(clearPlayers());
             dispatch(clearClubs());
             setIsOpen(false);
+            navigate('/');
             toast.success(res.message);
-            navigate('/account/login');
         } catch (err) {
             console.error(err);
         }
@@ -49,7 +49,7 @@ const UserDropdown = ({ profile }) => {
     }, [dropdownRef]);
 
     return (
-        <div className="relative inline-block text-left" ref={dropdownRef}>
+        <div className="z-100 relative inline-block text-left" ref={dropdownRef}>
             <div
                 className={`flex items-center gap-2  bg-gray-100 cursor-pointer p-2 hover:bg-gray-300 rounded-lg transition-all duration-300`}
                 onClick={toggleDropdown}

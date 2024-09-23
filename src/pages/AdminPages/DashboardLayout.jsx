@@ -24,7 +24,7 @@ const DashboardLayout = () => {
                             {crumb.charAt(0).toUpperCase() + crumb.slice(1)}
                         </button>
                     ) : (
-                        <span className='text-gray-500'>
+                        <span className='text-blue-500 font-semibold'>
                             {crumb.charAt(0).toUpperCase() + crumb.slice(1)}
                         </span>
                     )}
@@ -41,9 +41,9 @@ const DashboardLayout = () => {
 
             <div className='flex justify-between items-center'>
                 {/* Breadcrumb Navigation */}
-                <div className='text-gray-700'>
+                <div className='text-blue-500 text-sm'>
                     <button
-                        className='text-blue-600 hover:underline'
+                        className='text-blue-600 text-sm  hover:underline'
                         onClick={() => navigate('/admin')}
                     >
                         Home
