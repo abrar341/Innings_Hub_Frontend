@@ -10,8 +10,6 @@ function cn(...inputs) {
     return twMerge(clsx(inputs));
 }
 
-export default cn;
-
 
 const Dialog = DialogPrimitive.Root;
 

@@ -48,6 +48,9 @@ import Clubs from './pages/AdminPages/Clubs/Clubs';
 import { useGetUserInfoQuery } from './slices/auth/usersApiSlice';
 import DashboardLayout from './pages/AdminPages/DashboardLayout';
 import Matches from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/Matches';
+import Scorer from './components/Scorer';
+import Viewer from './components/Viewer';
+import ScoreButtons from './components/ScorerCardButtons/ScoreButtons';
 
 function App() {
 
@@ -56,6 +59,9 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
+        <Route path='/runner' element={<Scorer />} />
+        <Route path='/viewer' element={<Viewer />} />
+        {/* <Route path='/b' element={<ScoreButtons />} /> */}
         <Route path='account'>
           <Route path='login' element={<LoginPage />} />
           <Route path='signup' element={<SignUpPage />} />
