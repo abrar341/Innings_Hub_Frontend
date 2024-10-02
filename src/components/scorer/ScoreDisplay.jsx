@@ -1,24 +1,28 @@
-import { getOverStr, processTeamName } from "@/lib/utils";
-import { Separator } from "../ui/separator";
+import { getOverStr, processTeamName } from "../ui/utils";
+import { Separator } from "../ui/seprator";
 import { TypographyH2 } from "../ui/typography";
 
 function ScoreDisplay({ runs, wickets, totalBalls, runRate, curTeam }) {
     return (
         <div className="relative mt-6 flex items-end justify-center pb-2">
             <TypographyH2 className="absolute left-0">
-                {processTeamName(curTeam ?? "TEAM 1")}
+                {/* {processTeamName(curTeam ?? "TEAM 1")} */}
+                {'AUS'}
             </TypographyH2>
             <div>
                 <h2 className="mb-3 text-center text-6xl font-semibold tabular-nums">
-                    {runs}/{wickets}
+                    {/* {runs}/{wickets} */}
+                    200/4
                 </h2>
                 <div className="flex items-center justify-center text-center text-base font-medium text-muted-foreground md:text-lg">
-                    <span>({getOverStr(totalBalls)})</span>
+                    {/* <span>({getOverStr(totalBalls)})</span> */}
+                    <span>(19.1)</span>
                     <Separator
                         orientation="vertical"
                         className="mx-2 h-6 bg-muted-foreground"
                     />
-                    <span>RR: {runRate}</span>
+                    {/* <span>RR: {runRate}</span> */}
+                    <span>RR: 6.99</span>
                 </div>
             </div>
         </div>

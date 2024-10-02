@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-import { cn } from "@/lib/utils";
+import { cn } from "../ui/utils";
 
 function BallSummary({ event, size = "default" }) {
     const isNoBall = event?.includes("-3");
@@ -13,7 +13,8 @@ function BallSummary({ event, size = "default" }) {
         {
             variants: {
                 variant: {
-                    default: "bg-muted",
+                    // default: "bg-muted",
+                    default: "bg-amber-400 text-white text-amber-950 dark:bg-amber-600 dark:text-amber-50 font-extrabold",
                     "0": "bg-muted text-muted-foreground flex justify-center items-center",
                     "-4": "bg-muted text-muted-foreground flex justify-center items-center", // Manual Strike change without runs
                     "1": "bg-muted text-primary",
@@ -80,8 +81,7 @@ function BallSummary({ event, size = "default" }) {
                 })
             )}
         >
-            {summaryToShow}
-        </li>
+            6        </li>
     );
 }
 

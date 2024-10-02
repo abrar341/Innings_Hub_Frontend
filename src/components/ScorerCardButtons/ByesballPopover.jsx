@@ -17,7 +17,7 @@ function ByesballPopover({ handleScore }) {
                 <Button
                     size="lg"
                     variant="secondary"
-                    className="h-20 rounded-none text-lg text-muted-foreground"
+                    className="h-20 border border-gray-300 text-lg text-muted-foreground"
                 >
                     Byes
                 </Button>
@@ -47,6 +47,7 @@ function ByesballPopover({ handleScore }) {
                                 value={`-5${event}`}
                                 onClick={(e) => {
                                     handleScore(e);
+                                    console.log(e.target.value);
                                     setIsPopoverOpen(false);
                                 }}
                             >

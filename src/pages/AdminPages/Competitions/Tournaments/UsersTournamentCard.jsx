@@ -2,8 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaCalendarAlt, FaUsers, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { formatDate } from '../../../../utils/dateFormatter';
+import { useSelector } from 'react-redux';
 
 const UsersTournamentCard = ({ tournament }) => {
+    const { isAuthenticated, userType } = useSelector((state) => state.auth);
+
     if (tournament.startDate < Date.now && tournament.endDate < Date.now) {
         console.log("completed")
     }
@@ -18,7 +21,7 @@ const UsersTournamentCard = ({ tournament }) => {
                     Upcoming
                 </span>
             </div>
-            <div className="text-center mt-6">
+            <div className="text-center flex flex-col gap-2 mt-6">
 
                 <h5 className="font-semibold text-lg text-bold text-gray-800">{tournament.name}</h5>
                 <div className="text-gray-500 mt-3">
@@ -52,6 +55,10 @@ const UsersTournamentCard = ({ tournament }) => {
                         Points Table
                     </Link>
                 </div>
+                {
+                    isAuthenticated && userType === "club-manager" &&
+                    <Link className='border border-gray-400 mt-4 w-[200px] font-semibold self-center text-sm p-2 rounded'>Register Your Team</Link>
+                }
             </div>
         </Link>
     );

@@ -1,9 +1,9 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Dispatch, useState } from "react";
 import { Button } from "../ui/Button";
 import Link from "react-router-dom";
 import { useStatsOpenContext } from "@/contexts/StatsOpenContext";
-import { Separator } from "../ui/separator";
+import { Separator } from "../ui/seprator";
 import {
     calculatePlayerOfTheMatch,
     calculateWinner,

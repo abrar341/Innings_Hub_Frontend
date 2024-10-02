@@ -22,34 +22,23 @@ export const wicketTypes = [
     },
     {
         id: 4,
-        type: "Caught & Bowled",
-        shortName: "c & b.",
-    },
-    {
-        id: 5,
         type: "Run Out",
         shortName: "run out.",
         isOtherPlayerInvolved: true,
         isNotBowlersWicket: true,
     },
     {
-        id: 6,
+        id: 5,
         type: "Stumped",
         shortName: "st.",
         isOtherPlayerInvolved: true,
     },
-    {
-        id: 7,
-        type: "Hit Wicket",
-        shortName: "hit wkt.",
-        isNotBowlersWicket: true,
-    },
-    {
-        id: 8,
-        type: "Retired Hurt",
-        shortName: "ret. hurt",
-        isNotBowlersWicket: true,
-    },
+    // {
+    //     id: 8,
+    //     type: "Retired Hurt",
+    //     shortName: "ret. hurt",
+    //     isNotBowlersWicket: true,
+    // },
 ];
 
 function WicketPopover({ handleWicket }) {
@@ -65,7 +54,7 @@ function WicketPopover({ handleWicket }) {
                 <Button
                     size="lg"
                     variant="destructive"
-                    className="h-20 rounded-none text-lg font-bold"
+                    className="h-20 bg-red-600  border border-gray-300 text-lg text-white"
                 >
                     OUT
                 </Button>
@@ -78,6 +67,8 @@ function WicketPopover({ handleWicket }) {
                         value={JSON.stringify(type)}
                         onClick={(e) => {
                             handleWicket(e);
+                            console.log(e.target.value);
+
                             setIsPopoverOpen(false);
                         }}
                     >

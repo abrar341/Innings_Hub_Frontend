@@ -4,27 +4,6 @@ import { convertTo12HourFormat, formatDate } from '../../../../../utils/dateForm
 
 const Match_Card = ({ matchData }) => {
     return (
-        // teams: [
-
-        //     { _id: '66ef307c883bc58d1808c6ec', shortName: 'yut' },
-
-        //     { _id: '66ef3223883bc58d1808c6f7', shortName: 'RCC' }
-
-        //   ],
-
-        //   overs: 50,
-
-        //   venue: 'National Stadium',
-
-        //   date: '2024-09-18T00:00:00.000Z',
-
-        //   time: '14:00',
-
-        //   round: 'Quarter Final',
-
-        //   status: 'scheduled',
-
-        //   tournament: { _id: '66d34efebd6b2b67fba0a424', name: 'Jashe Bahran' },
         <div className=" gap-10 overflow-hidden flex-shrink-0 bg-gradient-to-r from-gray-50 to-white border border-gray-300 rounded shadow-lg transform transition-transform duration-300 ">
             {/* Card Front */}
             <div className="px-4 py-2">

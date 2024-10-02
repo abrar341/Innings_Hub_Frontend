@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { generateOverSummary, getScore, calcRuns } from "@/lib/utils";
-import { strikeChangers } from "@/lib/constants";
+import { generateOverSummary, getScore, calcRuns } from "../ui/utils";
+import { strikeChangers } from "../ui/constants";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "../ui/card";
+import { Separator } from "../ui/seprator";
 import DangerActions from "./DangerActions";
 import ScoreDisplay from "./ScoreDisplay";
-import BallSummary from "./BallSummary";
-import ScoreButtons from "../score-buttons/ScoreButtons";
+import BallSummary from "./BallSummery";
+import ScoreButtons from "../ScorerCardButtons/ScoreButtons";
 import BowlerScores from "../player-scores/BowlerScores";
 import BatsmanScores from "../player-scores/BatsmanScores";
-import Tools from "../match-stats/Tools";
-import FieldersDialog from "./FieldersDialog";
-import MatchSummary from "./MatchSummary";
+// import Tools from "../match-stats/Tools";
+import FieldersDialog from "./FielderDialog";
+// import MatchSummary from "./MatchSummery";
 import TargetInfo from "./TargetInfo";
-import ScoreButtonsSkeleton from "../score-buttons/ScoreButtonsSkeleton";
+import ScoreButtonsSkeleton from "../ScorerCardButtons/ScoreButtonsSkeleton";
 
-function ScorerLayout({ matchId, match }) {
+function ScorerLayout1({ matchId, match }) {
     const ballEventsFromMatch = match?.ballEvents;
 
     const team = match?.teams[match?.curTeam];
@@ -177,7 +177,7 @@ function ScorerLayout({ matchId, match }) {
                         runRate={runRate}
                         curTeam={team?.name}
                     />
-                    <ul className="flex gap-2 overflow-x-auto">
+                    <ul className="flex justify-center items-center gap-2 overflow-x-auto">
                         {Array.from({ length: ballLimitInOver }, (_, i) => (
                             <BallSummary key={i} event={overSummaries[curOverIndex]?.[i]} />
                         ))}
@@ -192,4 +192,4 @@ function ScorerLayout({ matchId, match }) {
     );
 }
 
-export default ScorerLayout;
+export default ScorerLayout1;

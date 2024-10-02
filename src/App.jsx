@@ -17,7 +17,6 @@ import LiveScores from './pages/LiveScore/pages/LiveScores';
 import Schedules from './pages/LiveScore/pages/Schedules';
 import { store, persistor } from './store';
 import { Provider, useDispatch } from 'react-redux';
-import ScorerLayout from './pages/Scorer/ScorerLayout';
 import Upcoming from './pages/Scorer/pages/Upcoming';
 import Live from './pages/Scorer/pages/Live';
 import Result from './pages/Scorer/pages/Result';
@@ -51,6 +50,9 @@ import Matches from './pages/AdminPages/Competitions/Tournaments/SingleTournamen
 import Scorer from './components/Scorer';
 import Viewer from './components/Viewer';
 import ScoreButtons from './components/ScorerCardButtons/ScoreButtons';
+import RegisterTeamToTournament from './pages/ClubManager/Tournaments';
+import ScorerLayout from './pages/Scorer/ScorerLayout';
+import ScorerLayout1 from './components/scorer/ScorerLayout';
 
 function App() {
 
@@ -59,9 +61,9 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
-        <Route path='/runner' element={<Scorer />} />
+        <Route path='/runner/:matchId' element={<Scorer />} />
+        <Route path='/runner' element={<ScorerLayout1 />} />
         <Route path='/viewer' element={<Viewer />} />
-        {/* <Route path='/b' element={<ScoreButtons />} /> */}
         <Route path='account'>
           <Route path='login' element={<LoginPage />} />
           <Route path='signup' element={<SignUpPage />} />
@@ -76,7 +78,7 @@ function App() {
           <Route path='live-scores' element={<LiveScores />} />
           <Route path='schedules' element={<Schedules />} />
           <Route path='results' element={<LiveScores />} />
-          <Route path="scorecard" element={<ScoreCard />}>
+          <Route path="/all-matches/scorecard/:matchId" element={<ScoreCard />}>
             <Route path='summery' element={<MatchSummery />} />
             <Route path='innings' element={<ScoreCard_Innings />} />
             <Route path='overs' element={<Overs />} />
@@ -105,17 +107,18 @@ function App() {
             <Route path='players' element={<PlayersPageLayout />} />
             <Route path='teams' element={<TeamsPageLayout />} />
             <Route path='profile' element={<Profile />} />
+            <Route path='tournaments' element={<RegisterTeamToTournament />} />
           </Route>
         </Route>
 
 
-        <Route element={<ProtectedRoute allowedRoles={['scorer']} />}>
-          <Route path='scorer' element={<ScorerLayout />}>
-            <Route path='live' element={<Live />} />
-            <Route path='upcoming' element={<Upcoming />} />
-            <Route path='results' element={<Result />} />
-          </Route>
+        {/* <Route element={<ProtectedRoute allowedRoles={['scorer']} />}> */}
+        <Route path='scorer' element={<ScorerLayout />}>
+          <Route path='live' element={<Live />} />
+          <Route path='upcoming' element={<Upcoming />} />
+          <Route path='results' element={<Result />} />
         </Route>
+        {/* </Route> */}
 
         {/* Public Routes */}
         {/* <Route path="clubs" element={<Clubs />} /> */}

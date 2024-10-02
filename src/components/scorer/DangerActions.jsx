@@ -8,7 +8,6 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-import RestartButton from "../RestartButton";
 
 function DangerActions({ handleRestart, handleUndo }) {
     const [showMenu, setShowMenu] = useState(false);
@@ -26,10 +25,6 @@ function DangerActions({ handleRestart, handleUndo }) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="grid w-40 gap-2 p-4" align="end">
-                <RestartButton
-                    onClick={handleRestart}
-                    handleCloseMenu={() => setShowMenu(false)}
-                />
                 <Button
                     size="sm"
                     variant="destructive"

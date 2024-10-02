@@ -31,11 +31,62 @@ export const matchApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Match'], // Helps to re-fetch and update when matches are created/updated
         }),
+        getMatchById: builder.query({
+            query: (matchId) => ({
+                url: `${MATCHES_URL}/getMatchById/${matchId}`,
+                method: 'GET',
+            }),
+            providesTags: ['Match'], // Helps with re-fetching/updating when a match is modified
+        }),
+        initializePlayers: builder.mutation({
+            query: ({ data, matchId }) => ({
+                url: `${MATCHES_URL}/initializePlayers/${matchId}`,
+                method: 'POST',
+                body: {
+                    striker: data.striker,
+                    nonStriker: data.nonStriker,
+                    bowler: data.bowler
+                },
+            }),
+            invalidatesTags: ['Match'], // This will help to invalidate and refetch match-related queries
+        }),
+        getAllMatches: builder.query({
+            query: () => ({
+                url: `${MATCHES_URL}/getAllMatches`,
+                method: 'GET',
+            }),
+            providesTags: ['Match'], // Helps to re-fetch and update when matches are created/updated
+        }),
+        getSquadPlayers: builder.query({
+            query: ({ tournamentId, teamId }) => ({
+                url: `${MATCHES_URL}/getSquadPlayers/${tournamentId}/${teamId}`,
+                method: 'GET',
+            }),
+            providesTags: ['Players'], // Helps to re-fetch and update when squads are created/updated
+        }),
+        startMatch: builder.mutation({
+            query: ({ matchId, tossWinner, tossDecision, playing11 }) => ({
+                url: `${MATCHES_URL}/startMatch/${matchId}`, // Sending matchId as a parameter
+                method: 'POST',
+                body: {
+                    tossWinner,
+                    tossDecision,
+                    playing11
+                },
+            }),
+            invalidatesTags: ['Match'], // Helps to re-fetch and update match-related data after starting the match
+        }),
+
 
     }),
 });
 
 export const {
     useCreateMatchMutation,
-    useGetMatchesByTournamentIdQuery
+    useGetMatchesByTournamentIdQuery,
+    useGetMatchByIdQuery,
+    useInitializePlayersMutation,
+    useGetAllMatchesQuery,
+    useGetSquadPlayersQuery,
+    useStartMatchMutation
 } = matchApiSlice;

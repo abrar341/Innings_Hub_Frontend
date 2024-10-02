@@ -38,6 +38,7 @@ const ClubManager = () => {
         { to: 'dashboard', icon: 'fa-users', title: `Dashboard` },
         { to: 'players', icon: 'fa-users', title: `Players` },
         { to: 'teams', icon: 'fa-group', title: 'Teams' },
+        { to: 'tournaments', icon: 'fa-group', title: 'Tournaments' },
     ];
 
     // Class for active and inactive NavLink

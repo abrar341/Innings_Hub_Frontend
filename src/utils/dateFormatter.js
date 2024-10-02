@@ -13,7 +13,7 @@ export const formatDate = (isoDateString) => {
 
 export const convertTo12HourFormat = (time) => {
     // Split the time into hours and minutes
-    const [hours, minutes] = time.split(':').map(Number);
+    const [hours, minutes] = time.split(':')?.map(Number);
 
     // Determine the period (AM/PM)
     const period = hours >= 12 ? 'PM' : 'AM';

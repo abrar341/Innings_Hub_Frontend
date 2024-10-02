@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import NavigationTabs from './NaviagtionTabs';
+import { useOutletContext } from 'react-router-dom';
 
 const PlayingEleven = () => {
+    const context = useOutletContext();
+    let matchInfo = context;
+    console.log(matchInfo?.playing11[0]);
+
     const players = [
         {
             name: 'Abdul Khader',
@@ -73,17 +78,18 @@ const PlayingEleven = () => {
                     </button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {players.map((player, index) => (
+                    {matchInfo?.playing11[0].players.map((player, index) => (
                         <div key={index} className="border p-4 grid grid-cols-3 gap-4">
                             <div >
                                 <img
                                     className="h-10 w-10 rounded-full mx-auto  object-cover"
                                     src={player.imgSrc}
-                                    alt={player.name}
+                                    alt={player.playerName}
                                 />
                             </div>
                             <div className="player-name self-center col-span-2">
-                                <h3 className="text-sm sm:text-base font-medium">{player.name}</h3>
+                                <h3 className="text-sm sm:text-base font-medium">{player.playerName}</h3>
+                                <p className='text-sm text-gray-500'>{player.role}</p>
                             </div>
                         </div>
                     ))}
