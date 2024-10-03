@@ -25,6 +25,17 @@ const InningsEndedDialog = ({ remainingWickets, remainRuns, winingTeam, matchId,
         console.log(matchId);
         socket.emit('joinMatch', matchId);
         socket.emit('startNewInnings', { matchId });
+        socket.on('NewInningsStarted', (matchData) => {
+            console.log('Received match data:', matchData);
+            console.log(matchData);
+
+            setMatchInfo(matchData); // Save match data in the state
+            console.log(matchInfo);
+
+            if (matchData.innings && matchData.innings.length > 0) {
+                setCurrentInning(matchData?.innings?.[matchData.currentInning - 1]);
+            }
+        });
     }
     return (
         <Dialog open={true} onOpenChange={setIsDialogOpen}>

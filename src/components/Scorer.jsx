@@ -177,21 +177,23 @@ const Scorer = () => {
             winingTeam = battingTeam?.team;
             result = true
             remainingWickets = 10 - matchInfo?.innings?.[1].wickets;
-
         }
         if (matchInfo?.innings?.[0].runs > matchInfo?.innings?.[1].runs) {
-            if (currentInning?.fallOfWickets?.length >= 10 || lastOver?.overNumber === matchInfo?.overs)
-                winingTeam = bowlingTeam?.team
-            result = true
-            remainRuns = matchInfo?.innings?.[0]?.runs - matchInfo?.innings?.[1]?.runs + 1;
+            if (currentInning?.fallOfWickets?.length >= 10 || lastOver?.overNumber === matchInfo?.overs + 1) {
 
-            console.log("winniing by runs");
+                winingTeam = bowlingTeam?.team
+                result = true
+                remainRuns = matchInfo?.innings?.[0]?.runs - matchInfo?.innings?.[1]?.runs + 1;
+
+                console.log("winniing by runs");
+            }
         }
     }
-    if (!matchInfo?.toss || (lastOver?.overNumber === matchInfo?.over - 1)) {
-        return <StartMatchDialog matchInfo={matchInfo} matchId={matchId} />;
+    // if (!matchInfo?.toss || (lastOver?.overNumber === matchInfo?.over)) {
+    if (!matchInfo?.toss) {
+        return <StartMatchDialog setMatchInfo={setMatchInfo} matchInfo={matchInfo} matchId={matchId} />;
     }
-    if (currentInning?.fallOfWickets?.length === 10 || currentInning?.fallOfWickets?.length >= 10 || lastOver?.overNumber === matchInfo?.overs) {
+    if (currentInning?.fallOfWickets?.length === 10 || currentInning?.fallOfWickets?.length >= 10 || lastOver?.overNumber === matchInfo?.overs + 1 || result) {
         return <InningsEndedDialog remainingWickets={remainingWickets} remainRuns={remainRuns} winingTeam={winingTeam} result={result} matchId={matchId} />;
     }
     if (fielderInvolved) {

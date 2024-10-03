@@ -39,9 +39,7 @@ const ScoreCard = () => {
         socket.emit('joinMatch', matchId);
         socket.on('newBall', (ballData) => {
             console.log('Received ball update:', ballData);
-            if (ballData) {
-                setMatchInfo(ballData)
-            }
+            setMatchInfo(ballData)
         })
 
         socket.on('matchUpdate', (data) => {
@@ -56,12 +54,6 @@ const ScoreCard = () => {
 
         socket.on('newBowlerAssigned', (updatedMatchData) => {
             console.log("Updated match data received:", updatedMatchData);
-
-            // Set the updated inning and match information in the scorer's state
-            // setCurrentInning(updatedMatchData?.innings?.[updatedMatchData.currentInning - 1]);
-            // setMatchInfo(updatedMatchData);
-
-            // Clean up the listener after receiving the updated match data
             socket.off('newBowlerAssigned');
         });
 

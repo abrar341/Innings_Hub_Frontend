@@ -11,15 +11,18 @@ const InitializePlayersDialog = ({ matchInfo, matchId, setCurrentInning, setMatc
   const { control, handleSubmit, watch, formState: { errors }, reset } = useForm();
   const [initializePlayers] = useInitializePlayersMutation()
   const currentInning = matchInfo?.innings?.[matchInfo?.currentInning - 1];
+  console.log("currentInning", currentInning);
+
   const battingTeamId = currentInning?.team?._id; // Get the team ID for this inning
   const battingPerformances = currentInning?.battingPerformances || [];
-  console.log(battingPerformances);
   const battingTeam = matchInfo?.playing11?.find((team) => team?.team?._id === battingTeamId);
   const bowlingTeam = matchInfo?.playing11?.find((team) => team?.team?._id !== battingTeamId);
   const playing11 = battingTeam?.players;
+  console.log("playing11", playing11);
+
   const alreadyBattedPlayerIds = battingPerformances.map((performance) => performance.player);
   const alreadyBattedIds = alreadyBattedPlayerIds.map((player) => player._id.toString());
-  const playersYetToBat = playing11.filter((player) => !alreadyBattedIds.includes(player._id.toString()));
+  const playersYetToBat = playing11?.filter((player) => !alreadyBattedIds.includes(player._id.toString()));
   const onSubmit = async (data) => {
     console.log(data);
     const res = await initializePlayers({ data, matchId }).unwrap();
@@ -32,7 +35,7 @@ const InitializePlayersDialog = ({ matchInfo, matchId, setCurrentInning, setMatc
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <button className="flex items-center bg-blue-500 text-white text-sm font-medium py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200">
+        <button className="flex mx-auto m-5 w-full items-center bg-blue-500 text-white text-sm font-medium py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200">
           <FaPlus className="mr-2" />
           Initialize Players
         </button>

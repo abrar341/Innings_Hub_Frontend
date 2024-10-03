@@ -1,122 +1,38 @@
 import React, { useState } from 'react';
-import NavigationTabs from './NaviagtionTabs';
 import { useOutletContext } from 'react-router-dom';
+import NavigationTabs from './NaviagtionTabs';
 
 const ScoreCard_Innings = () => {
     const context = useOutletContext();
     let matchInfo = context;
-    const batsme1n = [
-        {
-            name: 'Rohit Sharma',
-            status: 'c Ahmed b Nawaz',
-            runs: 12,
-            balls: 18,
-            fours: 0,
-            sixes: 1,
-            strikeRate: 66.67,
-            image: 'https://d2l63a9diffym2.cloudfront.net/players/KXomLmv0cP0VsIW4yElQeLDHsjKTP760B0KnpUVg.png',
-        },
-        {
-            name: 'Virat Kohli',
-            status: 'c Ahmed b Nawaz',
-            runs: 34,
-            balls: 22,
-            fours: 4,
-            sixes: 2,
-            strikeRate: 154.55,
-            image: 'https://d2l63a9diffym2.cloudfront.net/players/KXomLmv0cP0VsIW4yElQeLDHsjKTP760B0KnpUVg.png',
-        },
-        {
-            name: 'Rohit Sharma',
-            status: 'c Ahmed b Nawaz',
-            runs: 12,
-            balls: 18,
-            fours: 0,
-            sixes: 1,
-            strikeRate: 66.67,
-            image: 'https://d2l63a9diffym2.cloudfront.net/players/KXomLmv0cP0VsIW4yElQeLDHsjKTP760B0KnpUVg.png',
-        },
-        {
-            name: 'Virat Kohli',
-            status: 'c Ahmed b Nawaz',
-            runs: 34,
-            balls: 22,
-            fours: 4,
-            sixes: 2,
-            strikeRate: 154.55,
-            image: 'https://d2l63a9diffym2.cloudfront.net/players/KXomLmv0cP0VsIW4yElQeLDHsjKTP760B0KnpUVg.png',
-        },
-        {
-            name: 'Rohit Sharma',
-            status: 'c Ahmed b Nawaz',
-            runs: 12,
-            balls: 18,
-            fours: 0,
-            sixes: 1,
-            strikeRate: 66.67,
-            image: 'https://d2l63a9diffym2.cloudfront.net/players/KXomLmv0cP0VsIW4yElQeLDHsjKTP760B0KnpUVg.png',
-        },
-        {
-            name: 'Virat Kohli',
-            status: 'c Ahmed b Nawaz',
-            runs: 34,
-            balls: 22,
-            fours: 4,
-            sixes: 2,
-            strikeRate: 154.55,
-            image: 'https://d2l63a9diffym2.cloudfront.net/players/KXomLmv0cP0VsIW4yElQeLDHsjKTP760B0KnpUVg.png',
-        },
-        // Add more batsmen as needed
-    ];
 
-    const bowlers1 = [
-        {
-            name: 'Naseem Shah',
-            overs: 10,
-            maidens: 2,
-            runs: 40,
-            wickets: 3,
-            economy: 4.00,
-            image: 'https://d2l63a9diffym2.cloudfront.net/players/placeholder.png',
-        },
-        {
-            name: 'Umar Gul',
-            overs: 8,
-            maidens: 1,
-            runs: 30,
-            wickets: 2,
-            economy: 3.75,
-            image: 'https://d2l63a9diffym2.cloudfront.net/players/placeholder.png',
-        },
-        // Add more bowlers as needed
-    ];
+    // State to manage the currently selected inning (1 or 2)
+    const [currentInningIndex, setCurrentInningIndex] = useState(0); // 0 for 1st innings, 1 for 2nd innings
 
-    const fallOfWickets1 = [
-        { score: '1-23', detail: 'Rohit Sharma, 4.1 ov' },
-        { score: '2-45', detail: 'KL Rahul, 9.3 ov' },
-        { score: '3-98', detail: 'Virat Kohli, 19.6 ov' },
-        { score: '4-120', detail: 'Ravindra Jadeja, 24.4 ov' },
-        { score: '5-150', detail: 'Suryakumar Yadav, 30.5 ov' },
-    ];
-
-    const [tabs, setTabs] = useState([
-        { label: 'Kenya Innings', active: true },
-        { label: 'Nigeria Innings', active: false },
-    ]);
-    const batsmen = matchInfo?.innings?.[matchInfo?.currentInning - 1]?.battingPerformances;
-    const bowlers = matchInfo?.innings?.[matchInfo?.currentInning - 1]?.bowlingPerformances;
-    const fallOfWickets = matchInfo?.innings?.[matchInfo?.currentInning - 1]?.fallOfWickets;
+    // Function to handle tab click and set the current inning
     const handleTabClick = (index) => {
-        const newTabs = tabs.map((tab, i) => ({
-            ...tab,
-            active: i === index,
-        }));
-        setTabs(newTabs);
-        // Perform any additional logic when a tab is clicked
+        setCurrentInningIndex(index);
     };
-    const currentInning1 = matchInfo?.innings?.[matchInfo?.currentInning - 1];
-    const lastOverIndex = currentInning1?.overs?.length ? currentInning1.overs.length - 1 : 0;
-    const lastOver = currentInning1?.overs?.[lastOverIndex];
+
+    // Tabs configuration for innings
+    const tabs = [
+        { label: 'Inning 1', active: currentInningIndex === 0 },
+        { label: 'Inning 2', active: currentInningIndex === 1 }
+    ];
+
+    // Accessing the current inning's data
+    const currentInning = matchInfo?.innings?.[currentInningIndex];
+    const opposition = (currentInningIndex === 0 ? matchInfo?.innings?.[1]?.team : matchInfo?.innings?.[0]?.team);
+
+
+
+    const batsmen = currentInning?.battingPerformances;
+    const bowlers = currentInning?.bowlingPerformances;
+    const fallOfWickets = currentInning?.fallOfWickets;
+
+    // Handling overs and balls information for the last ball
+    const lastOverIndex = currentInning?.overs?.length ? currentInning.overs.length - 1 : 0;
+    const lastOver = currentInning?.overs?.[lastOverIndex];
     const lastBallIndex = lastOver?.balls?.length ? lastOver.balls.length - 1 : 0;
     const lastBall = lastOver?.balls?.[lastBallIndex];
     const lastBallNumber = lastBall?.ballNumber || 0;
@@ -124,13 +40,14 @@ const ScoreCard_Innings = () => {
     return (
         <>
             <NavigationTabs tabs={tabs} onTabClick={handleTabClick} />
+
             {/* Batting Section */}
             <div className="border rounded border-gray-300 mx-auto bg-white overflow-hidden ">
                 <div className="bg-blue-500 flex justify-between text-white px-4 pb-2 pt-3">
-                    <h1 className="text-xl font-bold">INDIA BATTING</h1>
+                    <h1 className="text-xl font-bold">{currentInning?.team?.teamName} BATTING</h1>
                     <div className="flex items-end">
-                        <p className="text-2xl font-bold">{matchInfo?.innings?.[0]?.runs}/{matchInfo?.innings?.[0]?.wickets}</p>
-                        <p className="font-bold text-lg ml-2">{matchInfo?.innings?.[0]?.overs?.length - 1}.{lastBallNumber || 0}</p>
+                        <p className="text-2xl font-bold">{currentInning?.runs}/{currentInning?.wickets}</p>
+                        <p className="font-bold text-lg ml-2">{currentInning?.overs?.length > 0 ? currentInning?.overs?.length - 1 : 0}.{lastBallNumber || 0}</p>
                     </div>
                 </div>
 
@@ -150,7 +67,7 @@ const ScoreCard_Innings = () => {
                             <tr key={index} className="border-b">
                                 <td className="py-2 px-4 flex items-center">
                                     <img className="w-10 h-10 rounded-full mr-3" src={batsman?.player.profilePicture} alt={batsman?.playerName} />
-                                    {batsman?.player?._id === matchInfo?.innings?.[0]?.currentStriker?._id ? (
+                                    {batsman?.player?._id === currentInning?.currentStriker?._id ? (
                                         <span className='px-3 py-2 font-bold '>*</span>
                                     ) : <span className='px-3 py-2 font-bold '></span>
                                     }
@@ -159,26 +76,20 @@ const ScoreCard_Innings = () => {
                                         <h5 className="font-bold text-gray-700">
                                             <a href="#" className="hover:underline">{batsman?.player?.playerName}</a>
                                         </h5>
-                                        <p className="text-sm text-gray-400 ">{batsman?.bowler?.playerName || ""} {batsman?.dismissalType || ""} - {batsman?.dismissalType === 'Caught' || batsman?.dismissalType === 'Run Out' && batsman?.fielder?.playerName}</p>
+                                        <p className="text-sm text-gray-400 ">{batsman?.bowler?.playerName || ""} {batsman?.dismissalType || ""} - {batsman?.fielder?.playerName}</p>
                                     </div>
                                 </td>
                                 <td className="py-2 px-4 text-center">{batsman?.runs}</td>
                                 <td className="py-2 px-4 text-center">{batsman.ballsFaced}</td>
                                 <td className="py-2 px-4 text-center">{batsman.fours}</td>
                                 <td className="py-2 px-4 text-center">{batsman.sixes}</td>
-                                <td className="py-2 px-4 text-center">{`${(batsman.runs / batsman.ballsFaced * 100).toFixed(2)} ` || 0}
-                                </td>
+                                <td className="py-2 px-4 text-center">{`${(batsman.runs / batsman.ballsFaced * 100).toFixed(2)} ` || 0}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
 
-                {/* <div className="p-4 border-b flex justify-between bg-gray-100 text-gray-700">
-                    <p>Extras: 10 (b 1, lb 2, w 5, nb 2)</p>
-                    <p className="font-bold text-lg">Total: 120</p>
-                </div> */}
-
-                <div className="p-4 bg-gray-50 ">
+                <div className="p-4 bg-gray-50">
                     <h2 className="text-xl font-bold mb-3">Fall of Wickets</h2>
                     <div className="flex flex-wrap">
                         {fallOfWickets?.map((wicket, index) => (
@@ -193,16 +104,15 @@ const ScoreCard_Innings = () => {
             </div>
 
             {/* Bowling Section */}
-            <div className="border rounded border-gray-300 mx-auto bg-white overflow-hidden mt-6" >
+            <div className="border rounded border-gray-300 mx-auto bg-white overflow-hidden mt-6">
                 <div className="bg-blue-500 flex justify-between text-white px-4 pb-2 pt-3">
-                    <h1 className="text-xl font-bold">PAKISTAN BOWLING</h1>
+                    <h1 className="text-xl font-bold">{opposition?.teamName} BOWLING</h1>
                 </div>
                 <table className="w-full">
                     <thead className="bg-customDarkGray">
                         <tr>
                             <th className="py-2 px-4 text-left">Bowler</th>
                             <th className="py-2 px-4 text-center">O</th>
-                            {/* <th className="py-2 px-4 text-center">M</th> */}
                             <th className="py-2 px-4 text-center">R</th>
                             <th className="py-2 px-4 text-center">W</th>
                             <th className="py-2 px-4 text-center">Econ</th>
@@ -220,10 +130,9 @@ const ScoreCard_Innings = () => {
                                     </div>
                                 </td>
                                 <td className="py-2 px-4 text-center">{Math.floor(bowler.balls / 6) + (bowler.balls % 6) / 10}</td>
-                                {/* <td className="py-2 px-4 text-center">{bowler.maidens}</td> */}
                                 <td className="py-2 px-4 text-center">{bowler.runsConceded}</td>
                                 <td className="py-2 px-4 text-center">{bowler.wickets}</td>
-                                <td className="py-2 px-4 text-center">{((bowler.runsConceded) / (Math.floor(bowler.balls - 1 / 6) + (bowler.balls % 6) / 6)).toFixed(2) || "0"}</td>
+                                <td className="py-2 px-4 text-center">{((bowler.runsConceded) / (Math.floor(bowler.balls / 6) + (bowler.balls % 6) / 10)).toFixed(2) || "0"}</td>
                             </tr>
                         ))}
                     </tbody>
