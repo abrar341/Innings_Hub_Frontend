@@ -8,6 +8,7 @@ const socket = io('http://localhost:8000');
 const ScoreCard = () => {
 
     const [matchInfo, setMatchInfo] = useState(null);
+
     const { matchId } = useParams();
 
     // const matchId = "66f9da08e7876225d4f91d68"; // Ideally, pass this dynamically
@@ -51,12 +52,25 @@ const ScoreCard = () => {
                 setMatchInfo(data?.match)
             }
         });
+        socket.on('newBatsmanAssigned', (updatedMatchData) => {
+            console.log("Updated match data received:", updatedMatchData);
+            if (updatedMatchData) {
+                setMatchInfo(updatedMatchData)
 
+            }
+        });
         socket.on('newBowlerAssigned', (updatedMatchData) => {
             console.log("Updated match data received:", updatedMatchData);
             socket.off('newBowlerAssigned');
         });
 
+        socket.on('NewInningsStarted', (match) => {
+            console.log("Updated match data received:", match);
+            if (match) {
+                setMatchInfo(match); // Save match data in the state
+            }
+
+        });
     }, [matchId]);
 
     const tabClasses = ({ isActive }) =>

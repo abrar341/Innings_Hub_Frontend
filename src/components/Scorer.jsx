@@ -14,6 +14,9 @@ import WideballPopover from './ScorerCardButtons/WideballPopover';
 import WicketPopover from './ScorerCardButtons/WicketPopover';
 import ScoreButtons from './ScorerCardButtons/ScoreButtons';
 import FielderInvolvementDialog from './FielderInvolvementDialog';
+import ScoreDisplay from './scorer/ScoreDisplay';
+import CurrentStriker from '../pages/Match/ScoreCard/CurrentStriker';
+import { TypographyH2 } from './ui/typography';
 
 // Connect to the backend socket server
 
@@ -23,6 +26,8 @@ const Scorer = () => {
     const { matchId } = useParams();
     const [matchInfo, setMatchInfo] = useState(null);
     const [wicketType, setWicketType] = useState("");
+    const [loading, setLoading] = useState(false);
+
     // const [result, setResult] = useState(null);
     const [fielderInvolved, setFielderInvolved] = useState(false); // State to open/close dialog
     console.log(matchInfo);
@@ -32,7 +37,7 @@ const Scorer = () => {
         socket.emit('joinMatch', matchId);
         socket.emit('newBowler', { matchId, bowlerId: data.bowler });
         socket.on('newBowlerAssigned', (updatedMatchData) => {
-            socket.off('newBowlerAssigned');
+            // socket.off('newBowlerAssigned');
         });
     }
     const retrive = () => {
@@ -94,6 +99,8 @@ const Scorer = () => {
         };
         console.log(dataToEmit);
         socket.emit('ballUpdate', dataToEmit);
+        setLoading(true);
+
 
     }
     function handleWicket(e) {
@@ -130,17 +137,25 @@ const Scorer = () => {
         console.log('New ball event received:', updatedMatch);
         setMatchInfo(updatedMatch);
         setCurrentInning(updatedMatch?.innings?.[updatedMatch?.currentInning - 1]);
+        setLoading(false);
+
     });
     socket.on('newBowlerAssigned', (updatedMatchData) => {
         console.log("Updated match data received:", updatedMatchData);
         if (updatedMatchData) {
-            retrive();
+            // retrive();
+            setMatchInfo(updatedMatchData);
+            setCurrentInning(updatedMatchData?.innings?.[updatedMatchData?.currentInning - 1]);
+
         }
     });
     socket.on('newBatsmanAssigned', (updatedMatchData) => {
         console.log("Updated match data received:", updatedMatchData);
         if (updatedMatchData) {
-            retrive();
+            // retrive();
+            setMatchInfo(updatedMatchData)
+            setCurrentInning(updatedMatchData?.innings?.[updatedMatchData?.currentInning - 1]);
+
         }
     });
     socket.on('matchUpdate', (match) => {
@@ -153,7 +168,11 @@ const Scorer = () => {
     socket.on('NewInningsStarted', (match) => {
         console.log("Updated match data received:", match);
         if (match) {
-            retrive();
+            setMatchInfo(match); // Save match data in the state
+
+            if (match) {
+                setCurrentInning(match?.innings?.[match.currentInning - 1]);
+            }
         }
 
     });
@@ -166,6 +185,7 @@ const Scorer = () => {
     console.log(battingTeam?.team);
 
 
+    const totalOves = matchInfo?.overs;
 
     let result;
     let winingTeam;
@@ -190,50 +210,66 @@ const Scorer = () => {
         }
     }
     // if (!matchInfo?.toss || (lastOver?.overNumber === matchInfo?.over)) {
-    if (!matchInfo?.toss) {
-        return <StartMatchDialog setMatchInfo={setMatchInfo} matchInfo={matchInfo} matchId={matchId} />;
-    }
-    if (currentInning?.fallOfWickets?.length === 10 || currentInning?.fallOfWickets?.length >= 10 || lastOver?.overNumber === matchInfo?.overs + 1 || result) {
-        return <InningsEndedDialog remainingWickets={remainingWickets} remainRuns={remainRuns} winingTeam={winingTeam} result={result} matchId={matchId} />;
-    }
+    // if (!matchInfo?.toss) {
+    //     return <StartMatchDialog setMatchInfo={setMatchInfo} matchInfo={matchInfo} matchId={matchId} />;
+    // }
+    // if (currentInning?.fallOfWickets?.length === 10 || currentInning?.fallOfWickets?.length >= 10 || lastOver?.overNumber === matchInfo?.overs + 1 || result) {
+    //     return <InningsEndedDialog remainingWickets={remainingWickets} remainRuns={remainRuns} winingTeam={winingTeam} result={result} matchId={matchId} />;
+    // }
     if (fielderInvolved) {
         return <FielderInvolvementDialog matchId={matchId} matchInfo={matchInfo} fielders={matchInfo?.playing11?.[0]} wicketType={wicketType} setFielderInvolved={setFielderInvolved} />;
     }
     return (
         <div className="p-4 max-w-xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4 text-center">Live Scorer</h2>
+            {/* <h2 className="text-2xl font-bold mb-4 text-center">Live Scorer</h2> */}
             {matchInfo && (
-                <div className="mb-6">
-                    <h3 className="text-xl font-semibold">Match Details</h3>
+                // ScoreDisplay({ runs, wickets, totalBalls, runRate, curTeam })
+                <div className="mb-2">
                     <div className='grid grid-cols-2 gap-2'>
-                        <p className='col-span-2 p-2 font-bold text-gray-700 text-base text-center'>{matchInfo?.innings?.[matchInfo?.currentInning - 1]?.team?.teamName}</p>
-                        <p className='p-2 border border-gray-400 rounded text-sm '>Runs:{matchInfo?.innings?.[matchInfo?.currentInning - 1]?.runs}/{matchInfo?.innings?.[matchInfo?.currentInning - 1]?.wickets}</p>
-                        <p className='p-2 border border-gray-400 rounded text-sm '>Overs:{lastOver?.overNumber - 1 || 0}.{lastBallNumber}/{matchInfo?.overs}</p>
-                        <p className='p-2 border border-gray-400 rounded text-sm '>Striker: {matchInfo?.innings?.[matchInfo?.currentInning - 1]?.currentStriker?.playerName}</p>
-                        <p className='p-2 border border-gray-400 rounded text-sm '>Non-Striker: {matchInfo?.innings?.[matchInfo?.currentInning - 1]?.nonStriker?.playerName}</p>
-                        <p className='p-2 border border-gray-400 rounded text-sm '>Bowler: {matchInfo?.innings?.[matchInfo?.currentInning - 1]?.currentBowler?.playerName}</p>
-                        <p className='p-2 border border-gray-400 rounded text-sm '>PreviousBowler: {matchInfo?.innings?.[matchInfo?.currentInning - 1]?.previousBowler?.playerName}</p>
+                        {matchInfo?.innings?.map((inning, index) => (
+                            <ScoreDisplay key={index} totalOves={totalOves} inning={inning} inningNumber={index + 1} />
+                        ))}
+
                     </div>
+                    {result && <p className='uppercase text-center text-center w-full p-3 my-3 text-base text- font-bold tracking-normal	'>{matchInfo?.result?.winner?.teamName} WON BY {matchInfo?.result?.margin}</p>}
+                    {matchInfo?.result?.isTie === true &&
+                        <div className='flex justify-center items-center gap-20 mb-4'>
+                            Match Tied
+
+                        </div>}
+                    {matchInfo?.toss && <div className='border-2'>
+                        <div className='flex justify-between '>
+                            <p className='w-full text-center font-semibold text-sm py-2 border-b '>Batsman</p>
+                            <p className='w-full text-center font-semibold text-sm py-2 border-b '>Bowlers</p>
+                        </div>
+                        <CurrentStriker matchInfo={matchInfo} />
+                    </div>}
 
                 </div>
+
             )}
             {
                 !matchInfo?.toss || (lastOver?.overNumber === matchInfo?.over - 1 && ballNumber === 5) && {
                 }
             }
-            <div className=" ">
-                <>
-                    {
-                        (!currentInning?.currentStriker && !currentInning?.nonStriker && !currentInning?.currentBowler)
-                            ? <InitializePlayersDialog matchInfo={matchInfo} setMatchInfo={setMatchInfo} setCurrentInning={setCurrentInning} matchId={matchId} playing11={matchInfo?.playing11} />
-                            : (!currentInning?.currentStriker) ? <NewBatsmanDialog matchInfo={matchInfo} matchId={matchId} playing11={matchInfo?.playing11} />
-                                : (!currentInning?.currentBowler) ?
-                                    <NewBowlerDialog matchInfo={matchInfo} onSubmit={onSubmit} matchId={matchId} playing11={matchInfo?.playing11?.[0]} />
-                                    : <ScoreButtons handleScore={handleScore} handleWicket={handleWicket} />
-                    }
-                </>
+            {
+                loading ? <div>loading</div> :
+                    <div className="border-2  p-2">
+                        <>
+                            {
+                                (!matchInfo?.toss) ? <StartMatchDialog setMatchInfo={setMatchInfo} matchInfo={matchInfo} matchId={matchId} /> :
+                                    (currentInning?.fallOfWickets?.length === 10 || currentInning?.fallOfWickets?.length >= 10 || lastOver?.overNumber === matchInfo?.overs + 1 || matchInfo?.status === 'completed') ? <InningsEndedDialog matchInfo={matchInfo} remainingWickets={remainingWickets} remainRuns={remainRuns} winingTeam={winingTeam} result={result} matchId={matchId} /> :
+                                        (!currentInning?.currentStriker && !currentInning?.nonStriker && !currentInning?.currentBowler)
+                                            ? <InitializePlayersDialog matchInfo={matchInfo} setMatchInfo={setMatchInfo} setCurrentInning={setCurrentInning} matchId={matchId} playing11={matchInfo?.playing11} />
+                                            : (!currentInning?.currentStriker) ? <NewBatsmanDialog matchInfo={matchInfo} matchId={matchId} playing11={matchInfo?.playing11} />
+                                                : (!currentInning?.currentBowler) ?
+                                                    <NewBowlerDialog matchInfo={matchInfo} onSubmit={onSubmit} matchId={matchId} playing11={matchInfo?.playing11?.[0]} />
+                                                    : <ScoreButtons handleScore={handleScore} handleWicket={handleWicket} />
+                            }
+                        </>
 
-            </div>
+                    </div>
+            }
 
             {/* Ball Summary */}
             {/* <div className="mt-6">

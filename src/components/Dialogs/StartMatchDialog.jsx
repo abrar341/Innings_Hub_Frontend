@@ -80,10 +80,10 @@ const StartMatchDialog = ({ setMatchInfo, matchId, matchInfo }) => {
 
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger className='flex justify-center items-center w-full' asChild>
                 <button className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded hover:bg-green-600 transition-colors duration-200">
                     <FaPlus className="mr-2" />
-                    Initialize Match Details
+                    Toss and Playing 11's
                 </button>
             </DialogTrigger>
 

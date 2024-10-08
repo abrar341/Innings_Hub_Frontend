@@ -18,7 +18,7 @@ const NewBowlerDialog = ({ onSubmit, matchInfo }) => {
     console.log("currentInning", currentInning);
 
     console.log(currentInning);
-    const previousBowler = matchInfo?.innings?.[matchInfo?.currentInning - 1]?.previousBowler._id;
+    const previousBowler = matchInfo?.innings?.[matchInfo?.currentInning - 1]?.previousBowler?._id;
 
     const battingTeamId = currentInning?.team?._id; // Get the team ID for this inning
     const battingPerformances = currentInning?.battingPerformances || [];

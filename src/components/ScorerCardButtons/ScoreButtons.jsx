@@ -82,7 +82,7 @@ function ScoreButtons({ handleScore, handleWicket }) {
                     6
                 </Button>
             </div>
-            <ManualScorePopover handleScore={handleScore} />
+            {/* <ManualScorePopover handleScore={handleScore} /> */}
         </div>
     );
 }

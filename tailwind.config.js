@@ -8,6 +8,16 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        blink: 'blink 1s linear infinite',
+      },
+      keyframes: {
+        blink: {
+          '0%': { opacity: 1 },
+          '50%': { opacity: 0.5 },
+          '100%': { opacity: 1 },
+        },
+      },
       screens: {
         'xs': '475px',
         'xs-1': '542px',
@@ -20,5 +30,6 @@ module.exports = {
       },
     },
   },
+
   plugins: [],
 }

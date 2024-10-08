@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import NavigationTabs from './NaviagtionTabs';
 
 const ScoreCard_Innings = () => {
     const context = useOutletContext();
     let matchInfo = context;
+    useEffect(() => {
+        if (matchInfo?.currentInning) {
+            const current = matchInfo?.currentInning - 1;
+            console.log(current);
+            setCurrentInningIndex(current);
+        }
+    }, [matchInfo]);
 
-    // State to manage the currently selected inning (1 or 2)
-    const [currentInningIndex, setCurrentInningIndex] = useState(0); // 0 for 1st innings, 1 for 2nd innings
+    // State to manage the currently selected inning (1 or 2), initialized as null
+    const [currentInningIndex, setCurrentInningIndex] = useState(null);
 
     // Function to handle tab click and set the current inning
     const handleTabClick = (index) => {
@@ -39,6 +46,7 @@ const ScoreCard_Innings = () => {
 
     return (
         <>
+
             <NavigationTabs tabs={tabs} onTabClick={handleTabClick} />
 
             {/* Batting Section */}
@@ -76,14 +84,14 @@ const ScoreCard_Innings = () => {
                                         <h5 className="font-bold text-gray-700">
                                             <a href="#" className="hover:underline">{batsman?.player?.playerName}</a>
                                         </h5>
-                                        <p className="text-sm text-gray-400 ">{batsman?.bowler?.playerName || ""} {batsman?.dismissalType || ""} - {batsman?.fielder?.playerName}</p>
+                                        <p className="text-sm text-gray-400 ">{batsman?.bowler?.playerName || ""} {batsman?.dismissalType || ""}  {batsman?.fielder?.playerName}</p>
                                     </div>
                                 </td>
                                 <td className="py-2 px-4 text-center">{batsman?.runs}</td>
                                 <td className="py-2 px-4 text-center">{batsman.ballsFaced}</td>
                                 <td className="py-2 px-4 text-center">{batsman.fours}</td>
                                 <td className="py-2 px-4 text-center">{batsman.sixes}</td>
-                                <td className="py-2 px-4 text-center">{`${(batsman.runs / batsman.ballsFaced * 100).toFixed(2)} ` || 0}</td>
+                                <td className="py-2 px-4 text-center">{batsman.runs > 0 ? `${(batsman.runs / batsman.ballsFaced * 100).toFixed(2)} ` : 0}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -96,7 +104,6 @@ const ScoreCard_Innings = () => {
                             <div key={index} className="mr-4 mb-2 flex items-center bg-gray-100 px-3 py-1 rounded-lg">
                                 <span className="text-gray-700 font-bold">{index + 1}-{wicket.runs}</span>
                                 <span className="text-gray-600 ml-1">{`(${wicket.batsmanOut?.playerName}, ${wicket?.over}.${wicket?.ball})`}</span>
-                                <span className="text-gray-600 ml-1">({wicket.detail})</span>
                             </div>
                         ))}
                     </div >
@@ -132,7 +139,7 @@ const ScoreCard_Innings = () => {
                                 <td className="py-2 px-4 text-center">{Math.floor(bowler.balls / 6) + (bowler.balls % 6) / 10}</td>
                                 <td className="py-2 px-4 text-center">{bowler.runsConceded}</td>
                                 <td className="py-2 px-4 text-center">{bowler.wickets}</td>
-                                <td className="py-2 px-4 text-center">{((bowler.runsConceded) / (Math.floor(bowler.balls / 6) + (bowler.balls % 6) / 10)).toFixed(2) || "0"}</td>
+                                <td className="py-2 px-4 text-center">{bowler.runsConceded > 0 ? ((bowler.runsConceded) / (Math.floor(bowler.balls / 6) + (bowler.balls % 6) / 10)).toFixed(2) : 0}</td>
                             </tr>
                         ))}
                     </tbody>

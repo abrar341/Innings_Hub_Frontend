@@ -113,11 +113,14 @@ const ScorerLayout = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
                                 </svg>
                             </Link>
+
                             <button
                                 onClick={() => { handleButtonClick(matchData) }}
                                 className="text-xs font-semibold text-gray-700 border border-gray-300 bg-white rounded px-3 py-2 inline-flex items-center space-x-1 transition-colors hover:bg-gray-200"
                             >
-                                Start Live Scoring
+                                {
+                                    matchData?.status === 'completed' ? "See Match Details" : matchData?.status === 'live' ? "Resume Live Scoring" : "Start Live Scoring"
+                                }
                             </button>
                         </div>
                     </div>

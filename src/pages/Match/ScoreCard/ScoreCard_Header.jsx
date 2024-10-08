@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useGetMatchByIdQuery } from '../../../slices/match/matchApiSlice';
+import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { convertTo12HourFormat, formatDate } from '../../../utils/dateFormatter';
+import Target from './Target';
+import CurrentStriker from './CurrentStriker';
 const socket = io('http://localhost:8000');
 const ScoreCard_Header = ({ matchInfo }) => {
     console.log(matchInfo);
-    const currentInning1 = matchInfo?.innings?.[matchInfo?.currentInning - 1];
-    // const lastOverIndex = currentInning1?.overs?.length ? currentInning1.overs.length - 1 : 0;
-    // const lastOver = currentInning1?.overs?.[lastOverIndex];
-    // const lastBallIndex = lastOver?.balls?.length ? lastOver.balls.length - 1 : 0;
-    // const lastBall = lastOver?.balls?.[lastBallIndex];
-    // const lastBallNumber = lastBall?.ballNumber || 0;
-
+    const totalOves = matchInfo?.overs;
+    // const [currentInningIndex, setCurrentInningIndex] = useState(null);
+    // useEffect(() => {
+    //     if (matchInfo?.currentInning) {
+    //         const current = matchInfo?.currentInning - 1;
+    //         console.log(current);
+    //         setCurrentInningIndex(current);
+    //     }
+    // }, [matchInfo]);
+    // const currentInning1 = matchInfo?.innings?.[currentInningIndex];
+    // const batsmen = currentInning1?.battingPerformances;
+    // const bowlers = currentInning1?.bowlingPerformances;
 
     //first inning 
     const lastOverIndex1 = matchInfo?.innings?.[0]?.overs?.length ? matchInfo?.innings?.[0]?.overs.length - 1 : 0;
@@ -25,12 +31,6 @@ const ScoreCard_Header = ({ matchInfo }) => {
     const lastBallIndex2 = lastOver2?.balls?.length ? lastOver2.balls.length - 1 : 0;
     const lastBall2 = lastOver2?.balls?.[lastBallIndex2];
     const lastBallNumber2 = lastBall2?.ballNumber || 0;
-
-    console.log(lastOver1);
-    console.log(lastOver2);
-
-
-
 
     const currentInning = matchInfo?.innings?.[matchInfo?.currentInning - 1];
     const battingTeamId = currentInning?.team?._id;
@@ -57,7 +57,7 @@ const ScoreCard_Header = ({ matchInfo }) => {
                         }
                         {matchInfo?.status !== 'scheduled' &&
                             <>
-                                <h1 className="text-3xl font-bold text-gray-800 mb-1" itemProp="name">{matchInfo?.innings?.[0]?.team?.teamName}nnmnb</h1>
+                                <h1 className="text-3xl font-bold text-gray-800 mb-1" itemProp="name">{matchInfo?.innings?.[0]?.team?.teamName}</h1>
                                 <div className="text-sm text-gray-600 font-semibold">Runs: <span
                                     className="text-gray-800 font-bold text-lg">{matchInfo?.innings?.[0]?.runs}/{matchInfo?.innings?.[0]?.wickets}</span></div>
                                 <div className="text-sm text-gray-600 font-semibold">Overs:
@@ -73,6 +73,7 @@ const ScoreCard_Header = ({ matchInfo }) => {
                                 </div>
                             </>
                         }
+                        {/* <Target totalOvers={matchInfo?.overs} innings={matchInfo?.innings} /> */}
                     </div>
                 </div>
                 <span className='border-2 text-base font-semibold  w-12 flex justify-center items-center h-12 w-12 rounded-full p-4'>V/S</span>
@@ -92,31 +93,28 @@ const ScoreCard_Header = ({ matchInfo }) => {
                         {/* <h1 className="text-3xl font-bold text-gray-800 mb-1" itemProp="name">{matchInfo?.innings?.[1]?.team?.teamName || matchInfo?.teams?.[1].teamName}</h1> */}
                         {matchInfo?.status !== 'live' && matchInfo?.status !== "completed" &&
                             <h1 className="text-3xl font-bold text-gray-800 mb-1" itemProp="name">{matchInfo?.teams?.[1]?.teamName}</h1>
-                        }                        {matchInfo?.status === 'live' || matchInfo?.status === "completed" &&
-                            <>
-                                {matchInfo?.currentInning === 2 ?
-                                    <>
-                                        <h1 className="text-3xl font-bold text-gray-800 mb-1" itemProp="name">{matchInfo?.innings?.[1]?.team?.teamName}</h1>
-                                        <div className="text-sm text-gray-600 font-semibold">Runs: <span
-                                            className="text-gray-800 font-bold text-lg">{matchInfo?.innings?.[1]?.runs}/{matchInfo?.innings?.[1]?.wickets}</span></div>
-                                        <div className="text-sm text-gray-600 font-semibold">Overs:
-                                            <span className="text-sm text-gray-700 text-lg">
-                                                {lastOver2.overNumber < 0 ? 0 : lastOver2.overNumber - 1}.
-                                                {lastBallNumber2 || 0}/{matchInfo?.overs || 0}
-                                            </span>
-                                            <p className="text-sm text-gray-700 text-lg">
+                        }
+                        <>
+                            {matchInfo?.currentInning === 2 ?
+                                <>
+                                    <h1 className="text-3xl font-bold text-gray-800 mb-1" itemProp="name">{matchInfo?.innings?.[1]?.team?.teamName}</h1>
+                                    <div className="text-sm text-gray-600 font-semibold">Runs: <span
+                                        className="text-gray-800 font-bold text-lg">{matchInfo?.innings?.[1]?.runs}/{matchInfo?.innings?.[1]?.wickets}</span></div>
+                                    <div className="text-sm text-gray-600 font-semibold">Overs:
+                                        <span className="text-sm text-gray-700 text-lg">
+                                            {lastOver2.overNumber < 0 ? 0 : lastOver2.overNumber - 1}.
+                                            {lastBallNumber2 || 0}/{matchInfo?.overs || 0}
+                                        </span>
+                                        <p className="text-sm text-gray-700 text-lg">
+                                            CRR {`${(matchInfo?.innings?.[matchInfo?.currentInning - 1]?.runs / (lastOver2?.overNumber + lastBallNumber2 / 6)).toFixed(2)}`}
+                                        </p>
+                                    </div>
+                                </> : (
+                                    ""
+                                )
 
-                                                CRR {`${(matchInfo?.innings?.[matchInfo?.currentInning - 1]?.runs / (lastOver2?.overNumber + lastBallNumber2 / 6)).toFixed(2)}`}
-                                            </p>
-                                        </div>
-                                    </> : (
-                                        <div className='text-base text-gray-600 font-semibold'>
-                                            Yet to Bat
-                                        </div>
-                                    )
-
-                                }
-                            </>}
+                            }
+                        </>
                     </div>
                 </div>
             </div>
@@ -124,8 +122,7 @@ const ScoreCard_Header = ({ matchInfo }) => {
                 {matchInfo?.status === 'live' && matchInfo?.currentInning ?
                     (<>
                         {matchInfo?.currentInning === 1 ? (<h1 className="text-base font-semibold text-gray-600">
-
-                            {matchInfo?.tossDecision === "bat" && `${battingTeam?.teamName}`} win the toss and choose to {matchInfo?.tossDecision}
+                            {matchInfo?.tossDecision === "bat" && `${matchInfo?.innings?.[0]?.team?.teamName}`} Win the toss and choose to {matchInfo?.tossDecision}
                         </h1>) : (<><h1 className="text-base font-semibold text-gray-600">
                             {
                                 `Target ${matchInfo?.innings?.[0]?.runs + 1}\n`
@@ -134,22 +131,24 @@ const ScoreCard_Header = ({ matchInfo }) => {
                             {/* RRR {`${(matchInfo?.innings?.[0]?.runs - matchInfo?.innings?.[1]?.runs / (20 - (lastOver2?.overNumber + lastBallNumber2 / 6))).toFixed(2)}`} */}
                         </h1></>)}
                     </>) :
-                    matchInfo?.result?.winner ? (<><div>
-                        {
-                            `${matchInfo?.result.winner?.teamName} by ${matchInfo?.result.margin}`
-                        }
-                    </div></>) :
-                        (<>
-                            <div className='flex gap-2 justify-center'>
-                                <h1 className="text-base font-semibold text-gray-600">
-                                    Scheduled on {formatDate(matchInfo?.date)}</h1>
-                                <h1 className="text-base font-semibold text-gray-600">
-                                    at {(matchInfo?.time)}</h1>
-                            </div>
-                        </>)}
+                    matchInfo?.result?.isTie === true ? <div>Match Tied</div> :
+                        matchInfo?.result?.winner ? (<><div>
+                            {
+                                `${matchInfo?.result.winner?.teamName} by ${matchInfo?.result.margin}`
+                            }
+                        </div></>) :
+                            (<>
+                                <div className='flex gap-2 justify-center'>
+                                    <h1 className="text-base font-semibold text-gray-600">
+                                        Scheduled on {formatDate(matchInfo?.date)}</h1>
+                                    <h1 className="text-base font-semibold text-gray-600">
+                                        at {(matchInfo?.time)}</h1>
+                                </div>
+                            </>)}
                 {/* <h1 className="text-sm font-bold text-gray-600">
                     {matchInfo.currentInning === 1 ? `${matchInfo.toss.teamName} won the toss and choose to bat` : "India Need 200 in 120 balls"}</h1> */}
             </div>
+            <CurrentStriker matchInfo={matchInfo} />
         </div >
     );
 };
