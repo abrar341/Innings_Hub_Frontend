@@ -10,7 +10,7 @@ const UserPlayerCard = ({ player, onClick }) => {
     };
     return (
         <div
-            className="border  rounded-xl border-gray-300 bg-white shadow-full transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out"
+            className="border  rounded border-gray-300 bg-white shadow-full transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out"
             onClick={onClick}
         >
             <div className="flex justify-between items-center p-3 text-white">

@@ -2,9 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { formatDateToYMD, convertTo12HourFormat } from '../../utils/dateUtils';
 import clsx from 'clsx';
 import { io } from 'socket.io-client';
+import { useNavigate } from 'react-router-dom';
 const socket = io('http://localhost:8000');
-const MatchCard1 = ({ id, matchData, statusStyles, handleButtonClick }) => {
+const MatchCard1 = ({ id, matchData }) => {
+    const navigate = useNavigate()
 
+    const handleButtonClick = (matchData) => {
+        // Navigate to the desired route with matchId as a param
+        navigate(`/match/${matchData?._id}/innings`);
+    };
+
+    const statusStyles = {
+        live: 'bg-red-600 w-16 text-center text-white animate-blink', // Blinking effect for live matches
+        scheduled: 'bg-blue-500 text-white',
+        completed: 'bg-gray-500 text-white',
+    };
     console.log(id);
 
     const [matchInfo, setMatchInfo] = useState(matchData);
@@ -60,7 +72,7 @@ const MatchCard1 = ({ id, matchData, statusStyles, handleButtonClick }) => {
                             {matchInfo?.tournament?.name}-{matchInfo?.tournament?.season}
                         </div>
                         <div className={clsx(
-                            'px-2 py-1 rounded text-sm font-semibold',
+                            'px-2 py-1 rounded text-xs ',
                             statusStyles[matchInfo?.status] || 'bg-gray-200 text-gray-800' // Default style
                         )}>
                             {matchInfo?.status === 'live' ? 'Live' : matchInfo?.status === 'scheduled' ? 'Scheduled' : 'Completed'}
@@ -70,9 +82,9 @@ const MatchCard1 = ({ id, matchData, statusStyles, handleButtonClick }) => {
                     {
                         matchInfo?.innings.length >= 1 ?
                             (<>
-                                <div className="mt-4 bg-white space-y-4">
+                                <div className="mt-4 flex flex-col  ">
                                     {matchInfo?.innings?.map((team, index) => (
-                                        <div className="flex items-center space-x-3" key={index}>
+                                        <div className=" min-h-[60px] flex  items-center space-x-3" key={index}>
                                             <img
                                                 className="w-10 "
                                                 src={team.team.teamLogo}
@@ -83,9 +95,10 @@ const MatchCard1 = ({ id, matchData, statusStyles, handleButtonClick }) => {
                                                 }}
                                             />
                                             <div className="flex-1">
-                                                <span className="text-sm font-semibold text-gray-800">{team.team.shortName}</span>
+                                                <span className="text-lg font-semibold text-gray-800">{team.team.shortName}</span>
                                             </div>
-                                            <div className="text-right">
+
+                                            <div className="flex justify-center items-center flex-col  text-right">
                                                 <div className="text-sm font-bold text-gray-900">{team.runs}/{team.wickets}</div>
                                                 <div className="text-xs text-gray-600">
                                                     {
@@ -118,7 +131,6 @@ const MatchCard1 = ({ id, matchData, statusStyles, handleButtonClick }) => {
                                             <div className="flex-1">
                                                 <span className="text-sm font-semibold text-gray-800">{team.shortName}</span>
                                             </div>
-
                                         </div>
                                     ))}
                                 </div>
@@ -127,7 +139,7 @@ const MatchCard1 = ({ id, matchData, statusStyles, handleButtonClick }) => {
                 </div>
 
                 {/* Match Status */}
-                <div className='bg-gray-200 p-3 text-center text-gray-500 font-semibold text-xs border-t border-gray-200'>
+                <div className='bg-gray-200 p-2 text-center text-gray-500 font-semibold text-xs border-t border-gray-200'>
                     {
                         matchInfo.status === 'scheduled' ?
                             (<>

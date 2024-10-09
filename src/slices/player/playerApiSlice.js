@@ -95,10 +95,21 @@ export const playerApiSlice = apiSlice.injectEndpoints({
             providesTags: ['Player'], // Provide cache tags for the fetched players
         }),
 
+        getAvailablePlayersForTeam: builder.query({
+            query: (clubId) => ({
+                url: `${PLAYERS_URL}/getAvailablePlayersForTeam/${clubId}`,
+                method: 'GET',
+            }),
+            providesTags: ['Players'], // This will help in caching the query related to players
+        }),
+
+
+
     }),
 });
 
 export const {
+    useGetAvailablePlayersForTeamQuery,
     useCreatePlayerMutation,
     useGetAllPlayersQuery,
     useDeletePlayerMutation,

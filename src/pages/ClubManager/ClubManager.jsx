@@ -35,10 +35,10 @@ const ClubManager = () => {
     }
 
     const cards = [
-        { to: 'dashboard', icon: 'fa-users', title: `Dashboard` },
-        { to: 'players', icon: 'fa-users', title: `Players` },
-        { to: 'teams', icon: 'fa-group', title: 'Teams' },
-        { to: 'tournaments', icon: 'fa-group', title: 'Tournaments' },
+        // { to: 'dashboard', icon: 'fa-users', title: `Dashboard` },
+        // { to: 'players', icon: 'fa-users', title: `Players` },
+        // { to: 'teams', icon: 'fa-group', title: 'Teams' },
+        // { to: 'tournaments', icon: 'fa-group', title: 'Tournaments' },
     ];
 
     // Class for active and inactive NavLink
@@ -51,7 +51,7 @@ const ClubManager = () => {
 
     // Shared part that should render for everyone
     const sharedHeader = (
-        <div className='flex items-center justify-between'>
+        <div className='flex p-2 items-center justify-between'>
             <Link to={"/"} className='underline text-blue-500 p-2'>see as regular user</Link>
             {/* <h2 className='text-3xl   mt-6 font-bold mb-6 text-center text-gray-700'>
                 {userInfo?.club.clubName}
@@ -113,7 +113,7 @@ const ClubManager = () => {
     return (
         <>
             {sharedHeader}
-            <div className="px-2 py-2 border-b border-gray-300  flex justify-between gap-6 mx-auto my-2">
+            {/* <div className="px-2 py-2 border-b border-gray-300  flex justify-between gap-6 mx-auto my-2">
                 <div className="flex justify-center items-center gap-6">
                     {cards.map((card, index) => (
                         <NavLink to={card.to} key={index} className={navLinkClass}>
@@ -121,7 +121,7 @@ const ClubManager = () => {
                         </NavLink>
                     ))}
                 </div>
-            </div>
+            </div> */}
             <Outlet />
         </>
     );

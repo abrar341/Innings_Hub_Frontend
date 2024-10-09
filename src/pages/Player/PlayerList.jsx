@@ -27,7 +27,7 @@ const PlayerList = ({ searchQuery }) => {
     }
 
     if (filteredPlayers.length === 0) {
-        return <div>No players found</div>;
+        return <div className='text-center p-4 font-semibold'>No players found</div>;
     }
 
     return (

@@ -102,7 +102,7 @@ const ScoreCard_Header = ({ matchInfo }) => {
                                         className="text-gray-800 font-bold text-lg">{matchInfo?.innings?.[1]?.runs}/{matchInfo?.innings?.[1]?.wickets}</span></div>
                                     <div className="text-sm text-gray-600 font-semibold">Overs:
                                         <span className="text-sm text-gray-700 text-lg">
-                                            {lastOver2.overNumber < 0 ? 0 : lastOver2.overNumber - 1}.
+                                            {lastOver2?.overNumber < 0 ? 0 : lastOver2?.overNumber - 1}.
                                             {lastBallNumber2 || 0}/{matchInfo?.overs || 0}
                                         </span>
                                         <p className="text-sm text-gray-700 text-lg">
@@ -148,7 +148,7 @@ const ScoreCard_Header = ({ matchInfo }) => {
                 {/* <h1 className="text-sm font-bold text-gray-600">
                     {matchInfo.currentInning === 1 ? `${matchInfo.toss.teamName} won the toss and choose to bat` : "India Need 200 in 120 balls"}</h1> */}
             </div>
-            <CurrentStriker matchInfo={matchInfo} />
+            {matchInfo?.status === 'live' && <CurrentStriker matchInfo={matchInfo} />}
         </div >
     );
 };

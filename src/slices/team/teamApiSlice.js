@@ -63,12 +63,31 @@ export const teamApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ['Team'], // Invalidate the cache when a team is updated
         }),
 
+        getSingleTeamDetail: builder.query({
+            query: (id) => ({
+                url: `${TEAMS_URL}/getSingleTeamDetail/${id}`,
+                method: 'GET',
+            }),
+            providesTags: ['Team'],
+        }),
+        addPlayerToTeam: builder.mutation({
+            query: ({ teamId, playerIds }) => ({
+                url: `${TEAMS_URL}/addPlayerToTeam`, // Endpoint to add players to a team
+                method: 'POST',
+                body: { teamId, playerIds }, // Sending teamId and playerIds in the request body
+            }),
+            invalidatesTags: ['Team'], // Invalidate team data to refetch after adding players
+        }),
+
+
     }),
 });
 
 export const {
+    useAddPlayerToTeamMutation,
     useCreateTeamMutation,
     useGetAllTeamsQuery,
     useDeleteTeamMutation,
     useUpdateTeamMutation,
+    useGetSingleTeamDetailQuery
 } = teamApiSlice;

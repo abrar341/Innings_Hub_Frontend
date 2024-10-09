@@ -26,7 +26,7 @@ const Matches_Scroll = () => {
 
     const handleButtonClick = (matchData) => {
         // Navigate to the desired route with matchId as a param
-        navigate(`/all-matches/scorecard/${matchData?._id}`);
+        navigate(`/match/${matchData?._id}/innings`);
     };
 
     const scrollLeft = () => {
@@ -82,8 +82,6 @@ const Matches_Scroll = () => {
                 className="flex overflow-x-scroll space-x-1 mx-1 my-1  hide-scrollbar"
             >
                 {matches?.map((matchData) => (
-
-
                     <MatchCard1 id={matchData?._id} handleButtonClick={handleButtonClick} matchData={matchData} statusStyles={statusStyles} />
                 ))}
             </div>

@@ -37,7 +37,7 @@ const Teams = () => {
             <div className="grid gap-2 grid-cols-2 xs-1:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 p-4">
                 {teams.map((team, index) => (
                     <Link
-                        to={`/team/${team.name}/players`}
+                        to={`/team/${team._id}/players`}
                         key={index}
                         className="rounded-xl hover:cursor-pointer  hover:cursor-pointer grid-cols-3 border border-gray-300 overflow-hidden transition duration-300 ease-in group">
                         <div className="flex flex-col gap-4 justify-center items-center p-4 space-x-4">

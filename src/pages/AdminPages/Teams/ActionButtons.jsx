@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useDeleteTeamMutation } from '../../../slices/team/teamApiSlice';
 import { delete_Team } from '../../../slices/team/teamSlice';
 import CreateTeamDialog from './CreateTeamDialog';
+import { useNavigate } from 'react-router-dom';
 
 const ActionButtons = ({ team }) => {
     console.log(team);
@@ -16,6 +17,12 @@ const ActionButtons = ({ team }) => {
     const dispatch = useDispatch()
     const handleDeleteClick = () => {
         setIsAlertOpen(true);
+    };
+    const navigate = useNavigate();
+
+    const handleViewClick = (id) => {
+        // Navigate to the desired route with matchId as a param
+        navigate(`/team/${id}/players`);
     };
 
     const handleConfirmDelete = async (id) => {
@@ -45,6 +52,12 @@ const ActionButtons = ({ team }) => {
                     onClick={handleDeleteClick}
                 >
                     <FaTrashAlt className="text-gray-600" />
+                </button>
+                <button
+                    className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                    onClick={() => handleViewClick(team?._id)}
+                >
+                    View
                 </button>
             </div>
             <AlertNote
