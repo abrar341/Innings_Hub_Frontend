@@ -87,12 +87,16 @@ const ScorerLayout = () => {
                         {/* Match Status */}
                         <div className='bg-gray-100 p-3 text-center text-gray-500 font-semibold text-xs border-t border-gray-200'>
                             {
-                                matchData.status === 'scheduled' ? (<>
+                                matchData?.status === 'scheduled' ? (<>
                                     {convertTo12HourFormat(matchData.time)}
                                 </>
-                                ) : (
-                                    <>Won by 5 wickets</>
-                                )
+                                ) : matchData?.status === 'live' ? (
+                                    <>Match is in Process</>
+                                ) : matchData?.status === 'completed' && matchData?.result?.isTie ? (
+                                    <>Match Tie</>
+                                ) : matchData?.status === 'completed' ? (
+                                    <>{`${matchData?.result?.winner?.teamName} won by ${matchData?.result.margin}`}</>
+                                ) : ""
                             }
                         </div>
                         {/* Action Buttons */}

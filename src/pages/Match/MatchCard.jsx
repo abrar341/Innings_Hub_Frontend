@@ -51,18 +51,12 @@ const MatchCard1 = ({ id, matchData }) => {
                 socket.off('newBowlerAssigned'); // Unsubscribe after the update
             });
 
-            // Clean up the socket listeners when the component unmounts
-            // return () => {
-            //     socket.off('newBall');
-            //     socket.off('matchUpdate');
-            //     socket.off('newBowlerAssigned');
-            // };
         }
     }, [matchInfo?._id, id]);
 
     return (
         <>
-            <div className="min-w-[400px]   bg-gradient-to-r from-gray-50 to-white border border-gray-300 rounded shadow-lg transform transition-transform duration-300">
+            <div className="min-w-[380px] bg-gradient-to-r from-gray-50 to-white border border-gray-300 rounded shadow-lg transform transition-transform duration-300">
                 {/* Card Front */}
 
                 <div className="px-4 py-2">
@@ -116,9 +110,9 @@ const MatchCard1 = ({ id, matchData }) => {
                                 </div>
                             </>
                             ) : (<>
-                                <div className="mt-4 bg-white space-y-4">
+                                <div className="mt-4 flex flex-col  ">
                                     {matchInfo?.teams?.map((team, index) => (
-                                        <div className="flex items-center space-x-3" key={index}>
+                                        <div className=" min-h-[60px] flex  items-center space-x-3" key={index}>
                                             <img
                                                 className="w-10 "
                                                 src={team.teamLogo}

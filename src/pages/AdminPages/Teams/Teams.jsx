@@ -8,9 +8,28 @@ import {
 } from '@tanstack/react-table';
 import CreateTeamDialog from './CreateTeamDialog'; // Dialog for creating teams
 import ActionButtons from './ActionButtons';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import AddPlayerToSquad from '../Competitions/Tournaments/SingleTournament.jsx/AddPlayerToSqaud';
+import AddPlayersToTeamDialog from '../../Team/AddPlayersToTeamDialog';
+import { useRemovePlayerFromTeamMutation } from '../../../slices/team/teamApiSlice';
+import toast from 'react-hot-toast';
 
 const Team = () => {
     const teams = useSelector((state) => state.teams.teams); // Fetch teams from Redux
+    console.log(teams);
+    const [removePlayerFromTeam, { isLoading, isSuccess, isError, error }] = useRemovePlayerFromTeamMutation();
+
+    const handleRemovePlayer = async ({ teamId, playerId }) => {
+        console.log(teamId, playerId);
+
+        try {
+            await removePlayerFromTeam({ teamId, playerId }).unwrap();
+            toast.dismiss();
+            toast.success('Player removed successfully');
+        } catch (error) {
+            console.error('Failed to remove player:', error);
+        }
+    };
     const navigate = useNavigate();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -92,6 +111,12 @@ const Team = () => {
         getCoreRowModel: getCoreRowModel(),
     });
 
+    const [openSquad, setOpenSquad] = useState(null); // State to track which squad is open
+
+    const toggleSquad = (index) => {
+        setOpenSquad(openSquad === index ? null : index); // Toggle the squad on click
+    };
+
     // Function to handle team deletion
     const handleDeleteTeam = (teamId) => {
         // You can dispatch an action here to delete the team
@@ -147,43 +172,105 @@ const Team = () => {
             </div>
 
             {/* Team List Table */}
-            {filteredTeams.length === 0 ? (
-                <div className="text-center py-4 text-gray-500">
-                    No teams found.
-                </div>
+            {filteredTeams?.length === 0 ? (
+                <div className="p-4 text-lg text-gray-600">No squads available at the moment.</div>
             ) : (
-                <div className="w-full overflow-x-auto">
-                    <table className="w-full whitespace-no-wrap">
-                        <thead>
-                            {table.getHeaderGroups().map(headerGroup => (
-                                <tr key={headerGroup.id} className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50">
-                                    {headerGroup.headers.map(header => (
-                                        <th key={header.id} className="px-4 py-3">
-                                            {flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                        </th>
-                                    ))}
-                                </tr>
-                            ))}
-                        </thead>
-                        <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                            {table.getRowModel().rows.map(row => (
-                                <tr key={row.id} className="text-gray-700">
-                                    {row.getVisibleCells().map(cell => (
-                                        <td key={cell.id} className="px-4 py-3">
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                filteredTeams?.map((team, index) => {
+                    const isOpen = openSquad === index;
+
+                    return (
+                        <div
+                            key={team._id}
+                            className={`card bg-white p-4 border rounded-lg mb-4 shadow-lg transition-transform duration-300 transform`}
+                        >
+                            {/* Squad Header */}
+                            <div
+                                className="flex justify-between items-center p-4 cursor-pointer rounded-lg"
+                                id={`team-${index}`}
+                            >
+                                <div className="flex items-center">
+                                    <img
+                                        className="rounded-lg mr-4"
+                                        height="60"
+                                        width="60"
+                                        src={team?.teamLogo || 'https://static.vecteezy.com/system/resources/thumbnails/005/720/408/small_2x/crossed-image-icon-picture-not-available-delete-picture-symbol-free-vector.jpg'} // Default logo if none
+                                        alt={team?.teamName}
+                                    />
+                                    <div className="text-left">
+                                        <h2 className="text-lg font-semibold text-gray-800">{team?.teamName}</h2>
+                                    </div>
+                                </div>
+
+                                {/* Arrow icon changes based on open/close state */}
+                                <div className="flex" onClick={() => toggleSquad(index)}>
+                                    <span className="text-gray-500 mr-2 text-sm">Players: {team?.players?.length}</span>
+                                    {!isOpen ? (
+                                        <IoIosArrowDown className="cursor-pointer text-xl" />
+                                    ) : (
+                                        <IoIosArrowUp className="cursor-pointer text-xl" />
+                                    )}
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <ActionButtons team={team} />
+                                    {!isOpen && (
+                                        <AddPlayersToTeamDialog teamId={team?._id} clubId={team?.associatedClub?._id} />
+
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Players list */}
+                            {isOpen && (
+                                <div className="flex items-center flex-col">
+                                    <div className="self-end">
+                                        <AddPlayersToTeamDialog teamId={team?._id} clubId={team?.associatedClub?._id} />
+                                    </div>
+                                    <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                                        {team?.players?.length === 0 ? (
+                                            <div className="col-span-full text-base text-gray-500">No Players Added to team Yet</div>
+                                        ) : (
+                                            team?.players?.map((player) => (
+                                                <>
+                                                    {isLoading ? <div className=''>loading....</div> : ""}
+                                                    <div
+                                                        key={player._id}
+                                                        className="relative p-4 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300 shadow-sm"
+                                                    >
+                                                        <div className="flex items-center">
+                                                            <img
+                                                                className="mr-3 h-10 w-10 rounded-full"
+                                                                src={player.profilePicture || 'https://static.vecteezy.com/system/resources/thumbnails/005/720/408/small_2x/crossed-image-icon-picture-not-available-delete-picture-symbol-free-vector.jpg'} // Default avatar if none
+                                                                alt={player.playerName}
+                                                            />
+                                                            <div>
+                                                                <h5 className="text-sm font-semibold text-gray-800">
+                                                                    {player.playerName}
+                                                                </h5>
+                                                                <p className="text-sm text-gray-500">{player.role}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Cross (X) button on top-right */}
+                                                        <button
+                                                            className="absolute text-sm font-semibold top-2 right-2 text-gray-500 hover:text-red-500"
+                                                            onClick={() => handleRemovePlayer({ playerId: player._id, teamId: team?._id })}
+                                                        >
+                                                            {/* {removingPlayer === player._id ? '...' : '✕'} */}
+                                                            x
+                                                        </button>
+                                                    </div>
+
+                                                </>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+                            )
+                            }
+                        </div>
+                    );
+                })
             )}
         </div>
     );

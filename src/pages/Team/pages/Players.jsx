@@ -12,10 +12,12 @@ import AddPlayersToTeamDialog from '../AddPlayersToTeamDialog';
 import { useSelector } from 'react-redux';
 
 const PlayersListing = () => {
-    const { isAuthenticated, userType } = useSelector((state) => state.auth);
+    const { isAuthenticated, userType, userInfo } = useSelector((state) => state.auth);
 
     const context = useOutletContext();
     let team = context;
+    console.log(team?.associatedClub === userInfo?.club?._id);
+
     let playerss = team?.players;
     console.log(playerss);
 
@@ -90,14 +92,12 @@ const PlayersListing = () => {
         return <div className="p-4 text-red-500">Error fetching squads: {error?.message}</div>;
     }
 
-
-
     return (
         <div className="p-6 bg-gray-50 min-h-screen">
             {/* Header with Add Team button */}
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold text-gray-800">Players</h1>
-                {isAuthenticated && userType === 'club-manager' && <AddPlayersToTeamDialog teamId={team?._id} clubId={team?.associatedClub} />
+                {isAuthenticated && userType === 'club-manager' && team?.associatedClub === userInfo?.club?._id && <AddPlayersToTeamDialog teamId={team?._id} clubId={team?.associatedClub} />
                 }
             </div>
 

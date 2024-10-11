@@ -193,7 +193,7 @@ const Scorer = () => {
     let remainingWickets;
     if (matchInfo?.currentInning === 2) {
         if (matchInfo?.innings?.[1].runs > matchInfo?.innings?.[0].runs) {
-            console.log("winniing by wickets");
+            console.log("winning by wickets");
             winingTeam = battingTeam?.team;
             result = true
             remainingWickets = 10 - matchInfo?.innings?.[1].wickets;
@@ -231,7 +231,7 @@ const Scorer = () => {
                         ))}
 
                     </div>
-                    {result && <p className='uppercase text-center text-center w-full p-3 my-3 text-base text- font-bold tracking-normal	'>{matchInfo?.result?.winner?.teamName} WON BY {matchInfo?.result?.margin}</p>}
+                    {matchInfo?.status === 'completed' && <p className='uppercase text-center text-center w-full p-3 my-3 text-base text- font-bold tracking-normal	'>{matchInfo?.result?.winner?.teamName} WON BY {matchInfo?.result?.margin}</p>}
                     {matchInfo?.result?.isTie === true &&
                         <div className='flex justify-center items-center gap-20 mb-4'>
                             Match Tied

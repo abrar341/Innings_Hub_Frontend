@@ -79,12 +79,22 @@ export const teamApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ['Team'], // Invalidate team data to refetch after adding players
         }),
 
+        removePlayerFromTeam: builder.mutation({
+            query: ({ teamId, playerId }) => ({
+                url: `${TEAMS_URL}/removePlayerFromTeam`,
+                method: 'DELETE',
+                body: { teamId, playerId },
+            }),
+            invalidatesTags: ['Team'],
+        }),
+
 
     }),
 });
 
 export const {
     useAddPlayerToTeamMutation,
+    useRemovePlayerFromTeamMutation,
     useCreateTeamMutation,
     useGetAllTeamsQuery,
     useDeleteTeamMutation,

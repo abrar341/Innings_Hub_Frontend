@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaArrowRight, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const UserPlayerCard = ({ player, onClick }) => {
@@ -13,6 +14,7 @@ const UserPlayerCard = ({ player, onClick }) => {
             className="border  rounded border-gray-300 bg-white shadow-full transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out"
             onClick={onClick}
         >
+
             <div className="flex justify-between items-center p-3 text-white">
                 <img
                     className="w-6 h-6"

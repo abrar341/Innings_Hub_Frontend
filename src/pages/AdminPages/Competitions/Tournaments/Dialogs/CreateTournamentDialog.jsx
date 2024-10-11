@@ -407,6 +407,11 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                             </button>
                         </div>
                     </form>
+                    <DialogClose asChild>
+                        <button className="absolute text-black top-4 right-4 hover:text-gray-500">
+                            X
+                        </button>
+                    </DialogClose>
                 </DialogContent>
             </Dialog>
             <NextStepsDialog isOpen={nextStepsOpen} onClose={() => setNextStepsOpen(false)} goToTournamentProfile={() => navigate("/tournament-profile")}

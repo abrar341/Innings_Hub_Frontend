@@ -54,7 +54,7 @@ const ActionButtons = ({ team }) => {
                     <FaTrashAlt className="text-gray-600" />
                 </button>
                 <button
-                    className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                    className="p-[1px] px-3 bg-gray-100 rounded border hover:bg-gray-200 focus:outline-none"
                     onClick={() => handleViewClick(team?._id)}
                 >
                     View
