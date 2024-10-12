@@ -1,34 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { useGetSingleTournamentSquadsQuery, useRemovePlayerFromSquadMutation, useRemoveTeamFromTournamentMutation } from '../../../../../slices/tournament/tournamentApiSlice';
+import { useApproveSquadByIdMutation, useGetSingleTournamentSquadsQuery, useRemovePlayerFromSquadMutation, useRemoveTeamFromTournamentMutation } from '../../../../../slices/tournament/tournamentApiSlice';
 import { Spinner } from 'flowbite-react'; // Optional loading spinner
 import AddTeamToTournamentDialog from './AddTeamToTournamentDialog';
 import { useOutletContext } from 'react-router-dom';
 import AddPlayerToSqaud from './AddPlayerToSqaud';
 import toast from 'react-hot-toast';
+import { FaCheck } from 'react-icons/fa';
 
 const Squads = () => {
     const context = useOutletContext();
     let tournament = context;
     const tournamentId = tournament?._id;
+
     const [removePlayerFromSquad] = useRemovePlayerFromSquadMutation();
-
+    const [approveSquadById, { isLoading: squadApproving }] = useApproveSquadByIdMutation();
     const [removingPlayer, setRemovingPlayer] = useState(null); // Track which player is being removed
-
     const handleRemovePlayer = async (playerId, squadId) => {
         setRemovingPlayer(playerId); // Set the specific player being removed
         try {
             await removePlayerFromSquad({ squadId, playerId }).unwrap();
             toast.dismiss();
             toast.success('Player removed successfully');
-            // Optionally, refetch or update state to remove the player from UI
         } catch (error) {
             console.error('Failed to remove player:', error);
         } finally {
-            setRemovingPlayer(null); // Reset the removing state after operation
+            setRemovingPlayer(null);
         }
     };
-
     const [squads, setSquads] = useState([]);
     const { data, isLoading, isError, error, refetch } = useGetSingleTournamentSquadsQuery(tournamentId);
 
@@ -46,13 +45,10 @@ const Squads = () => {
     }, [squads]);
 
     const [removeTeamFromTournament] = useRemoveTeamFromTournamentMutation(); // Initialize mutation
-
     const [openSquad, setOpenSquad] = useState(null); // State to track which squad is open
-
     const toggleSquad = (index) => {
         setOpenSquad(openSquad === index ? null : index); // Toggle the squad on click
     };
-
     const handleRemoveTeam = async (squadId) => {
         try {
             await removeTeamFromTournament({ tournamentId, squadId }).unwrap();
@@ -63,6 +59,16 @@ const Squads = () => {
         }
     };
 
+    const handleApproveSquad = async (squadId) => {
+        console.log(squadId);
+
+        try {
+            await approveSquadById(squadId); // Call the mutation
+            // Additional logic after successful approval can go here, like showing a success message
+        } catch (err) {
+            console.error('Failed to approve squad:', err); // Handle any errors here
+        }
+    };
     if (isLoading) {
         return (
             <div className="flex justify-center items-center min-h-screen">
@@ -82,7 +88,6 @@ const Squads = () => {
                 <h1 className="text-3xl font-bold text-gray-800">Squads</h1>
                 <AddTeamToTournamentDialog tournamentId={tournamentId} />
             </div>
-
             {squads?.length === 0 ? (
                 <div className="p-4 text-lg text-gray-600">No squads available at the moment.</div>
             ) : (
@@ -92,7 +97,7 @@ const Squads = () => {
 
                     return (
                         <div
-                            key={squad._id}
+                            key={squad?._id}
                             className={`card bg-white p-4 border rounded-lg mb-4 shadow-lg transition-transform duration-300 transform`}
                         >
                             {/* Squad Header */}
@@ -123,9 +128,22 @@ const Squads = () => {
                                     )}
                                 </div>
 
-                                <div className="flex flex-col gap-2">
-                                    {!isOpen && (
-                                        <AddPlayerToSqaud tournamentId={tournamentId} teamId={team._id} squadId={squadId} />
+                                <div className="flex flex items-center gap-5 gap-2">
+                                    {/* {!isOpen && (
+                                        <AddPlayerToSqaud tournamentId={tournamentId} teamId={team?._id} squadId={squadId} />
+                                    )} */}
+
+                                    {squad?.status === 'pending' ? (
+                                        <button
+                                            className="bg-green-500 text-white py-1 px-4 rounded hover:bg-red-600 transition-colors duration-300"
+                                            onClick={() => handleApproveSquad(squad._id)} // Call the approve function on click
+                                            disabled={isLoading} // Disable the button if the mutation is in progress
+                                        >
+                                            {isLoading ? 'Approving...' : 'Approve'}
+                                        </button>
+                                    ) : (
+                                        <FaCheck className="text-green-600" />
+                                        // Display a message or different UI when the squad is not pending
                                     )}
                                     <button
                                         className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 transition-colors duration-300"
@@ -140,7 +158,7 @@ const Squads = () => {
                             {isOpen && (
                                 <div className="flex items-center flex-col">
                                     <div className="self-end">
-                                        <AddPlayerToSqaud tournamentId={tournamentId} teamId={team._id} squadId={squadId} />
+                                        <AddPlayerToSqaud tournamentId={tournamentId} teamId={team?._id} squadId={squadId} />
                                     </div>
                                     <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                                         {players.length === 0 ? (
@@ -148,7 +166,7 @@ const Squads = () => {
                                         ) : (
                                             players.map((player) => (
                                                 <div
-                                                    key={player._id}
+                                                    key={player?._id}
                                                     className="relative p-4 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300 shadow-sm"
                                                 >
                                                     <div className="flex items-center">
@@ -168,10 +186,10 @@ const Squads = () => {
                                                     {/* Cross (X) button on top-right */}
                                                     <button
                                                         className="absolute text-sm font-bold top-2 right-2 text-gray-500 hover:text-red-500"
-                                                        onClick={() => handleRemovePlayer({ playerId: player._id, squadId })}
-                                                        disabled={removingPlayer === player._id} // Disable only the button of the player being removed
+                                                        onClick={() => handleRemovePlayer({ playerId: player?._id, squadId })}
+                                                        disabled={removingPlayer === player?._id} // Disable only the button of the player being removed
                                                     >
-                                                        {removingPlayer === player._id ? '...' : '✕'}
+                                                        {removingPlayer === player?._id ? '...' : '✕'}
                                                     </button>
                                                 </div>
 

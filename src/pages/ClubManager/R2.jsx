@@ -4,19 +4,20 @@ import { Dialog, DialogContent, DialogTitle, DialogClose, DialogTrigger } from "
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
-import { useAddTeamsToTournamentsMutation, useGetAvailableTeamsForTournamentQuery } from "../../slices/tournament/tournamentApiSlice";
+import { useSelector } from "react-redux";
+import { useGetClubTeamsQuery } from "../../slices/club/clubApiSlice";
 
-const RegisterTeamToTournamentDialog = ({ tournamentId }) => {
+const RegTeamDialog = () => {
+    const { isAuthenticated, userType, userInfo } = useSelector((state) => state.auth);
+    const clubId = userInfo?.club?._id;
+
     const [teams, setTeams] = useState([]);
     const [selectedTeams, setSelectedTeams] = useState([]);
-    const [addTeamsToTournament, { isLoading: createLoading }] = useAddTeamsToTournamentsMutation();
-
-
     console.log(selectedTeams);
 
     const [isDialogOpen, setIsDialogOpen] = useState(false); // Track dialog state
 
-    const { data, isLoading, isError, error, refetch } = useGetAvailableTeamsForTournamentQuery(tournamentId);
+    const { data, isLoading, refetch } = useGetClubTeamsQuery(clubId);
 
     // Fetch teams when the dialog opens
     useEffect(() => {
@@ -44,19 +45,23 @@ const RegisterTeamToTournamentDialog = ({ tournamentId }) => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            console.log(tournamentId, selectedTeams);
+        console.log("Selected teams:", selectedTeams);
 
-            const res = await addTeamsToTournament({
-                tournamentId,
-                teamIds: selectedTeams // Send selected teams
-            }).unwrap();
+        try {
+            e.preventDefault();
+            // console.log("Tournament ID:", tournamentId);
+            console.log("Selected Team IDs:", selectedTeams);
+
+            // Assume addTeamsToTournament is already defined elsewhere
+            // const res = await addTeamsToTournament({
+            //     tournamentId,
+            //     teamIds: selectedTeams // Send selected teams
+            // }).unwrap();
 
             toast.dismiss();
             toast.success("Teams added successfully!");
             setSelectedTeams([]);
-            setIsDialogOpen(false)
+            setIsDialogOpen(false);
         } catch (err) {
             toast.dismiss();
             toast.error(err?.data?.message || "Error occurred");
@@ -68,16 +73,16 @@ const RegisterTeamToTournamentDialog = ({ tournamentId }) => {
             <DialogTrigger asChild>
                 <button className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded hover:bg-green-600 transition-colors duration-200">
                     <FaPlus className="mr-2" />
-                    Register Teams to Tournament
+                    Reg Teams to Tournament
                 </button>
             </DialogTrigger>
 
-            <DialogContent className="max-w-lg w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
+            <DialogContent className="max-w-2xl w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
                 <DialogTitle className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
-                    Register Teams to Tournament
+                    Add Teams to Tournament
                 </DialogTitle>
                 <p className="text-center text-gray-300 mb-6">
-                    Select the teams to register to the tournament.
+                    Select the teams to add to the tournament.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -86,13 +91,13 @@ const RegisterTeamToTournamentDialog = ({ tournamentId }) => {
                             <div key={team._id} className="flex items-center space-x-4">
                                 <input
                                     type="checkbox"
-                                    id={`team-${team.id}`}
-                                    value={team.id}
+                                    id={`team-${team._id}`} // Set the ID properly with team._id
+                                    value={team._id} // Set the value to team._id
                                     checked={selectedTeams.includes(team._id)}
                                     onChange={() => handleSelectTeam(team._id)}
                                     className="h-5 w-5 text-green-600 bg-gray-700 border-gray-600 rounded-lg focus:ring-green-500"
                                 />
-                                <label htmlFor={`team-${team.id}`} className="text-gray-300 font-medium">
+                                <label htmlFor={`team-${team._id}`} className="text-gray-300 font-medium">
                                     {team.teamName}
                                 </label>
                             </div>
@@ -110,11 +115,10 @@ const RegisterTeamToTournamentDialog = ({ tournamentId }) => {
                     </motion.button>
                 </form>
 
-                <DialogClose asChild>
-                </DialogClose>
+                <DialogClose asChild></DialogClose>
             </DialogContent>
         </Dialog>
     );
 };
 
-export default RegisterTeamToTournamentDialog;
+export default RegTeamDialog;

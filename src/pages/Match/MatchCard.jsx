@@ -81,15 +81,15 @@ const MatchCard1 = ({ id, matchData }) => {
                                         <div className=" min-h-[60px] flex  items-center space-x-3" key={index}>
                                             <img
                                                 className="w-10 "
-                                                src={team.team.teamLogo}
-                                                alt={team.team.teamName}
+                                                src={team?.team?.teamLogo}
+                                                alt={team?.team?.teamName}
                                                 onError={(e) => {
                                                     e.target.onerror = null;
                                                     e.target.src = 'https://assets-icc.sportz.io/static-assets/buildv3-stg/images/teams/00.png?v=7';
                                                 }}
                                             />
                                             <div className="flex-1">
-                                                <span className="text-lg font-semibold text-gray-800">{team.team.shortName}</span>
+                                                <span className="text-lg font-semibold text-gray-800">{team?.team?.shortName}</span>
                                             </div>
 
                                             <div className="flex justify-center items-center flex-col  text-right">

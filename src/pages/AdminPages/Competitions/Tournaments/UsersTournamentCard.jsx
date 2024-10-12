@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaCalendarAlt, FaUsers, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { formatDate } from '../../../../utils/dateFormatter';
 import { useSelector } from 'react-redux';
+import RegisterTeamToTournament from '../../../ClubManager/RegisterTeamToTournament';
 
 const UsersTournamentCard = ({ tournament }) => {
     const { isAuthenticated, userType } = useSelector((state) => state.auth);
@@ -15,7 +16,7 @@ const UsersTournamentCard = ({ tournament }) => {
 
     }
     return (
-        <Link to={`/series/${tournament?._id}/fixtures`} className="p-6 bg-white shadow-md rounded-lg relative transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out">
+        <div className="p-6 bg-white shadow-md rounded-lg relative transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out">
             <div className="flex justify-between items-start">
                 <span className="bg-green-100 text-green-700 rounded-full px-3 py-1 text-xs font-semibold">
                     Upcoming
@@ -56,11 +57,11 @@ const UsersTournamentCard = ({ tournament }) => {
                     </Link>
                 </div>
                 {
-                    isAuthenticated && userType === "club-manager" &&
-                    <Link className='border border-gray-400 mt-4 w-[200px] font-semibold self-center text-sm p-2 rounded'>Register Your Team</Link>
+                    isAuthenticated && userType === 'club-manager' &&
+                    <RegisterTeamToTournament tournamentId={tournament?._id} />
                 }
             </div>
-        </Link>
+        </div>
     );
 };
 

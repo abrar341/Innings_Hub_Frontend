@@ -22,7 +22,6 @@ const CreateMatchDialog = ({ tournamentId }) => {
     const { data, isLoading, isError, error, refetch } = useGetTeamsInTournamentQuery(tournamentId);
     const [createMatch] = useCreateMatchMutation()
 
-
     useEffect(() => {
         if (isDialogOpen) {
             refetch(); // Trigger API call to fetch players

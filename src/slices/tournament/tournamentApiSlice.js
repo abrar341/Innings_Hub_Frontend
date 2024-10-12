@@ -124,6 +124,14 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Tournament'], // Invalidate the tournament data to refetch after adding teams
     }),
+    registerTeamsToTournament: builder.mutation({
+      query: (data) => ({
+        url: `${TOURNAMENTS_URL}/registerTeamsToTournament`,
+        method: 'POST',
+        body: data, // Pass tournamentId and teams in the body
+      }),
+      invalidatesTags: ['Tournament'], // Invalidate the tournament data to refetch after adding teams
+    }),
     removeTeamFromTournament: builder.mutation({
       query: ({ tournamentId, squadId }) => ({
         url: `${TOURNAMENTS_URL}/removeTeamFromTournament`,
@@ -169,11 +177,21 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'], // This will help in caching
     }),
+    approveSquadById: builder.mutation({
+      query: (squadId) => ({
+        url: `${TOURNAMENTS_URL}/approveSquadById/${squadId}`,
+        method: 'PATCH', // Using PATCH since we're updating an existing resource
+      }),
+      invalidatesTags: ['Tournament'], // Invalidate the tournament data to refresh
+    }),
+
 
   }),
 });
 
 export const {
+  useApproveSquadByIdMutation,
+  useRegisterTeamsToTournamentMutation,
   useCreateTournamentMutation,
   useUpdateTournamentMutation,
   useDeleteTournamentMutation,

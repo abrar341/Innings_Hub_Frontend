@@ -7,6 +7,7 @@ import { FaPlus } from "react-icons/fa";
 import { useAddTeamsToTournamentsMutation, useGetAvailableTeamsForTournamentQuery } from "../../../../../slices/tournament/tournamentApiSlice";
 
 const AddTeamToTournamentDialog = ({ tournamentId }) => {
+
     const [teams, setTeams] = useState([]);
     const [selectedTeams, setSelectedTeams] = useState([]);
     const [addTeamsToTournament, { isLoading: createLoading }] = useAddTeamsToTournamentsMutation();
@@ -42,17 +43,15 @@ const AddTeamToTournamentDialog = ({ tournamentId }) => {
             return [...prevSelected, teamId];
         });
     };
-
     const handleSubmit = async (e) => {
+        console.log(selectedTeams);
         e.preventDefault();
         try {
             console.log(tournamentId, selectedTeams);
-
             const res = await addTeamsToTournament({
                 tournamentId,
                 teamIds: selectedTeams // Send selected teams
             }).unwrap();
-
             toast.dismiss();
             toast.success("Teams added successfully!");
             setSelectedTeams([]);
@@ -72,7 +71,7 @@ const AddTeamToTournamentDialog = ({ tournamentId }) => {
                 </button>
             </DialogTrigger>
 
-            <DialogContent className="max-w-lg w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
+            <DialogContent className="max-w-2xl w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
                 <DialogTitle className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
                     Add Teams to Tournament
                 </DialogTitle>

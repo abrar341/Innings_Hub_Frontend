@@ -7,8 +7,8 @@ import { FaPlus } from "react-icons/fa";
 import { useGetAvailablePlayersForTeamQuery } from "../../slices/player/playerApiSlice";
 import { useAddPlayerToTeamMutation } from "../../slices/team/teamApiSlice";
 
-const AddPlayersToTeamDialog = ({ tournamentId, clubId, teamId, squadId }) => {
-    console.log(tournamentId, clubId, teamId, squadId);
+const AddPlayersToTeamDialog = ({ clubId, teamId }) => {
+    console.log(clubId, teamId);
 
     const [players, setPlayers] = useState([]);
     const [selectedPlayers, setSelectedPlayers] = useState([]);
@@ -17,7 +17,6 @@ const AddPlayersToTeamDialog = ({ tournamentId, clubId, teamId, squadId }) => {
     console.log(data);
 
     const [addPlayerToTeam, { isLoading: createLoading }] = useAddPlayerToTeamMutation();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (data) {

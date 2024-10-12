@@ -20,16 +20,16 @@ const playerData = {
         teams: ['India', 'Delhi', 'Royal Challengers Bengaluru', 'India U19', 'Asia XI'],
     },
     battingCareer: [
-        { format: 'Test', matches: 113, innings: 191, runs: 8848, average: 49.16, strikeRate: 55.56, hundreds: 29, fifties: 30 },
-        { format: 'ODI', matches: 292, innings: 280, runs: 13848, average: 58.68, strikeRate: 93.59, hundreds: 50, fifties: 72 },
-        { format: 'T20I', matches: 125, innings: 117, runs: 4188, average: 48.7, strikeRate: 137.04, hundreds: 1, fifties: 38 },
-        { format: 'IPL', matches: 252, innings: 244, runs: 8004, average: 38.67, strikeRate: 131.97, hundreds: 8, fifties: 55 },
+        { format: '200', matches: 113, innings: 191, runs: 8848, average: 49.16, strikeRate: 55.56, hundreds: 29, fifties: 30 },
+        // { format: '200', matches: 292, innings: 280, runs: 13848, average: 58.68, strikeRate: 93.59, hundreds: 50, fifties: 72 },
+        // { format: '200', matches: 125, innings: 117, runs: 4188, average: 48.7, strikeRate: 137.04, hundreds: 1, fifties: 38 },
+        // { format: '200', matches: 252, innings: 244, runs: 8004, average: 38.67, strikeRate: 131.97, hundreds: 8, fifties: 55 },
     ],
     bowlingCareer: [
         { format: 'Test', matches: 113, innings: 11, runs: 84, wickets: 0, best: '0/0', economy: 2.88 },
-        { format: 'ODI', matches: 292, innings: 50, runs: 680, wickets: 5, best: '1/13', economy: 6.16 },
-        { format: 'T20I', matches: 125, innings: 13, runs: 204, wickets: 4, best: '1/13', economy: 8.05 },
-        { format: 'IPL', matches: 252, innings: 26, runs: 368, wickets: 4, best: '2/25', economy: 8.80 },
+        // { format: 'ODI', matches: 292, innings: 50, runs: 680, wickets: 5, best: '1/13', economy: 6.16 },
+        // { format: 'T20I', matches: 125, innings: 13, runs: 204, wickets: 4, best: '1/13', economy: 8.05 },
+        // { format: 'IPL', matches: 252, innings: 26, runs: 368, wickets: 4, best: '2/25', economy: 8.80 },
     ],
 };
 
@@ -99,7 +99,7 @@ const PlayerProfile = () => {
                     <table className="min-w-full table-auto divide-y divide-gray-200">
                         <thead className="bg-gray-100">
                             <tr>
-                                {['Format', 'M', 'Inn', 'Runs', 'Avg', 'SR', '100', '50'].map((header) => (
+                                {['Matches', 'Inn', 'Runs', 'HS', 'Avg', 'SR', '100', '50'].map((header) => (
                                     <th key={header} className="px-4 py-2 text-left">{header}</th>
                                 ))}
                             </tr>
@@ -107,10 +107,10 @@ const PlayerProfile = () => {
                         <tbody className="bg-white divide-y divide-gray-200">
                             {player.battingCareer.map((career, index) => (
                                 <tr key={index}>
-                                    <td className="px-4 py-2 font-bold">{career.format}</td>
                                     <td className="px-4 py-2">{career.matches}</td>
                                     <td className="px-4 py-2">{career.innings}</td>
                                     <td className="px-4 py-2">{career.runs}</td>
+                                    <td className="px-4 py-2 font-bold">{career.format}</td>
                                     <td className="px-4 py-2">{career.average}</td>
                                     <td className="px-4 py-2">{career.strikeRate}</td>
                                     <td className="px-4 py-2">{career.hundreds}</td>

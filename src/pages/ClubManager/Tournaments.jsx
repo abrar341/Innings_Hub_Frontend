@@ -4,7 +4,6 @@ import { Spinner } from 'flowbite-react'; // Optional loading spinner
 import { useOutletContext } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useGetSingleTournamentSquadsQuery, useRemovePlayerFromSquadMutation, useRemoveTeamFromTournamentMutation } from '../../slices/tournament/tournamentApiSlice';
-import RegisterTeamToTournamentDialog from './RegisterTeamToTournamentDialog';
 
 const RegisterTeamToTournament = () => {
     const context = useOutletContext();
