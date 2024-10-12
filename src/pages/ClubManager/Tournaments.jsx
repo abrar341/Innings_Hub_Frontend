@@ -78,7 +78,7 @@ const RegisterTeamToTournament = () => {
             {/* Header with Add Team button */}
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold text-gray-800">Squads</h1>
-                <RegisterTeamToTournamentDialog tournamentId={tournamentId} />
+                {/* <RegisterTeamToTournamentDialog tournamentId={tournamentId} /> */}
             </div>
 
             {squads?.length === 0 ? (

@@ -16,6 +16,8 @@ const Squads = () => {
     const [removePlayerFromSquad] = useRemovePlayerFromSquadMutation();
     const [approveSquadById, { isLoading: squadApproving }] = useApproveSquadByIdMutation();
     const [removingPlayer, setRemovingPlayer] = useState(null); // Track which player is being removed
+    const [filter, setFilter] = useState('all'); // New state for filtering squads
+
     const handleRemovePlayer = async (playerId, squadId) => {
         setRemovingPlayer(playerId); // Set the specific player being removed
         try {
@@ -28,6 +30,7 @@ const Squads = () => {
             setRemovingPlayer(null);
         }
     };
+
     const [squads, setSquads] = useState([]);
     const { data, isLoading, isError, error, refetch } = useGetSingleTournamentSquadsQuery(tournamentId);
 
@@ -40,15 +43,18 @@ const Squads = () => {
         }
     }, [data]);
 
-    useEffect(() => {
-        refetch();
-    }, [squads]);
+    // Filtered squads based on the selected filter (approved, pending, or all)
+    const filteredSquads = squads.filter((squad) => {
+        if (filter === 'all') return true;
+        return squad?.status === filter;
+    });
 
     const [removeTeamFromTournament] = useRemoveTeamFromTournamentMutation(); // Initialize mutation
     const [openSquad, setOpenSquad] = useState(null); // State to track which squad is open
     const toggleSquad = (index) => {
         setOpenSquad(openSquad === index ? null : index); // Toggle the squad on click
     };
+
     const handleRemoveTeam = async (squadId) => {
         try {
             await removeTeamFromTournament({ tournamentId, squadId }).unwrap();
@@ -60,15 +66,15 @@ const Squads = () => {
     };
 
     const handleApproveSquad = async (squadId) => {
-        console.log(squadId);
-
         try {
             await approveSquadById(squadId); // Call the mutation
-            // Additional logic after successful approval can go here, like showing a success message
+            toast.success('Squad approved successfully');
         } catch (err) {
-            console.error('Failed to approve squad:', err); // Handle any errors here
+            console.error('Failed to approve squad:', err);
+            toast.error('Failed to approve squad');
         }
     };
+
     if (isLoading) {
         return (
             <div className="flex justify-center items-center min-h-screen">
@@ -88,10 +94,34 @@ const Squads = () => {
                 <h1 className="text-3xl font-bold text-gray-800">Squads</h1>
                 <AddTeamToTournamentDialog tournamentId={tournamentId} />
             </div>
-            {squads?.length === 0 ? (
+
+            {/* Filter buttons */}
+            <div className="mb-6 flex gap-4">
+                <button
+                    className={`inline-flex items-center justify-center whitespace-nowrap py-1 px-3 font-medium rounded transition-colors duration-300 rounded ${filter === 'all' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-200'}`}
+                    onClick={() => setFilter('all')}
+                >
+                    All
+                </button>
+                <button
+                    className={`inline-flex items-center justify-center whitespace-nowrap py-1 px-3 font-medium rounded transition-colors duration-300 ${filter === 'approved' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-200'}`}
+                    onClick={() => setFilter('approved')}
+                >
+                    Approved
+                </button>
+                <button
+                    className={`inline-flex items-center justify-center whitespace-nowrap py-1 px-3 font-medium rounded transition-colors duration-300 ${filter === 'pending' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-200'}`}
+                    onClick={() => setFilter('pending')}
+                >
+                    Pending
+                </button>
+            </div>
+
+            {/* Squads list */}
+            {filteredSquads?.length === 0 ? (
                 <div className="p-4 text-lg text-gray-600">No squads available at the moment.</div>
             ) : (
-                squads?.map((squad, index) => {
+                filteredSquads?.map((squad, index) => {
                     const { name, players, team, _id: squadId } = squad;
                     const isOpen = openSquad === index;
 
@@ -129,21 +159,16 @@ const Squads = () => {
                                 </div>
 
                                 <div className="flex flex items-center gap-5 gap-2">
-                                    {/* {!isOpen && (
-                                        <AddPlayerToSqaud tournamentId={tournamentId} teamId={team?._id} squadId={squadId} />
-                                    )} */}
-
                                     {squad?.status === 'pending' ? (
                                         <button
                                             className="bg-green-500 text-white py-1 px-4 rounded hover:bg-red-600 transition-colors duration-300"
                                             onClick={() => handleApproveSquad(squad._id)} // Call the approve function on click
-                                            disabled={isLoading} // Disable the button if the mutation is in progress
+                                            disabled={squadApproving} // Disable the button if the mutation is in progress
                                         >
-                                            {isLoading ? 'Approving...' : 'Approve'}
+                                            {squadApproving ? 'Approving...' : 'Approve'}
                                         </button>
                                     ) : (
                                         <FaCheck className="text-green-600" />
-                                        // Display a message or different UI when the squad is not pending
                                     )}
                                     <button
                                         className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 transition-colors duration-300"
@@ -197,13 +222,12 @@ const Squads = () => {
                                         )}
                                     </div>
                                 </div>
-                            )
-                            }
+                            )}
                         </div>
                     );
                 })
             )}
-        </div >
+        </div>
     );
 };
 
