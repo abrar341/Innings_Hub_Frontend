@@ -60,12 +60,12 @@ const ScorerLayout = () => {
                             </div>
 
                             <div className="mt-4 bg-white space-y-4">
-                                {matchData.teams?.map((team, index) => (
+                                {matchData?.teams?.map((team, index) => (
                                     <div className="flex items-center space-x-3" key={index}>
                                         <img
                                             className="w-10 "
-                                            src={team.teamLogo}
-                                            alt={team.teamName}
+                                            src={team?.teamLogo}
+                                            alt={team?.teamName}
                                             onError={(e) => {
                                                 e.target.onerror = null;
                                                 e.target.src = 'https://assets-icc.sportz.io/static-assets/buildv3-stg/images/teams/00.png?v=7';

@@ -54,6 +54,7 @@ import RegisterTeamToTournament from './pages/ClubManager/Tournaments';
 import ScorerLayout from './pages/Scorer/ScorerLayout';
 import ScorerLayout1 from './components/scorer/ScorerLayout';
 import UpcomingItem from './components/upcomingitem';
+import Side from './components/Side';
 
 function App() {
 
@@ -62,6 +63,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
+        <Route path='/side' element={<Side />} />
         <Route path='/item' element={<UpcomingItem />} />
         <Route path='/runner/:matchId' element={<Scorer />} />
         <Route path='/runner' element={<ScorerLayout1 />} />
@@ -109,6 +111,7 @@ function App() {
             <Route path='teams' element={<TeamsPageLayout />} />
             <Route path='dashboard' element={<ClubManagerDashboard />}>
               <Route path='players' element={<PlayersPageLayout />} />
+              <Route path='squads' element={<Squads />} />
               <Route path='teams' element={<TeamsPageLayout />} >
                 <Route path='team/:id' element={<TeamProfileLayout />} />
               </Route>

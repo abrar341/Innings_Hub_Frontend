@@ -33,7 +33,7 @@ const Layout = () => {
     const location = useLocation();
 
     // Array of paths where the navbar should not be displayed
-    const noNavbarRoutes = ['/account', '/club-manager', '/admin', '/scorer', '/b'];
+    const noNavbarRoutes = ['/account', '/side', '/club-manager', '/admin', '/scorer', '/b'];
     const currentPath = location.pathname;
 
     // Check if the current path contains any of the paths in `noNavbarRoutes`

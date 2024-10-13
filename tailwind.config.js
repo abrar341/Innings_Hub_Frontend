@@ -28,6 +28,10 @@ module.exports = {
         customDarkGray: ' rgb(222 229 237)',
         custonGreen: 'rgba(53,186,246,0.5)'
       },
+      colors: {
+        "dark-purple": "#081A51",
+        "light-white": "rgba(255,255,255,0.17)",
+      },
     },
   },
 

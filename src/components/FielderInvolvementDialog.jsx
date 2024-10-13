@@ -78,7 +78,7 @@ const FielderInvolvementDialog = ({
                             <option value="">-- Select Fielder --</option>
                             {fielders?.players?.map((fielder) => (
                                 <option key={fielder._id} value={fielder._id}>
-                                    {fielder?.PlayerName}
+                                    {fielder?.playerName}
                                 </option>
                             ))}
                         </select>
@@ -95,6 +95,7 @@ const FielderInvolvementDialog = ({
                                     onChange={(e) => setRuns(Number(e.target.value))}
                                     className="w-full bg-gray-700 text-white border-2 border-gray-600 rounded-lg py-2 px-3 focus:border-green-500 focus:outline-none"
                                 >
+                                    <option value="0">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>

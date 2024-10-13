@@ -231,11 +231,10 @@ const Scorer = () => {
                         ))}
 
                     </div>
-                    {matchInfo?.status === 'completed' && <p className='uppercase text-center text-center w-full p-3 my-3 text-base text- font-bold tracking-normal	'>{matchInfo?.result?.winner?.teamName} WON BY {matchInfo?.result?.margin}</p>}
+                    {matchInfo?.status === 'completed' && matchInfo?.result?.isTie === false && <p className='uppercase text-center text-center w-full p-3 my-3 text-base text- font-bold tracking-normal	'>{matchInfo?.result?.winner?.teamName} WON BY {matchInfo?.result?.margin}</p>}
                     {matchInfo?.result?.isTie === true &&
-                        <div className='flex justify-center items-center gap-20 mb-4'>
-                            Match Tied
-
+                        <div className='uppercase text-center text-center w-full p-3 my-3 text-base text- font-bold tracking-normal'>
+                            Match Tie
                         </div>}
                     {matchInfo?.toss && <div className='border-2'>
                         <div className='flex justify-between '>
@@ -248,10 +247,23 @@ const Scorer = () => {
                 </div>
 
             )}
-            {
-                !matchInfo?.toss || (lastOver?.overNumber === matchInfo?.over - 1 && ballNumber === 5) && {
-                }
+
+
+            {!matchInfo?.toss &&
+                <div className='flex mb-4 justify-between px-20 py-4 border-2 gap-4'>
+                    {matchInfo?.teams?.map((team, index) => (
+                        <TypographyH2 key={team?._id} className="flex justify-between gap-10 left-0">
+                            {/* {processTeamName(curTeam ?? "TEAM 1")} */}
+                            {team?.teamName}
+                            {index === 0 && <TypographyH2 className="">
+                                vs
+                            </TypographyH2>}
+                        </TypographyH2>
+                    ))}
+                </div>
             }
+
+
             {
                 loading ? <div>loading</div> :
                     <div className="border-2  p-2">

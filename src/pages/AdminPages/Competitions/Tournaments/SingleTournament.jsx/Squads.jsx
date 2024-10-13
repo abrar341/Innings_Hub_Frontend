@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { useApproveSquadByIdMutation, useGetSingleTournamentSquadsQuery, useRemovePlayerFromSquadMutation, useRemoveTeamFromTournamentMutation } from '../../../../../slices/tournament/tournamentApiSlice';
 import { Spinner } from 'flowbite-react'; // Optional loading spinner
 import AddTeamToTournamentDialog from './AddTeamToTournamentDialog';
 import { useOutletContext } from 'react-router-dom';
 import AddPlayerToSqaud from './AddPlayerToSqaud';
 import toast from 'react-hot-toast';
 import { FaCheck } from 'react-icons/fa';
+import { useApproveSquadByIdMutation, useGetSingleTournamentSquadsQuery, useRemovePlayerFromSquadMutation, useRemoveTeamFromTournamentMutation } from '../../../../../slices/tournament/tournamentApiSlice';
 
 const Squads = () => {
     const context = useOutletContext();
     let tournament = context;
     const tournamentId = tournament?._id;
-
     const [removePlayerFromSquad] = useRemovePlayerFromSquadMutation();
     const [approveSquadById, { isLoading: squadApproving }] = useApproveSquadByIdMutation();
     const [removingPlayer, setRemovingPlayer] = useState(null); // Track which player is being removed
     const [filter, setFilter] = useState('all'); // New state for filtering squads
-
     const handleRemovePlayer = async (playerId, squadId) => {
         setRemovingPlayer(playerId); // Set the specific player being removed
         try {
@@ -30,7 +28,6 @@ const Squads = () => {
             setRemovingPlayer(null);
         }
     };
-
     const [squads, setSquads] = useState([]);
     const { data, isLoading, isError, error, refetch } = useGetSingleTournamentSquadsQuery(tournamentId);
 
@@ -64,7 +61,6 @@ const Squads = () => {
             alert('Error removing team.');
         }
     };
-
     const handleApproveSquad = async (squadId) => {
         try {
             await approveSquadById(squadId); // Call the mutation

@@ -126,7 +126,7 @@ const Team = () => {
     return (
         <div className="w-full h-screen mt-0 rounded-lg shadow-xs px-4">
             {/* Filters */}
-            <div className="grid grid-cols-3 py-2 border-b sm:grid-cols-5 gap-3 sm:gap-4 mb-3 items-end sticky top-0 bg-white z-10">
+            <div className="grid grid-cols-3 py-2 border-b sm:grid-cols-5 gap-3 sm:gap-4 mb-3 items-end  top-0 bg-white z-10">
                 <div className="col-span-3 sm:col-span-3">
                     <form className="relative">
                         <input
