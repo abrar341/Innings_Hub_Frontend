@@ -31,7 +31,7 @@ function ScoreDisplay({ inning, totalOves, inningNumber }) {
     return (
         <>
             <div className={`relative   ${inningNumber === 1 ? "border-r-2" : ""}  flex items-end justify-center px-2 py-4`}>
-                <TypographyH2 className=" left-0">
+                <TypographyH2 className=" left-0 ">
                     {/* {processTeamName(curTeam ?? "TEAM 1")} */}
                     {teamName}
                 </TypographyH2>

@@ -1,19 +1,11 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
-import {
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    DialogTrigger,
-} from '../ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { FaPlus } from 'react-icons/fa';
 import { FaBaseballBatBall } from 'react-icons/fa6';
-import {
-    useGetSquadPlayersQuery,
-    useStartMatchMutation,
-} from '../../slices/match/matchApiSlice';
+import { useGetSquadPlayersQuery, useStartMatchMutation } from '../../slices/match/matchApiSlice';
 
 const socket = io('http://localhost:8000');
 
@@ -59,14 +51,8 @@ const StartMatchDialog = ({ setMatchInfo, matchId, matchInfo }) => {
         }
         if (team1Playing11.length !== 11 || team2Playing11.length !== 11) {
             setError({
-                team1:
-                    team1Playing11.length !== 11
-                        ? 'Team 1 must have 11 players.'
-                        : '',
-                team2:
-                    team2Playing11.length !== 11
-                        ? 'Team 2 must have 11 players.'
-                        : '',
+                team1: team1Playing11.length !== 11 ? 'Team 1 must have 11 players.' : '',
+                team2: team2Playing11.length !== 11 ? 'Team 2 must have 11 players.' : '',
             });
             return;
         }
@@ -79,11 +65,8 @@ const StartMatchDialog = ({ setMatchInfo, matchId, matchInfo }) => {
                 { team: team2?._id, players: team2Playing11 },
             ],
         };
-        console.log(formattedData);
 
         const match = await StartMatch(formattedData);
-        console.log(match);
-
         setMatchInfo(match?.data);
     };
 
@@ -108,86 +91,64 @@ const StartMatchDialog = ({ setMatchInfo, matchId, matchInfo }) => {
     return (
         <>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger className='flex justify-center items-center w-full' asChild>
-                    <button className="flex items-center bg-green-500 text-white text-sm font-medium py-2 px-4 rounded hover:bg-green-600 transition-colors duration-200">
+                <DialogTrigger className="flex justify-center items-center w-full" asChild>
+                    <button className="flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200">
                         <FaPlus className="mr-2" />
                         Toss and Playing 11's
                     </button>
                 </DialogTrigger>
 
-                <DialogContent className="max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl custom-scrollbar">
-                    <DialogTitle className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
+                <DialogContent className="max-w-lg w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+                    <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-transparent bg-clip-text mb-8">
                         Toss & Playing 11
                     </DialogTitle>
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         {/* Toss Winner Selection */}
                         <div className="space-y-2">
-                            <h3 className="text-lg font-semibold text-white">
-                                Who won the toss?
-                            </h3>
+                            <h3 className="text-lg font-semibold text-white">Who won the toss?</h3>
                             <div className="flex gap-4">
                                 {[team1, team2].map((team) => (
                                     <div
                                         key={team?._id}
-                                        className={`flex items-center justify-center py-2 px-4 rounded-lg cursor-pointer ${tossWinner === team?._id ? 'bg-green-500' : 'bg-gray-700'}`}
+                                        className={`flex items-center justify-center py-2 px-4 rounded-lg cursor-pointer ${tossWinner === team?._id ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+
+
                                         onClick={() => setTossWinner(team?._id)}
                                     >
                                         <span className="text-white">{team?.teamName}</span>
                                     </div>
                                 ))}
                             </div>
-                            {error.tossWinner && (
-                                <p className="text-red-500 text-sm">
-                                    {error.tossWinner}
-                                </p>
-                            )}
+                            {error.tossWinner && <p className="text-red-500 text-sm">{error.tossWinner}</p>}
                         </div>
 
                         {/* Toss Decision */}
                         <div className="space-y-2">
-                            <h3 className="text-lg font-semibold text-white">
-                                What is the toss decision?
-                            </h3>
+                            <h3 className="text-lg font-semibold text-white">What is the toss decision?</h3>
                             <div className="flex gap-6">
-                                <button
+                                <motion.button
                                     type="button"
-                                    className={`flex justify-center items-center text-white gap-2 px-4 py-2 rounded-lg ${tossDecision === 'bat' ? 'bg-green-500' : 'bg-gray-700'
-                                        }`}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className={`flex justify-center items-center text-white gap-2 px-4 py-2 rounded-lg ${tossDecision === 'bat' ? 'bg-blue-600' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
                                     onClick={() => setTossDecision('bat')}
                                 >
-                                    <img
-                                        src="https://www.iplt20.com/assets/images/teams-batsman-icon.svg"
-                                        alt=""
-                                        className="w-8"
-                                        style={{
-                                            filter: 'invert(100%) brightness(50)',
-                                        }}
-                                    />
+                                    <FaBaseballBatBall className="w-6 h-6" />
                                     <span>Bat</span>
-                                </button>
-                                <button
+                                </motion.button>
+                                <motion.button
                                     type="button"
-                                    className={`flex items-center justify-center gap-2 text-white px-4 py-2 rounded-lg ${tossDecision === 'bowl' ? 'bg-green-500' : 'bg-gray-700'
-                                        }`}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className={`flex justify-center items-center text-white gap-2 px-4 py-2 rounded-lg ${tossDecision === 'bowl' ? 'bg-blue-600' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
                                     onClick={() => setTossDecision('bowl')}
                                 >
-                                    <img
-                                        src="https://www.iplt20.com/assets/images/teams-bowler-icon.svg"
-                                        className="w-8"
-                                        alt="bowler icon"
-                                        style={{
-                                            filter: 'invert(100%) brightness(50)',
-                                        }}
-                                    />
+                                    <FaBaseballBatBall className="w-6 h-6" />
                                     <span>Bowl</span>
-                                </button>
+                                </motion.button>
                             </div>
-                            {error.tossDecision && (
-                                <p className="text-red-500 text-sm">
-                                    {error.tossDecision}
-                                </p>
-                            )}
+                            {error.tossDecision && <p className="text-red-500 text-sm">{error.tossDecision}</p>}
                         </div>
 
                         {/* Playing 11 Selection Summary */}
@@ -198,86 +159,78 @@ const StartMatchDialog = ({ setMatchInfo, matchId, matchInfo }) => {
                                     className="space-y-2 cursor-pointer"
                                     onClick={() => index === 0 ? setIsTeam1DialogOpen(true) : setIsTeam2DialogOpen(true)}
                                 >
-                                    <h3 className="text-lg font-semibold text-white">
-                                        {team?.teamName} ({players.length}/11)
-                                    </h3>
-                                    <p className="text-sm text-gray-300">
-                                        Click to select players
-                                    </p>
-                                    {error[`team${index + 1}`] && (
-                                        <p className="text-red-500 text-sm">
-                                            {error[`team${index + 1}`]}
-                                        </p>
-                                    )}
+                                    <h3 className="text-lg font-semibold text-white">{team?.teamName} ({players.length}/11)</h3>
+                                    <p className="text-sm text-gray-300">Click to select players</p>
+                                    {error[`team${index + 1}`] && <p className="text-red-500 text-sm">{error[`team${index + 1}`]}</p>}
                                 </div>
                             ))}
                         </div>
+                        {/* Playing 11 Selection Dialogs */}
+                        {[isTeam1DialogOpen, isTeam2DialogOpen].map((isOpen, index) => {
+                            const team = index === 0 ? team1 : team2;
+                            const playersData = index === 0 ? team1data?.data?.[0]?.players : team2data?.data?.[0]?.players;
+                            const selectedPlayers = index === 0 ? team1Playing11 : team2Playing11;
 
+                            return (
+                                <Dialog
+                                    key={index}
+                                    open={isOpen}
+                                    onOpenChange={index === 0 ? setIsTeam1DialogOpen : setIsTeam2DialogOpen}
+                                >
+                                    <DialogContent className="max-w-lg hide-scrollbar w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+                                        <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-transparent bg-clip-text mb-8">
+                                            {team?.teamName} Playing XI
+                                        </DialogTitle>
+                                        <div className="gap-4 grid grid-cols-2">
+                                            {playersData?.map((player) => (
+                                                <div
+                                                    key={player?._id}
+                                                    className={`flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer ${selectedPlayers.includes(player?._id) ? 'bg-green-500' : 'bg-gray-700'
+                                                        }`}
+                                                    onClick={() => {
+                                                        const newSelectedPlayers = selectedPlayers.includes(player?._id)
+                                                            ? selectedPlayers.filter((id) => id !== player?._id)
+                                                            : [...selectedPlayers, player?._id];
+                                                        handlePlaying11Change(index === 0 ? 'team1' : 'team2', newSelectedPlayers);
+                                                    }}
+                                                >
+                                                    <span className="text-white">{player?.playerName}</span>
+                                                    <span className="text-gray-300 text-sm">
+                                                        {selectedPlayers.includes(player?._id) ? 'Selected' : 'Select'}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="flex justify-center mt-6">
+                                            <button
+                                                className="bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-6 rounded-lg transition-colors duration-200"
+                                                onClick={() => {
+                                                    if (index === 0) {
+                                                        setIsTeam1DialogOpen(false);
+                                                    } else {
+                                                        setIsTeam2DialogOpen(false);
+                                                    }
+                                                }}
+                                            >
+                                                Confirm
+                                            </button>
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
+                            );
+                        })}
                         {/* Start Match Button */}
-                        <button
+                        <motion.button
                             type="submit"
-                            className="bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-6 rounded-lg transition-colors duration-200"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="w-full py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all duration-200"
                         >
                             Start Match
-                        </button>
+                        </motion.button>
                     </form>
                 </DialogContent>
             </Dialog>
-
-            {/* Playing 11 Selection Dialogs */}
-            {[isTeam1DialogOpen, isTeam2DialogOpen].map((isOpen, index) => {
-                const team = index === 0 ? team1 : team2;
-                const playersData = index === 0 ? team1data?.data?.[0]?.players : team2data?.data?.[0]?.players;
-                const selectedPlayers = index === 0 ? team1Playing11 : team2Playing11;
-
-                return (
-                    <Dialog
-                        key={index}
-                        open={isOpen}
-                        onOpenChange={index === 0 ? setIsTeam1DialogOpen : setIsTeam2DialogOpen}
-                    >
-                        <DialogContent className="max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl custom-scrollbar">
-                            <DialogTitle className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
-                                {team?.teamName} Playing XI
-                            </DialogTitle>
-                            <div className="gap-4 grid grid-cols-2">
-                                {playersData?.map((player) => (
-                                    <div
-                                        key={player?._id}
-                                        className={`flex items-center justify-between py-2 px-4 rounded-lg cursor-pointer ${selectedPlayers.includes(player?._id) ? 'bg-green-500' : 'bg-gray-700'
-                                            }`}
-                                        onClick={() => {
-                                            const newSelectedPlayers = selectedPlayers.includes(player?._id)
-                                                ? selectedPlayers.filter((id) => id !== player?._id)
-                                                : [...selectedPlayers, player?._id];
-                                            handlePlaying11Change(index === 0 ? 'team1' : 'team2', newSelectedPlayers);
-                                        }}
-                                    >
-                                        <span className="text-white">{player?.playerName}</span>
-                                        <span className="text-gray-300 text-sm">
-                                            {selectedPlayers.includes(player?._id) ? 'Selected' : 'Select'}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="flex justify-center mt-6">
-                                <button
-                                    className="bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-6 rounded-lg transition-colors duration-200"
-                                    onClick={() => {
-                                        if (index === 0) {
-                                            setIsTeam1DialogOpen(false);
-                                        } else {
-                                            setIsTeam2DialogOpen(false);
-                                        }
-                                    }}
-                                >
-                                    Confirm
-                                </button>
-                            </div>
-                        </DialogContent>
-                    </Dialog>
-                );
-            })}
         </>
     );
 };

@@ -17,6 +17,7 @@ const FielderInvolvementDialog = ({
     setFielderInvolved,
     matchId
 }) => {
+    console.log(wicketType);
 
     const currentInning1 = matchInfo?.innings?.[matchInfo?.currentInning - 1];
     const lastOverIndex = currentInning1?.overs?.length ? currentInning1.overs.length - 1 : 0;
@@ -60,7 +61,7 @@ const FielderInvolvementDialog = ({
 
     return (
         <Dialog open={true}>
-            <DialogContent className="max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
+            <DialogContent className="max-w-xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
                 <DialogTitle className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
                     Fielder Involvement ({wicketType})
                 </DialogTitle>
@@ -137,7 +138,7 @@ const FielderInvolvementDialog = ({
                         type="submit"
                         className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                     >
-                        {wicketType === "run-out" ? "Record Run Out" : wicketType === "caught" ? "Record Catch" : "Record Stumping"}
+                        {wicketType === "Run Out" ? "Record Run Out" : wicketType === "Caught" ? "Record Catch" : "Record Stumping"}
                     </motion.button>
                 </form>
 

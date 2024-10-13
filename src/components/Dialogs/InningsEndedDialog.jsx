@@ -37,10 +37,11 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
                 </button>
             </DialogTrigger>
 
-            <DialogContent className="max-w-lg w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl">
-                {matchInfo?.result?.winner || matchInfo?.result?.isTie === true ? "" : <DialogTitle className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-indigo-500 text-transparent bg-clip-text">
-                    Innings Ended
-                </DialogTitle>}
+            <DialogContent className="max-w-lg w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+                {matchInfo?.result?.winner || matchInfo?.result?.isTie === true ? "" :
+                    <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-transparent bg-clip-text mb-8">
+                        Innings Ended
+                    </DialogTitle>}
 
                 {/* {result && <p className='uppercase text-center p-3 my-3 text-xl text-white font-bold tracking-normal	'>{`${winingTeam?.teamName} WON BY ${remainRuns ? `${remainRuns} RUNS` : `${remainingWickets} WICKETS`}`}</p>} */}
                 {matchInfo?.result?.winner ? <p className='uppercase text-center p-3 my-3 text-xl text-white font-bold tracking-normal	'>{matchInfo?.result?.winner?.teamName} WON BY {matchInfo?.result?.margin}</p> : matchInfo?.result?.isTie ? <><p className='uppercase text-center p-3 my-3 text-xl text-white font-bold tracking-normal	'> Match Tie </p></> : ""}

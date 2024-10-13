@@ -220,7 +220,7 @@ const Scorer = () => {
         return <FielderInvolvementDialog matchId={matchId} matchInfo={matchInfo} fielders={matchInfo?.playing11?.[0]} wicketType={wicketType} setFielderInvolved={setFielderInvolved} />;
     }
     return (
-        <div className="p-4 max-w-xl mx-auto">
+        <div className="mx-auto max-w-2xl w-full bg-white rounded shadow-md p-6 border border-gray-600">
             {/* <h2 className="text-2xl font-bold mb-4 text-center">Live Scorer</h2> */}
             {matchInfo && (
                 // ScoreDisplay({ runs, wickets, totalBalls, runRate, curTeam })
