@@ -47,12 +47,10 @@ const ClubRegistrationForm = () => {
     };
 
 
-
-
     useEffect(() => {
         if (userInfo) {
-            setValue("managerName", userInfo.name);
-            setValue("managerEmail", userInfo.email);
+            setValue("managerName", userInfo?.name);
+            setValue("managerEmail", userInfo?.email);
         }
     }, [userInfo, setValue]);
 
@@ -71,19 +69,16 @@ const ClubRegistrationForm = () => {
 
             // Await the API call to register the club
             const res = await registerClub(data).unwrap();
-            console.log(res.data?.user);
+            console.log(res?.data?.user);
             const { user } = res?.data;
-
             // console.log(res.data?.id);
             dispatch(setCredentials({ ...user }));
-            toast.success(res.message)
-
+            toast.success(res?.message)
             console.log("Club registered successfully:", res);
         } catch (err) {
             console.error("Error registering club:", err);
         }
     };
-
 
     return (
         <div className="flex justify-center items-center min-h-screen py-2 bg-gray-900">
@@ -91,9 +86,9 @@ const ClubRegistrationForm = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="w-full max-w-lg bg-gray-700 bg-opacity-50 backdrop-blur-xl rounded-xl shadow-xl p-8"
+                className="max-w-2xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-xl shadow-2xl p-6 border border-gray-600"
             >
-                <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
+                <h2 className="text-3xl font-extrabold text-center mb-6 bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
                     {steps[step].label}
                 </h2>
 
@@ -269,7 +264,7 @@ const ClubRegistrationForm = () => {
                             <motion.button
                                 type="button"
                                 onClick={prevStep}
-                                className="flex items-center text-gray-300 bg-gray-800 py-2 px-4 rounded-lg shadow-lg"
+                                className="flex items-center text-gray-300 bg-gray-800 py-2 px-4 rounded shadow-lg"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
@@ -280,7 +275,7 @@ const ClubRegistrationForm = () => {
 
                         <motion.button
                             type="submit"
-                            className="flex items-center justify-center bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4 rounded-lg shadow-lg"
+                            className="flex items-center justify-center bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4 rounded shadow-lg"
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                         >

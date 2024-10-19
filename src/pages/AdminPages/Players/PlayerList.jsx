@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
     useReactTable,
@@ -12,16 +12,19 @@ import CreatePlayerDialog from './CreatePlayerDialog';
 
 const PlayerList = () => {
     const players = useSelector((state) => state.clubManager.players);
-    const navigate = useNavigate();
     console.log(players);
+
+    const navigate = useNavigate();
+
 
     // Filter states
     const [statusFilter, setStatusFilter] = useState('');
     const [roleFilter, setRoleFilter] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
-    const handleClick = (name) => {
-        navigate(`/player/${name}`);
+    const handleClick = (id) => {
+        console.log(id);
+        navigate(`/player/${id}`);
     };
 
     // Filter the players based on search query, status, and role
@@ -48,31 +51,16 @@ const PlayerList = () => {
                             alt={row.original.playerName}
                             loading="lazy"
                         />
-                        <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
+
                     </div>
                     <div>
-                        <p className="font-semibold">{row.original.playerName}</p>
+                        <Link onClick={() => handleClick(row?.original?._id)} className="hover:text-black font-semibold">{row.original.playerName}</Link>
                         <p className="text-xs text-gray-600 dark:text-gray-400">{row.original.role}</p>
                     </div>
                 </div>
             )
         },
-        {
-            accessorKey: 'status',
-            header: 'Status',
-            cell: ({ row }) => {
-                const status = row.original?.status;
-                const statusClasses = status === 'Active'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800';
 
-                return (
-                    <div className={`px-2 py-1 text-center w-[90px] font-semibold leading-tight rounded-full ${statusClasses}`}>
-                        {status}
-                    </div>
-                );
-            },
-        },
         {
             accessorKey: 'DOB',
             header: 'DOB',
@@ -113,20 +101,7 @@ const PlayerList = () => {
                     </form>
                 </div>
                 <CreatePlayerDialog />
-                {/* Status Filter */}
-                <div className="col-span-1 sm:col-span-2">
 
-                    <select
-                        id="statusFilter"
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                        className="block px-3 w-full py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-100 focus:border-blue-500 sm:text-sm"
-                    >
-                        <option value="">Filter By Status</option>
-                        <option value="Active">Active</option>
-                        <option value="inActive">InActive</option>
-                    </select>
-                </div>
 
                 {/* Role Filter */}
                 <div className="col-span-1 sm:col-span-2">

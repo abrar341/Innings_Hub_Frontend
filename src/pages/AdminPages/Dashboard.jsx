@@ -1,49 +1,59 @@
-import React, { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import UserDropdown from '../../components/userDropdown';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Profile from './Profile';
-
+import { Trophy, Calendar, Users, Briefcase } from 'lucide-react'; // Professional icons
+import UserDropdown from '../../components/userDropdown';
 
 const AdminDashboard = () => {
   const cards = [
-    { to: 'competitions', icon: 'fa-trophy', title: 'Competitions' },
-    { to: 'competitio', icon: 'fa-address-book', title: 'Matches Schedules' },
-    { to: 'players', icon: 'fa-users', title: 'Players' },
-    { to: 'teams', icon: 'fa-group', title: 'Teams' },
-    { to: 'clubs', icon: 'fa-trophy', title: 'Clubs' },
-    { to: 'coetitions', icon: 'fa-briefcase', title: 'Officials' },
+    { to: 'competitions', icon: <Trophy />, title: 'Competitions' },
+    { to: 'competitio', icon: <Calendar />, title: 'Matches Schedules' },
+    { to: 'clubs', icon: <Users />, title: 'Clubs' },
+    { to: 'coetitions', icon: <Briefcase />, title: 'Officials' },
   ];
+
   const navigate = useNavigate();
 
-  const navLinkClass = ({ isActive }) =>
-    `px-3 py-1  gap-3 text-sm font-semibold transition-all duration-300 ease-in-out transform
-    ${isActive
-      ? 'text-white bg-blue-600 rounded  border-blue-600 shadow-lg  '
-      : 'text-gray-600 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-800 hover:scale-105 hover:shadow-md'
-    }`;
+  const handleCardClick = (to) => {
+    navigate(`/admin/${to}`);
+  };
+
   return (
-    <>
-
-      <div className=" grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-        <div className="col-span-1 grid grid-cols-2 gap-3 md:col-span-2  ">
-          {cards.map((card, index) => (
-            <div onClick={() => {
-              navigate(`/admin/${card.to}`);
-            }} key={index} className={navLinkClass
-            }
-            >
-              <div className="realtive hover:bg-gray-100 h-full group w-full flex border border-gray-400 rounded p-4 items-center cursor-pointer  ">
-                {/* <i className={`fa ${card.icon} text-4xl`}></i> */}
-                <img className='transition duration-300 ease-in group-hover:scale-110' src={"fffff"} alt="" />
-                <div className="text-base text-gray-700 font-semibold transition duration-300 ease-in  group-hover:border-gray-700 group-hover:scale-102 group-hover:text-black">{card.title}</div>
-              </div>
-            </div>
-          ))}
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8">
+      {/* Header with Profile */}
+      <div className="flex justify-between items-center mb-10">
+        <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100">
+          Admin
+        </h1>
+        <div className='mr-2 z-10 self-end'>
+          <UserDropdown />
         </div>
-        <Profile />
       </div>
-    </>
 
+      {/* Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {cards.map((card, index) => (
+          <div
+            key={index}
+            onClick={() => handleCardClick(card.to)}
+            className="group relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer"
+          >
+            {/* Subtle Background Ripple Effect */}
+            <div className="absolute inset-0 rounded-lg bg-blue-500 opacity-0 group-hover:opacity-20 transition duration-500"></div>
+
+            {/* Icon and Title */}
+            <div className="z-10 flex flex-col items-center">
+              <div className="text-5xl text-blue-500 mb-4 transition-transform duration-300 group-hover:scale-110">
+                {card.icon}
+              </div>
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 group-hover:text-blue-600 transition-colors duration-300">
+                {card.title}
+              </h3>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

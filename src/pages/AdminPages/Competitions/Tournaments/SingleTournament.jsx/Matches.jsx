@@ -53,7 +53,10 @@ const Matches = ({ type }) => {
                     isAuthenticated && userType === 'admin' && (
                         <>
                             {/* Show create match dialog only for tournaments */}
-                            {type === 'tournament' && <CreateMatchDialog tournamentId={entityId} />}
+                            {type === 'tournament' && <>
+                                <CreateMatchDialog tournamentId={entityId} />
+                                <div>Schedule Matches</div>
+                            </>}
                         </>
                     )
                 }

@@ -67,10 +67,10 @@ const SignUpPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className='max-w-lg sm:w-full bg-gray-700 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'
+                className='max-w-lg w-full bg-gray-700 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl border border-gray-600'
             >
                 <div className='p-8'>
-                    <h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
+                    <h2 className='text-3xl font-extrabold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
                         Create Account
                     </h2>
 

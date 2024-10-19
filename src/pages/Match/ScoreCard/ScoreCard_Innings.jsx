@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import NavigationTabs from './NaviagtionTabs';
 
 const ScoreCard_Innings = () => {
@@ -82,7 +82,7 @@ const ScoreCard_Innings = () => {
 
                                     <div>
                                         <h5 className="font-bold text-gray-700">
-                                            <a href="#" className="hover:underline">{batsman?.player?.playerName}</a>
+                                            <Link to={`/player/${batsman?.player?._id}`} className="hover:underline">{batsman?.player?.playerName}</Link>
                                         </h5>
                                         <p className="text-sm text-gray-400 ">{batsman?.bowler?.playerName || ""} {batsman?.dismissalType || ""}  {batsman?.fielder?.playerName}</p>
                                     </div>
@@ -132,7 +132,7 @@ const ScoreCard_Innings = () => {
                                     <img className="w-10 h-10 rounded-full mr-3" src={bowler?.player.profilePicture} alt={bowler.name} />
                                     <div>
                                         <h5 className="font-bold text-gray-700">
-                                            <a href="#" className="hover:underline">{bowler?.player.playerName}</a>
+                                            <Link to={`/player/${bowler?.player?._id}`} className="hover:underline">{bowler?.player.playerName}</Link>
                                         </h5>
                                     </div>
                                 </td>

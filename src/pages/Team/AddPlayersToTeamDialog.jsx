@@ -63,8 +63,8 @@ const AddPlayersToTeamDialog = ({ clubId, teamId }) => {
                 </button>
             </DialogTrigger>
 
-            <DialogContent className="max-w-lg w-full bg-gray-800 custom-scrollbar bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl">
-                <DialogTitle className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
+            <DialogContent className="hide-scrollbar max-w-2xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+                <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-green-400 via-emerald-500 to-purple-400 text-green-500 bg-clip-text mb-4">
                     Add Players to Team
                 </DialogTitle>
                 <p className="text-center text-gray-300 mb-6">
@@ -84,15 +84,17 @@ const AddPlayersToTeamDialog = ({ clubId, teamId }) => {
                                             <div
                                                 key={player._id}
                                                 onClick={() => handleSelectPlayer(player._id)}
-                                                className={`relative p-4 border rounded-lg cursor-pointer transition-colors duration-300 shadow-sm ${isSelected ? "bg-green-500 text-white" : "bg-gray-50 hover:bg-gray-100"
+                                                className={`flex items-center justify-start mb-1 p-4 rounded-lg cursor-pointer transition-colors duration-200 ${isSelected
+                                                    ? 'bg-green-600 text-white'
+                                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                                                     }`}
                                             >
                                                 <div className="flex min-h-15 items-center">
                                                     <div>
-                                                        <h5 className={`text-sm font-semibold ${isSelected ? "text-white" : "text-gray-800"}`}>
+                                                        <h5 className={`text-base font-semibold `}>
                                                             {player.playerName}
                                                         </h5>
-                                                        <p className={`text-xs ${isSelected ? "text-gray-200" : "text-gray-500"}`}>
+                                                        <p className={`text-xs `}>
                                                             {player.role}
                                                         </p>
                                                     </div>
@@ -116,7 +118,6 @@ const AddPlayersToTeamDialog = ({ clubId, teamId }) => {
 
                 <DialogClose asChild>
                     <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-500">
-                        X
                     </button>
                 </DialogClose>
             </DialogContent>

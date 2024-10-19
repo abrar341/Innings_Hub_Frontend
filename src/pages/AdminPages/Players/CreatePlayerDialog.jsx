@@ -4,6 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { update_Player } from '../../../slices/player/playerSlice';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css'; // Import the default styles
 
 import {
     Dialog,
@@ -19,6 +21,8 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 const CreatePlayerDialog = ({ open, action, playerData }) => {
+    console.log(playerData);
+
     const [isOpen, setIsOpen] = useState(open);
     const [logoPreview, setLogoPreview] = useState(null);
     const [createPlayer, { isLoading: createLoading }] = useCreatePlayerMutation();
@@ -59,6 +63,9 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
             }
         }
         if (playerData) {
+            setValue("cnic", playerData.CNIC);
+        }
+        if (playerData) {
             setValue("jerseyNumber", playerData.jersyNo);
         }
     }, [playerData, setValue]);
@@ -73,6 +80,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
     const clubId = userInfo.club?._id;
 
     const onSubmit = async (data) => {
+        console.log(data);
 
         // Include the club ID in the formatted data
         const formattedData = {
@@ -118,17 +126,16 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                         </button>
                     )}
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl custom-scrollbar w-full p-8 rounded-lg bg-white shadow-2xl">
-                    <div className="flex justify-between items-center mb-6">
-                        <DialogTitle className="text-2xl font-bold text-gray-800">
-                            {isEditing ? "Edit Player" : "Create Player"}
+                <DialogContent className="hide-scrollbar max-w-2xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+                    <div className="flex justify-between items-center mb-2">
+                        <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-green-400 via-emerald-500 to-purple-400 text-green-500 bg-clip-text mb-4">                            {isEditing ? "Edit Player" : "Create Player"}
                         </DialogTitle>
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         {/* Form Fields */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                            <label className="cursor-pointer border group">
-                                <div className="relative w-full h-32 rounded-lg border-2 border-gray-300 group-hover:border-green-500 transition-colors">
+                            <label className="cursor-pointer border rounded-lg border-gray-300  group">
+                                <div className="relative w-full h-32 group-hover:border-green-500 transition-colors">
                                     {logoPreview ? (
                                         <img
                                             src={logoPreview}
@@ -166,7 +173,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                             <input
                                                 {...field}
                                                 value={field.value || ""}
-                                                className="form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                                className={`w-full outline-none bg-gray-700 px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.playerName ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                 placeholder="Player Name"
                                                 type="text"
                                             />
@@ -179,7 +186,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                     )}
                                 />
                                 {/* Other Fields */}
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 gap-4">
                                     <Controller
                                         name="city"
                                         control={control}
@@ -188,7 +195,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                                 <input
                                                     {...field}
                                                     value={field.value || ""}
-                                                    className="form-control flex w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                                    className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.city ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                     placeholder="City"
                                                     type="text"
                                                 />
@@ -200,7 +207,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                             </div>
                                         )}
                                     />
-                                    <Controller
+                                    {/* <Controller
                                         name="phone"
                                         control={control}
                                         render={({ field }) => (
@@ -208,7 +215,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                                 <input
                                                     {...field}
                                                     value={field.value || ""}
-                                                    className="form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                                    className={`w-full outline-none px-10 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.phone ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                     placeholder="Phone Number"
                                                     type="text"
                                                 />
@@ -219,7 +226,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                                 )}
                                             </div>
                                         )}
-                                    />
+                                    /> */}
                                 </div>
                             </div>
                         </div>
@@ -232,7 +239,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                         <input
                                             {...field}
                                             value={field.value || ""}
-                                            className="form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                            className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                             placeholder="Email"
                                             type="email"
                                         />
@@ -252,7 +259,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                         <input
                                             {...field}
                                             value={field.value || ""}
-                                            className="form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                            className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.jerseyNumber ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                             placeholder="Jersey Number"
                                             type="text"
                                         />
@@ -266,6 +273,67 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Phone Number Input with Country Code */}
+                            <Controller
+                                name="phone"
+                                control={control}
+                                render={({ field }) => (
+                                    <div>
+                                        <PhoneInput
+                                            {...field}
+                                            country={'pk'} // Default country code as +92 for Pakistan
+                                            value={field.value || ""}
+                                            onChange={field.onChange}
+                                            inputProps={{
+                                                className: `w-full outline-none px-12 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.phone ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`,
+                                                placeholder: "Phone Number"
+                                            }}
+                                        />
+                                        {errors.phone && (
+                                            <p className="text-red-500 text-xs mt-1">
+                                                {errors.phone.message}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+                            />
+
+                            {/* CNIC Input with Auto-Formatting */}
+                            <Controller
+                                name="cnic"
+                                control={control}
+                                render={({ field }) => (
+                                    <div>
+                                        <input
+                                            {...field}
+                                            value={field.value || ""}
+                                            onChange={(e) => {
+                                                // Auto-format CNIC as xxxxx-xxxxxxx-x
+                                                let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                                                if (value.length > 5) {
+                                                    value = value.slice(0, 5) + '-' + value.slice(5);
+                                                }
+                                                if (value.length > 13) {
+                                                    value = value.slice(0, 13) + '-' + value.slice(13, 14);
+                                                }
+                                                field.onChange(value);
+                                            }}
+                                            maxLength={15} // Max length including hyphens
+                                            className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.cnic ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
+                                            placeholder="CNIC (xxxxx-xxxxxxx-x)"
+                                            type="text"
+                                        />
+                                        {errors.cnic && (
+                                            <p className="text-red-500 text-xs mt-1">
+                                                {errors.cnic.message}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Controller
                                 name="role"
                                 control={control}
@@ -274,7 +342,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                         <select
                                             {...field}
                                             value={field.value || ""}
-                                            className="form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                            className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.role ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                         >
                                             <option value="">Select Role</option>
                                             <option value="All-Rounder">All-Rounder</option>
@@ -298,7 +366,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                         <select
                                             {...field}
                                             value={field.value || ""}
-                                            className="form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                            className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.battingStyle ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                         >
                                             <option value="">Batting Style</option>
                                             <option value="Right-handed">Right-Handed</option>
@@ -322,7 +390,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                         <select
                                             {...field}
                                             value={field.value || ""}
-                                            className="form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                            className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.bowlingStyle ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                         >
                                             <option value="">Bowling Style</option>
                                             <option value="Right-arm fast">Right-Arm Fast</option>
@@ -344,8 +412,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                                 render={({ field }) => (
                                     <div className="w-full">
                                         <DatePicker
-                                            className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.dob ? "border-red-500" : ""
-                                                }`}
+                                            className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.dob ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                             selected={field.value}
                                             onChange={(date) => field.onChange(date)}
                                             placeholderText="Date of Birth"
@@ -363,7 +430,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                             <button
                                 type="submit"
                                 disabled={createLoading || updateLoading}
-                                className={`flex self-end justify-center w-full items-center btn btn-success text-uppercase px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors flex justify-center ${createLoading || updateLoading
+                                className={`flex self-end justify-center w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 ${createLoading || updateLoading
                                     ? "cursor-not-allowed opacity-50"
                                     : ""
                                     }`}

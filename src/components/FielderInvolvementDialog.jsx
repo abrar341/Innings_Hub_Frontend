@@ -17,8 +17,6 @@ const FielderInvolvementDialog = ({
     setFielderInvolved,
     matchId
 }) => {
-    console.log(wicketType);
-
     const currentInning1 = matchInfo?.innings?.[matchInfo?.currentInning - 1];
     const lastOverIndex = currentInning1?.overs?.length ? currentInning1.overs.length - 1 : 0;
     const lastOver = currentInning1?.overs?.[lastOverIndex];
@@ -29,7 +27,8 @@ const FielderInvolvementDialog = ({
     const [fielder, setFielder] = useState(""); // Selected fielder
     const [runs, setRuns] = useState(1); // Runs for run-out (1, 2, 3)
     const [batsmanOut, setBatsmanOut] = useState("striker"); // Who's out: striker or non-striker
-    console.log(batsmanOut)
+    const [fielderDialogOpen, setFielderDialogOpen] = useState(false); // Control for fielder selection dialog
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -50,7 +49,6 @@ const FielderInvolvementDialog = ({
             ballNumber: lastBallNumber,
             overNumber: lastOver?.overNumber || 0
         };
-        console.log(dataToEmit);
         socket.emit('ballUpdate', dataToEmit);
         toast.success(`${wicketType} recorded successfully!`);
         setFielder("");
@@ -59,92 +57,130 @@ const FielderInvolvementDialog = ({
         setFielderInvolved(false); // Close the dialog
     };
 
+    const openFielderDialog = () => {
+        setFielderDialogOpen(true);
+    };
+
+    const closeFielderDialog = () => {
+        setFielderDialogOpen(false);
+    };
+
     return (
-        <Dialog open={true}>
-            <DialogContent className="max-w-xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
-                <DialogTitle className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
-                    Fielder Involvement ({wicketType})
-                </DialogTitle>
+        <>
+            <Dialog open={true}>
+                <DialogContent className="hide-scrollbar max-w-xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+                    <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-green-400 bg-clip-text mb-4">
+                        Fielder Involvement ({wicketType})
+                    </DialogTitle>
+                    <form onSubmit={handleSubmit} className="space-y-6">
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                        {/* Fielder selection button */}
+                        <div className="flex flex-col">
+                            <label className="text-white font-semibold mb-2">Select Fielder:</label>
+                            <button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                type="button"
+                                onClick={openFielderDialog}
+                                className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none"
+                            >
+                                {fielder ? fielders.players.find(f => f._id === fielder)?.playerName : "Select Fielder"} {fielder ? <span className="text-sm">(change)</span> : ""}
+                            </button>
+                            {fielder && (
+                                <p className="text-green-400 font-bold mt-2">
+                                    Selected Fielder: {fielders.players.find(f => f._id === fielder)?.playerName}
+                                </p>
+                            )}
+                        </div>
 
-                    {/* Fielder dropdown */}
-                    <div className="flex flex-col">
-                        <label className="text-white font-semibold mb-2">Select Fielder:</label>
-                        <select
-                            value={fielder}
-                            onChange={(e) => setFielder(e.target.value)}
-                            className="w-full bg-gray-700 text-white border-2 border-gray-600 rounded-lg py-2 px-3 focus:border-green-500 focus:outline-none"
-                        >
-                            <option value="">-- Select Fielder --</option>
-                            {fielders?.players?.map((fielder) => (
-                                <option key={fielder._id} value={fielder._id}>
-                                    {fielder?.playerName}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {/* Conditional fields for run-out */}
-                    {wicketType === "Run Out" && (
-                        <>
-                            {/* Runs scored before the wicket type */}
+                        {/* Runs scored before the wicket type */}
+                        {wicketType === "Run Out" && (
                             <div className="flex flex-col">
                                 <label className="text-white font-semibold mb-2">Runs Scored:</label>
-                                <select
-                                    value={runs}
-                                    onChange={(e) => setRuns(Number(e.target.value))}
-                                    className="w-full bg-gray-700 text-white border-2 border-gray-600 rounded-lg py-2 px-3 focus:border-green-500 focus:outline-none"
-                                >
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                </select>
+                                <div className="flex space-x-4">
+                                    {[0, 1, 2, 3].map((r) => (
+                                        <button
+                                            key={r}
+                                            whileHover={{ scale: 1.1 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            type="button"
+                                            className={`py-2 px-4 rounded-lg font-bold text-white ${runs === r ? 'bg-green-600' : 'bg-gray-700'}`}
+                                            onClick={() => setRuns(r)}
+                                        >
+                                            {r}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
+                        )}
 
-                            {/* Radio buttons for Striker or Non-Striker */}
-                            <div className="flex justify-center space-x-4">
-                                <label className="flex items-center space-x-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="batsmanOut"
-                                        value="striker"
-                                        checked={batsmanOut === "striker"}
-                                        onChange={() => setBatsmanOut("striker")}
-                                        className="form-radio h-5 w-5 text-green-500"
-                                    />
-                                    <span className="text-white">Striker</span>
-                                </label>
-                                <label className="flex items-center space-x-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="batsmanOut"
-                                        value="non-striker"
-                                        checked={batsmanOut === "non-striker"}
-                                        onChange={() => setBatsmanOut("non-striker")}
-                                        className="form-radio h-5 w-5 text-red-500"
-                                    />
-                                    <span className="text-white">Non-Striker</span>
-                                </label>
+                        {/* Striker or Non-Striker */}
+                        {wicketType === "Run Out" && (
+                            <div className="flex flex-col">
+                                <label className="text-white font-semibold mb-2">Batsman Out:</label>
+                                <div className="flex space-x-4">
+                                    {['striker', 'non-striker'].map((type) => (
+                                        <button
+                                            key={type}
+                                            whileHover={{ scale: 1.1 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            type="button"
+                                            className={`py-2 px-4 rounded-lg font-bold text-white ${batsmanOut === type ? 'bg-green-600' : 'bg-gray-700'}`}
+                                            onClick={() => setBatsmanOut(type)}
+                                        >
+                                            {type === "striker" ? "Striker" : "Non-Striker"}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                        </>
-                    )}
+                        )}
 
-                    {/* Submit button */}
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        type="submit"
-                        className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                    >
-                        {wicketType === "Run Out" ? "Record Run Out" : wicketType === "Caught" ? "Record Catch" : "Record Stumping"}
-                    </motion.button>
-                </form>
+                        {/* Submit button */}
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            type="submit"
+                            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                        >
+                            {wicketType === "Run Out" ? "Record Run Out" : wicketType === "Caught" ? "Record Catch" : "Record Stumping"}
+                        </motion.button>
+                    </form>
 
-                <DialogClose asChild></DialogClose>
-            </DialogContent>
-        </Dialog>
+                    <DialogClose asChild></DialogClose>
+                </DialogContent>
+            </Dialog>
+
+            {/* Fielder Selection Dialog */}
+            <Dialog open={fielderDialogOpen} onOpenChange={setFielderDialogOpen}>
+                <DialogContent className="hide-scrollbar max-w-xl w-full bg-gray-800 p-6 rounded-lg">
+                    <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-transparent bg-clip-text mb-4">Select Fielder</DialogTitle>
+                    <div className="grid py-3 grid-cols-2 gap-4">
+                        {fielders?.players?.map((fielder) => (
+                            <button
+                                key={fielder._id}
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => {
+                                    setFielder(fielder._id);
+                                    closeFielderDialog();
+                                }}
+                                className={`flex items-center justify-center p-4 rounded-lg cursor-pointer transition-colors duration-200 ${fielder._id === fielder
+                                    ? 'bg-green-600 text-white'
+                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                    }`}
+                            // className={`py-2 px-4 bg-gray-700 text-white rounded-lg shadow-lg hover:bg-green-600 ${fielder._id === fielder ? 'bg-green-600' : ''}`}
+                            >
+                                {fielder?.playerName}
+                            </button>
+                        ))}
+                    </div>
+                    <DialogClose asChild>
+                        <button className="w-full mt-8 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-800 transition-all duration-300"
+                        >Close</button>
+                    </DialogClose>
+                </DialogContent>
+            </Dialog>
+        </>
     );
 };
 

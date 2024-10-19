@@ -53,6 +53,14 @@ export const clubApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Team'], // Provide cache for club details
         }),
+        getAllClubs: builder.query({
+            query: () => ({
+                url: `${CLUBS_URL}/getAllClubs`, // Always fetch all clubs
+                method: 'GET',
+            }),
+            providesTags: ['Clubs'], // Provide cache for clubs
+        }),
+
     }),
 });
 
@@ -60,5 +68,6 @@ export const {
     useRegisterClubMutation,
     useGetClubDetailsQuery,
     useGetClubPlayersQuery,
-    useGetClubTeamsQuery
+    useGetClubTeamsQuery,
+    useGetAllClubsQuery
 } = clubApiSlice;

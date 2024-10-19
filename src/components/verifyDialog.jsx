@@ -73,11 +73,12 @@ const EmailVerificationDialog = ({ email, setEmail }) => {
             closeVerifyDialog();
             setCode(["", "", "", "", "", ""])
         }}>
-            <DialogContent className="max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
-                <DialogTitle className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
+            <DialogContent className="hide-scrollbar max-w-md w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+                {/* <DialogTitle className="text-3xl  font-extrabold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text"> */}
+                <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text mb-4">
                     Verify Your Email
                 </DialogTitle>
-                <p className="text-center text-gray-300 mb-6">Enter the 6-digit code sent to<span className="font-bold text-base bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">{email}</span>
+                <p className="text-center text-gray-300 mb-6">Enter the 6-digit code sent to <span className="font-bold text-base bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">{email}</span>
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">

@@ -95,7 +95,7 @@ const PlayersListing = () => {
     return (
         <div className="p-6 bg-gray-50 min-h-screen">
             {/* Header with Add Team button */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-bold text-gray-800">Players</h1>
                 {isAuthenticated && userType === 'club-manager' && team?.associatedClub === userInfo?.club?._id && <AddPlayersToTeamDialog teamId={team?._id} clubId={team?.associatedClub} />
                 }
@@ -104,7 +104,7 @@ const PlayersListing = () => {
             {playerss?.length === 0 ? (
                 <div className="p-4 text-lg text-gray-600">No players available at the moment.</div>
             ) : (
-                <div className="grid gap-4 grid-cols-2 xs-1:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 p-4">
+                <div className="grid gap-4 grid-cols-2 xs-1:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 py-4">
                     {playerss?.map((player, index) => (
                         <UserPlayerCard key={index} player={player} onClick={handleClick} />
                     ))}

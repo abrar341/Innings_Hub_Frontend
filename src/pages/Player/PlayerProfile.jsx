@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useGetPlayerByIdQuery } from '../../slices/player/playerApiSlice';
 
 const playerData = {
     profile: {
@@ -10,8 +11,6 @@ const playerData = {
     },
     personalInfo: {
         born: 'Nov 05, 1988',
-        birthPlace: 'Delhi',
-        height: "5' 9\"",
         role: 'Batsman',
         battingStyle: 'Right Handed',
         bowlingStyle: 'Right-arm medium',
@@ -32,9 +31,36 @@ const playerData = {
         // { format: 'IPL', matches: 252, innings: 26, runs: 368, wickets: 4, best: '2/25', economy: 8.80 },
     ],
 };
+const getRoleImageUrl = (role) => {
+    const normalizedRole = role?.toLowerCase().replace(" ", "-");
+    return `https://www.iplt20.com/assets/images/teams-${normalizedRole}-icon.svg`;
+};
+function formatDate(dateString) {
+    console.log(dateString);
 
+    const dateObject = new Date(dateString);
+
+    // Check if date is valid
+    if (isNaN(dateObject)) {
+        // If it's invalid, return the original string (it might already be formatted)
+        return dateString;
+    }
+
+    // If valid, format the date
+    return dateObject.toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric'
+    });
+}
 const PlayerProfile = () => {
-    const { name } = useParams();
+    const { id } = useParams();
+    // const id = "66e88fb78e0e4e9fd26654bb";
+    console.log(id);
+
+    const { data } = useGetPlayerByIdQuery(id);
+    const playerInfo = data?.data;
+    console.log(playerInfo);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -47,54 +73,73 @@ const PlayerProfile = () => {
             {/* Player Profile Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4  mb-3">
                 <div className="flex flex-col justify-between bg-gray-50 border rounded shadow-md overflow-hidden">
-                    <div className="bg-customDarkBlue text-white  text-center text-lg font-bold  p-4">{player.profile.name}
+                    <div className="bg-customDark uppercase  bg-blue-500 text-white  text-center text-lg font-extrabold  p-4">
+                        {playerInfo?.playerName}
                     </div>
-                    <div className="flex flex-col items-center p-6">
-                        <img className="w-36 h-36 rounded-full border-4 border-blue-900 mb-4" src={player.profile.image} alt={player.profile.name} />
+                    <div className="flex justify-center items-center items-center  gap-4 items-center p-6">
+                        <img className="w-36 h-36 rounded-full border-2 border-blue-900" src={playerInfo?.profilePicture || "https://www.shutterstock.com/image-vector/cricket-batsman-playing-action-illustration-600nw-2136241905.jpg"} alt={player.profile.name} />
+                        <img src={playerInfo?.currentTeam?.teamLogo} className="w-36 opacity-80 rounded-full" alt="" />
+
                     </div>
                     <div className="bg-gray-100 p-4 flex justify-center items-center gap-2 border-t">
-                        <img className="h-6" src={player.profile.roleImg} alt="Role" />
-                        <span className="text-sm text-gray-800 font-bold">{player.personalInfo.role}</span>
+                        <img className="h-6" src={getRoleImageUrl(playerInfo?.role)} alt="Role" />
+                        <span className="text-sm text-gray-800 font-bold">{playerInfo?.role}</span>
                     </div>
                 </div>
 
                 {/* Personal Information Section */}
                 <div className="bg-gray-50 rounded shadow-md overflow-hidden">
-                    <div className="bg-customDarkBlue text-white  text-lg font-bold p-4">
+                    <div className="bg-blue-500 text-white  text-lg font-bold p-4">
                         Personal Information
                     </div>
                     <div className="p-4">
-                        {Object.entries(player.personalInfo).map(([key, value]) => (
-                            <div key={key} className="flex justify-between py-2 border-b last:border-b-0">
-                                <span className="capitalize font-semibold text-gray-800">{key.replace(/([A-Z])/g, ' $1')}:</span>
-                                <span className="text-gray-700">{value}</span>
-                            </div>
-                        ))}
+                        <div className="flex justify-between py-2 border-b">
+                            <span className="font-semibold text-gray-800">Born:</span>
+                            <span className="text-gray-700">{formatDate(playerInfo?.DOB)}</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b">
+                            <span className="font-semibold text-gray-800">Role:</span>
+                            <span className="text-gray-700">{playerInfo?.role}</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b">
+                            <span className="font-semibold text-gray-800">Batting Style:</span>
+                            <span className="text-gray-700">{playerInfo?.battingStyle || "-"}</span>
+                        </div>
+                        <div className="flex justify-between py-2">
+                            <span className="font-semibold text-gray-800">Bowling Style:</span>
+                            <span className="text-gray-700">{playerInfo?.bowlingStyle || "-"}</span>
+                        </div>
                     </div>
                 </div>
                 <div className="md:col-span-2 lg:col-span-1 bg-gray-50 rounded shadow-md overflow-hidden">
-                    <div className="bg-customDarkBlue text-white  text-lg font-bold p-4">
+                    <div className="bg-blue-500 text-white  text-lg font-bold p-4">
                         Teams
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-2 gap-2 p-2">
-                        {player.careerInfo.teams.map((team, index) => (
-                            <div key={index} className="bg-gray-100 text-sm text-gray-900 rounded px-4 py-2">
-                                {team}
+                        {playerInfo?.teams.map((team, index) => (
+                            <div
+                                key={index}
+                                className={`text-sm font-semibold rounded px-4 py-2 ${team?.teamName === playerInfo?.currentTeam?.teamName
+                                    ? 'bg-gray-300 text-gray-900' // Style for the current team
+                                    : 'bg-gray-200 text-gray-900' // Style for other teams
+                                    }`}
+                            >
+                                {team?.teamName}
                             </div>
                         ))}
+
                     </div>
                 </div>
             </div>
 
             {/* Career Information Section */}
             <div className="bg-white shadow-md rounded mb-2">
-                <div className="bg-customDarkBlue rounded text-white  text-2xl font-bold p-4">Career Information</div>
+                <div className="bg-blue-500 rounded text-white  text-2xl font-bold p-4">Career Information</div>
 
             </div>
-
             {/* Batting Career Summary Section */}
             <div className="bg-white shadow-md rounded mb-2">
-                <div className="bg-gray-300 text-xl text-gray-700 font-bold p-4 rounded">Batting Career Summary</div>
+                <div className="bg-blue-500 text-xl text-white font-bold p-4 rounded">Batting Career Summary</div>
                 <div className="overflow-x-auto">
                     <table className="min-w-full table-auto divide-y divide-gray-200">
                         <thead className="bg-gray-100">
@@ -107,14 +152,14 @@ const PlayerProfile = () => {
                         <tbody className="bg-white divide-y divide-gray-200">
                             {player.battingCareer.map((career, index) => (
                                 <tr key={index}>
-                                    <td className="px-4 py-2">{career.matches}</td>
-                                    <td className="px-4 py-2">{career.innings}</td>
-                                    <td className="px-4 py-2">{career.runs}</td>
-                                    <td className="px-4 py-2 font-bold">{career.format}</td>
-                                    <td className="px-4 py-2">{career.average}</td>
-                                    <td className="px-4 py-2">{career.strikeRate}</td>
-                                    <td className="px-4 py-2">{career.hundreds}</td>
-                                    <td className="px-4 py-2">{career.fifties}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.matches}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.battingInnings}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.runs}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.highestScore}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.runs / (playerInfo?.stats.battingInnings || 1)}</td>
+                                    <td className="px-4 py-2">{((playerInfo?.stats.runs / playerInfo?.stats.ballFaced) * 100 || 0).toFixed(2)}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.centuries}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.halfCenturies}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -124,12 +169,12 @@ const PlayerProfile = () => {
 
             {/* Bowling Career Summary Section */}
             <div className="bg-white  shadow-md rounded">
-                <div className="rounded bg-gray-300 text-xl text-gray-700 font-bold p-4">Bowling Career Summary</div>
+                <div className="rounded bg-blue-500 text-xl text-white font-bold p-4">Bowling Career Summary</div>
                 <div className="overflow-x-auto">
                     <table className="min-w-full table-auto divide-y divide-gray-200">
                         <thead className="bg-gray-100">
                             <tr>
-                                {['Format', 'M', 'Inn', 'Runs', 'Wkts', 'BBI', 'Econ'].map((header) => (
+                                {['Matches', 'Inn', 'Runs', 'Wkts', 'BBI', '5W', '10W', 'Econ'].map((header) => (
                                     <th key={header} className="px-4 py-2 text-left">{header}</th>
                                 ))}
                             </tr>
@@ -137,12 +182,14 @@ const PlayerProfile = () => {
                         <tbody className="bg-white divide-y divide-gray-200">
                             {player.bowlingCareer.map((career, index) => (
                                 <tr key={index}>
-                                    <td className="px-4 py-2 font-bold">{career.format}</td>
-                                    <td className="px-4 py-2">{career.matches}</td>
-                                    <td className="px-4 py-2">{career.innings}</td>
-                                    <td className="px-4 py-2">{career.runs}</td>
-                                    <td className="px-4 py-2">{career.wickets}</td>
-                                    <td className="px-4 py-2">{career.best}</td>
+                                    {/* <td className="px-4 py-2 font-bold">{career.format}</td> */}
+                                    <td className="px-4 py-2">{playerInfo?.stats.matches}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.bowlingInnings}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.runsConceded}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.wickets}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.BB}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.FiveWickets}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.TenWickets}</td>
                                     <td className="px-4 py-2">{career.economy}</td>
                                 </tr>
                             ))}

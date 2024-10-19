@@ -19,7 +19,7 @@ function ByesballPopover({ handleScore }) {
                     variant="secondary"
                     className="h-20 border border-gray-300 text-lg text-muted-foreground"
                 >
-                    Byes
+                    LegByes
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-60" align="start">
@@ -30,6 +30,9 @@ function ByesballPopover({ handleScore }) {
                                 !event.includes("-1") &&
                                 getIsInvalidBall(event) &&
                                 event !== "-5" &&
+                                event !== "6" &&
+                                event !== "5" &&
+                                event !== "7" &&
                                 event !== "0"
                         )
                         .map((event, i) => (

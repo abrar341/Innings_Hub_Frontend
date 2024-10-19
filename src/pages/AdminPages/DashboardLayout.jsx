@@ -15,54 +15,56 @@ const DashboardLayout = () => {
             const isLast = index === array.length - 1;
 
             return (
-                <span key={routeTo} className='text-sm'>
+                <span key={routeTo} className='inline-flex items-center text-sm'>
                     {!isLast ? (
                         <button
-                            className='text-blue-600 hover:underline'
+                            className='text-blue-600 hover:underline transition-colors duration-200'
                             onClick={() => navigate(routeTo)}
                         >
                             {crumb.charAt(0).toUpperCase() + crumb.slice(1)}
                         </button>
                     ) : (
-                        <span className='text-blue-500 font-semibold'>
+                        <span className='text-gray-700 font-semibold'>
                             {crumb.charAt(0).toUpperCase() + crumb.slice(1)}
                         </span>
                     )}
-                    {!isLast && ' > '}
+                    {!isLast && <span className="mx-2 text-gray-400">/</span>}
                 </span>
             );
         });
 
+    // Conditionally show breadcrumbs, excluding when on '/admin'
+    const showBreadcrumbs = location.pathname !== '/admin';
+
     return (
-        <>
-            <h2 className='text-3xl mt-6 font-bold mb-6 text-center text-gray-700'>
-                Admin
-            </h2>
+        <div className="min-h-screen bg-gray-50">
+            {showBreadcrumbs && (
+                <div className='flex justify-between sticky top-0 bg-white py-2 z-10 border-b items-center mb-4 px-6'>
+                    {/* Breadcrumb Navigation */}
+                    <>
+                        <div className='text-blue-500 text-sm font-semibold'>
+                            <button
+                                className='text-blue-600 text-sm hover:underline transition-colors duration-200'
+                                onClick={() => navigate('/admin')}
+                            >
+                                Home
+                            </button>
+                            {breadcrumbs.length > 0 && ' / '}
+                            {breadcrumbs}
+                        </div>
+                        <div className='mr-2'>
+                            <UserDropdown />
+                        </div>
+                    </>
 
-            <div className='flex justify-between items-center'>
-                {/* Breadcrumb Navigation */}
-                <div className='text-blue-500 text-sm'>
-                    <button
-                        className='text-blue-600 text-sm  hover:underline'
-                        onClick={() => navigate('/admin')}
-                    >
-                        Home
-                    </button>
-                    {breadcrumbs.length > 0 && ' > '}
-                    {breadcrumbs}
                 </div>
+            )}
 
-                <div className='mr-2 self-end'>
-                    <UserDropdown />
-                </div>
-            </div>
-
-            {/* Render the routed component */}
-            <div className='mt-6'>
-                {/* You can now remove the Outlet if desired */}
+            {/* Main Content */}
+            <div className=''>
                 <Outlet />
             </div>
-        </>
+        </div>
     );
 };
 

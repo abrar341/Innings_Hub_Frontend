@@ -160,16 +160,16 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                         </button>
                     )}
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl custom-scrollbar w-full p-8 rounded-lg bg-white shadow-2xl hide-scrollbar">
+                <DialogContent className="hide-scrollbar max-w-2xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+
                     <div className="flex justify-between items-center mb-6">
-                        <DialogTitle className="text-2xl font-bold text-gray-800">
-                            {isEditing ? "Edit Tournament" : "Create Tournament"}
+                        <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-green-400 via-emerald-500 to-purple-400 text-green-500 bg-clip-text mb-4">                            {isEditing ? "Edit Tournament" : "Create Tournament"}
                         </DialogTitle>
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                            <label className="cursor-pointer border group">
-                                <div className="relative w-full  h-32 rounded-lg border-2 border-gray-300 group-hover:border-green-500 transition-colors">
+                            <label className="cursor-pointer border rounded group">
+                                <div className="relative w-full h-32 rounded-lg  border-gray-300 group-hover:border-green-500 transition-colors">
                                     {logoPreview ? (
                                         <img
                                             src={logoPreview}
@@ -203,8 +203,7 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                                     render={({ field }) => (
                                         <div>
                                             <input
-                                                className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.title ? "border-red-500" : ""
-                                                    }`}
+                                                className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.title ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                 placeholder="Competition Title"
                                                 type="text"
                                                 {...field}
@@ -225,8 +224,7 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                                         render={({ field }) => (
                                             <div>
                                                 <input
-                                                    className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.short_title ? "border-red-500" : ""
-                                                        }`}
+                                                    className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.short_title ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                     placeholder="Short Title"
                                                     type="text"
                                                     {...field}
@@ -246,8 +244,7 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                                         render={({ field }) => (
                                             <div>
                                                 <input
-                                                    className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.season ? "border-red-500" : ""
-                                                        }`}
+                                                    className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.season ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                     placeholder="Season"
                                                     type="text"
                                                     {...field}
@@ -272,8 +269,7 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                                     render={({ field }) => (
                                         <div className="w-full">
                                             <select
-                                                className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.type ? "border-red-500" : ""
-                                                    }`}
+                                                className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.type ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                 {...field}
                                                 value={field.value || ""}
                                             >
@@ -297,8 +293,7 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                                         render={({ field }) => (
                                             <div className="w-full">
                                                 <DatePicker
-                                                    className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.start_date ? "border-red-500" : ""
-                                                        }`}
+                                                    className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.start_date ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                     selected={field.value}
                                                     onChange={(date) => field.onChange(date)}
                                                     placeholderText="Start Date"
@@ -317,8 +312,7 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                                         render={({ field }) => (
                                             <div className="w-full">
                                                 <DatePicker
-                                                    className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.end_date ? "border-red-500" : ""
-                                                        }`}
+                                                    className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.end_date ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                     selected={field.value}
                                                     onChange={(date) => field.onChange(date)}
                                                     placeholderText="End Date"
@@ -362,8 +356,8 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                                                     onClick={() =>
                                                         handleBallSelection(item.value)
                                                     }
-                                                    className={`card picker-card text-center p-4 border rounded-lg hover:shadow-lg transition-shadow cursor-pointer ${selectedBall === item.value
-                                                        ? "bg-green-100 border-green-500"
+                                                    className={`card picker-card text-center p-4 border rounded-lg text-gray-200 hover:shadow-lg transition-shadow cursor-pointer ${selectedBall === item.value
+                                                        ? "bg-green-500  border-green-500"
                                                         : ""
                                                         }`}
                                                 >
@@ -391,7 +385,7 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                             <button
                                 type="submit"
                                 disabled={createLoading || updateLoading}
-                                className={`flex self-end justify-center w-full items-center btn btn-success text-uppercase px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors flex justify-center ${createLoading || updateLoading
+                                className={`flex self-end justify-center  w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 ${createLoading || updateLoading
                                     ? "cursor-not-allowed opacity-50"
                                     : ""
                                     }`}
@@ -409,7 +403,7 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                     </form>
                     <DialogClose asChild>
                         <button className="absolute text-black top-4 right-4 hover:text-gray-500">
-                            X
+
                         </button>
                     </DialogClose>
                 </DialogContent>

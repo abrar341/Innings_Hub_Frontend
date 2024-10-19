@@ -56,20 +56,24 @@ const ClubManagerDashboard = () => {
 
     return (
         <div className="min-h-screen">
-            <header className="flex items-center justify-center bg-green-600 text-white p-3 font-bold text-center">
+            <header className="flex items-center justify-between bg-green-600 py-2 ">
                 <button
-                    className="absolute top-16 left-2 p-3 z-50 rounded-full text-white"
+                    className="w-12 z-50 rounded-full text-white"
                     onClick={() => setOpen(!open)}
                 >
                     ☰
                 </button>
-                <h2 className="text-xl">{club?.clubName} Dashboard</h2>
+                <h2 className="text-3xl text-white font-extrabold text-center">{club?.clubName}</h2>
+                <div className='z-30 mr-4 '>
+                    <UserDropdown profile={"/club-manager/profile"} />
+                </div>
+
             </header>
 
-            <div className="flex  relative">
+            <div className="flex relative">
                 <nav
-                    className={`flex justify-between max-h-[80vh] flex-col ${open ? 'w-64' : 'w-16'
-                        } bg-white shadow-md h-screen p-4 overflow-y-auto duration-300 sticky md:relative top-15 left-0 z-40`}
+                    className={`flex justify-between max-h-[90vh] flex-col ${open ? 'w-64' : 'w-16'
+                        } bg-white  h-screen p-4 overflow-y-auto hide-scrollbar duration-300 fixed md:relative top-15 left-0 z-40`}
                 >
                     {window.innerWidth < 768 && open && (
                         <button
@@ -81,7 +85,7 @@ const ClubManagerDashboard = () => {
                     )}
 
                     <ul className="space-y-4">
-                        <li>
+                        {/* <li>
                             <Link
                                 to="/club/details"
                                 onClick={handleLinkClick}
@@ -93,7 +97,7 @@ const ClubManagerDashboard = () => {
                                 </div>
                                 {open && <span>Club Details</span>}
                             </Link>
-                        </li>
+                        </li> */}
 
                         <li>
                             <Link
@@ -124,7 +128,7 @@ const ClubManagerDashboard = () => {
                     </ul>
                     <button
                         type="button"
-                        className={`text-gray-700 flex ${!open && 'justify-center'} items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200`}
+                        className={`text-gray-700 flex ${!open && 'justify-center'}  items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200`}
                         role="menuitem"
                         onClick={logoutHandler}
                     >
@@ -142,7 +146,7 @@ const ClubManagerDashboard = () => {
                     </button>
                 </nav>
 
-                <main className="flex-1 overflow-y-auto hide-scrollbar p-6 ml-0">
+                <main className="flex-1 border-l overflow-y-auto hide-scrollbar p-6 ml-0">
                     <Outlet />
                 </main>
             </div>

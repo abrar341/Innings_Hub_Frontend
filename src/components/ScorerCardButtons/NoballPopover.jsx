@@ -29,7 +29,9 @@ function NoballPopover({ handleScore }) {
                             (event) =>
                                 !event.includes("-1") &&
                                 getIsInvalidBall(event) &&
-                                event !== "-5"
+                                event !== "-5" &&
+                                event !== "6" &&
+                                event !== "0"
                         )
                         .map((event, i) => (
                             <Button
@@ -37,9 +39,9 @@ function NoballPopover({ handleScore }) {
                                 variant="secondary"
                                 className={cn({
                                     "bg-amber-400 font-semibold text-amber-950 dark:bg-amber-600 dark:text-amber-50":
-                                        event === "6",
+                                        event === "7",
                                     "bg-emerald-500 text-emerald-50 dark:bg-emerald-600":
-                                        event === "4",
+                                        event === "5",
                                     "hover:brightness-95": event === "6" || event === "4",
                                     "col-span-3": event === "-4",
                                 })}
@@ -49,7 +51,7 @@ function NoballPopover({ handleScore }) {
                                     setIsPopoverOpen(false);
                                 }}
                             >
-                                {event !== "-4" ? event : "Manual Strike"}
+                                {event !== "-4" ? 1 : "Manual Strike"} + {event - 1}
                             </Button>
                         ))}
                 </div>

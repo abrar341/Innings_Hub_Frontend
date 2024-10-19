@@ -13,6 +13,9 @@ export const playerApiSlice = apiSlice.injectEndpoints({
                 if (data.profilePicture) {
                     formData.append("profilePicture", data.profilePicture);
                 }
+                if (data.cnic) {
+                    formData.append("CNIC", data.cnic);
+                }
                 if (data.city) {
                     formData.append("city", data.city);
                 }
@@ -52,6 +55,13 @@ export const playerApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Player'], // Provide cache tags for the fetched players
         }),
+        getPlayerById: builder.query({
+            query: (playerId) => ({
+                url: `${PLAYERS_URL}/getPlayerById/${playerId}`, // URL with dynamic player ID
+                method: 'GET',
+            }),
+            providesTags: (result, error, playerId) => [{ type: 'Player', id: playerId }], // Cache by player ID
+        }),
 
 
 
@@ -78,6 +88,7 @@ export const playerApiSlice = apiSlice.injectEndpoints({
                 if (data.phone) formData.append("phone", data.phone);
                 if (data.battingStyle) formData.append("battingStyle", data.battingStyle);
                 if (data.bowlingStyle) formData.append("bowlingStyle", data.bowlingStyle);
+                if (data.cnic) formData.append("CNIC", data.cnic);
 
                 return {
                     url: `${PLAYERS_URL}/updatePlayer/${id}`,
@@ -94,6 +105,15 @@ export const playerApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Player'], // Provide cache tags for the fetched players
         }),
+        updatePlayerStats: builder.mutation({
+            query: ({ matchId }) => ({
+                url: `${PLAYERS_URL}/updatePlayerStats`,
+                method: "PUT",
+                body: { matchId },
+            }),
+            invalidatesTags: ['Player'],
+        }),
+
 
         getAvailablePlayersForTeam: builder.query({
             query: (clubId) => ({
@@ -114,5 +134,7 @@ export const {
     useGetAllPlayersQuery,
     useDeletePlayerMutation,
     useUpdatePlayerMutation, // Export the updatePlayer mutation hook
-    useAllPlayersQuery
+    useAllPlayersQuery,
+    useUpdatePlayerStatsMutation,
+    useGetPlayerByIdQuery
 } = playerApiSlice;

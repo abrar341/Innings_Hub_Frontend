@@ -44,7 +44,15 @@ const LoginPage = () => {
 
 			const role = res.data.user.role;
 			if (role === 'admin' || role === 'club-manager' || role === 'scorer') {
-				navigate(`/${role}/dashboard`);
+
+				if (role === 'admin') {
+					navigate(`/${role}`);
+				}
+				else {
+					navigate(`/${role}/dashboard`);
+
+				}
+
 			} else {
 				navigate('/');
 			}
@@ -62,10 +70,10 @@ const LoginPage = () => {
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5 }}
-				className='max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'
+				className='max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl border border-gray-600'
 			>
 				<div className='p-8'>
-					<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
+					<h2 className='text-3xl font-extrabold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
 						Welcome Back
 					</h2>
 

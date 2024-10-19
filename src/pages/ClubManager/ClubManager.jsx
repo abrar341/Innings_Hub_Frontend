@@ -26,10 +26,10 @@ const ClubManager = () => {
 
         useEffect(() => {
             if (data) {
-                dispatch(setPlayers({ data: data.data }));
+                dispatch(setPlayers({ data: data?.data }));
             }
             if (teams) {
-                dispatch(set_Team({ data: teams.data }));
+                dispatch(set_Team({ data: teams?.data }));
             }
         }, [dispatch, data, teams, userInfo]);  // Access userInfo from Redux
     }
@@ -51,14 +51,7 @@ const ClubManager = () => {
 
     // Shared part that should render for everyone
     const sharedHeader = (
-        <div className='flex p-2 items-center justify-between'>
-            <Link to={"/"} className='underline text-blue-500 p-2'>see as regular user</Link>
-            {/* <h2 className='text-3xl   mt-6 font-bold mb-6 text-center text-gray-700'>
-                {userInfo?.club.clubName}
-            </h2> */}
-            <div className='z-30 mr-4'>
-                <UserDropdown profile={"/club-manager/profile"} />
-            </div>
+        <div >
         </div>
     );
 
@@ -77,7 +70,6 @@ const ClubManager = () => {
             </>
         );
     }
-
     if (userInfo?.club.registrationStatus === 'pending') {
         return (
             <>

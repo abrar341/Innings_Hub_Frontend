@@ -88,6 +88,15 @@ export const teamApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ['Team'],
         }),
 
+        updateTeamStats: builder.mutation({
+            query: ({ matchId }) => ({
+                url: `${TEAMS_URL}/updateTeamStats`,
+                method: "PUT",
+                body: { matchId },
+            }),
+            invalidatesTags: ['Player'],
+        }),
+
 
     }),
 });
@@ -99,5 +108,6 @@ export const {
     useGetAllTeamsQuery,
     useDeleteTeamMutation,
     useUpdateTeamMutation,
-    useGetSingleTeamDetailQuery
+    useGetSingleTeamDetailQuery,
+    useUpdateTeamStatsMutation
 } = teamApiSlice;

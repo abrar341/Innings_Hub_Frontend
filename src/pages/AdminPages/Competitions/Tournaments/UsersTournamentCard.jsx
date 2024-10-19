@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaCalendarAlt, FaUsers, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaUsers } from 'react-icons/fa';
 import { formatDate } from '../../../../utils/dateFormatter';
 import { useSelector } from 'react-redux';
 import RegisterTeamToTournament from '../../../ClubManager/RegisterTeamToTournament';
@@ -8,25 +8,37 @@ import RegisterTeamToTournament from '../../../ClubManager/RegisterTeamToTournam
 const UsersTournamentCard = ({ tournament }) => {
     const { isAuthenticated, userType } = useSelector((state) => state.auth);
 
-    if (tournament.startDate < Date.now && tournament.endDate < Date.now) {
-        console.log("completed")
-    }
-    else {
-        console.log("dasd");
+    const currentDate = new Date();
+    const startDate = new Date(tournament.startDate);
+    const endDate = new Date(tournament.endDate);
+    const registrationDeadline = new Date(tournament.startDate);
 
+    // Determine tournament status based on current date
+    let status = '';
+    if (currentDate < startDate) {
+        status = 'Upcoming';
+    } else if (currentDate >= startDate && currentDate <= endDate) {
+        status = 'Ongoing';
+    } else if (currentDate > endDate) {
+        status = 'Concluded';
     }
+
     return (
         <div className="p-6 bg-white shadow-md rounded-lg relative transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out">
             <div className="flex justify-between items-start">
-                <span className="bg-green-100 text-green-700 rounded-full px-3 py-1 text-xs font-semibold">
-                    Upcoming
+                <span
+                    className={`${status === 'Upcoming' ? 'bg-green-100 text-green-700' :
+                        status === 'Ongoing' ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-gray-100 text-gray-700'
+                        } rounded-full px-3 py-1 text-xs font-semibold`}
+                >
+                    {status}
                 </span>
             </div>
             <div className="text-center flex flex-col gap-2 mt-6">
-
-                <h5 className="font-semibold text-lg text-bold text-gray-800">{tournament.name}</h5>
+                <h5 className="text-xl font-extrabold text-gray-700 uppercase">{tournament.name}</h5>
                 <div className="text-gray-500 mt-3">
-                    {tournament.start !== 'Start Date' && tournament.end !== 'End Date' ? (
+                    {tournament.startDate && tournament.endDate ? (
                         <div className="flex justify-center items-center">
                             <FaCalendarAlt className="text-green-500 mr-2" />
                             <span className='text-sm'>{formatDate(tournament.startDate)}</span>
@@ -42,24 +54,29 @@ const UsersTournamentCard = ({ tournament }) => {
                         <span className='text-base'>{tournament?.squads.length} Teams</span>
                     </p>
                 </div>
-                <div className="mt-6 flex justify-center gap-5">
-                    <Link
-                        to={`/series/${tournament._id}/fixtures`}
-                        className="transition duration-300 ease-in text-sm border-b border-gray-500 text-center"
-                    >
-                        Fixtures
-                    </Link>
-                    <Link
-                        to={`/series/${tournament._id}/point-table`}
-                        className="transition duration-300 ease-in text-sm border-b border-gray-800 text-center"
-                    >
-                        Points Table
-                    </Link>
-                </div>
-                {
-                    isAuthenticated && userType === 'club-manager' &&
+
+                {/* Conditionally render "Fixtures/Points Table" if the start date is present */}
+                {currentDate > registrationDeadline && (
+                    <div className="mt-6 flex justify-center gap-5">
+                        <Link
+                            to={`/series/${tournament._id}/fixtures`}
+                            className="transition duration-300 ease-in text-sm border-b border-gray-500 text-center"
+                        >
+                            Fixtures
+                        </Link>
+                        <Link
+                            to={`/series/${tournament._id}/point-table`}
+                            className="transition duration-300 ease-in text-sm border-b border-gray-800 text-center"
+                        >
+                            Points Table
+                        </Link>
+                    </div>
+                )}
+
+                {/* Conditionally render "RegisterTeamToTournament" if registration is still open */}
+                {isAuthenticated && userType === 'club-manager' && currentDate < registrationDeadline && (
                     <RegisterTeamToTournament tournamentId={tournament?._id} />
-                }
+                )}
             </div>
         </div>
     );

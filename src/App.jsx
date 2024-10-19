@@ -55,11 +55,9 @@ import ScorerLayout from './pages/Scorer/ScorerLayout';
 import ScorerLayout1 from './components/scorer/ScorerLayout';
 import UpcomingItem from './components/upcomingitem';
 import Side from './components/Side';
+import UpdateProfile from './pages/Profile/UpdateProfile';
 
 function App() {
-
-
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
@@ -82,7 +80,6 @@ function App() {
           <Route path='live-scores' element={<LiveScores />} />
           <Route path='schedules' element={<Schedules />} />
           <Route path='results' element={<LiveScores />} />
-
         </Route>
         <Route path="match/:matchId" element={<ScoreCard />}>
           <Route path='summery' element={<MatchSummery />} />
@@ -103,12 +100,11 @@ function App() {
               <Route path='matches' element={<Matches type={"tournament"} />} />
             </Route>
           </Route>
+          <Route path='/admin/profile' element={<UpdateProfile />} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['club-manager']} />}>
           <Route path='club-manager' element={<ClubManager />}>
-            <Route path='players' element={<PlayersPageLayout />} />
-            <Route path='teams' element={<TeamsPageLayout />} />
             <Route path='dashboard' element={<ClubManagerDashboard />}>
               <Route path='players' element={<PlayersPageLayout />} />
               <Route path='squads' element={<Squads />} />
@@ -116,10 +112,10 @@ function App() {
                 <Route path='team/:id' element={<TeamProfileLayout />} />
               </Route>
               <Route path='tournaments' element={<RegisterTeamToTournament />} />
-
             </Route>
             <Route path='tournaments' element={<RegisterTeamToTournament />} />
           </Route>
+          <Route path='/club-manager/profile' element={<UpdateProfile />} />
         </Route>
 
 
@@ -146,7 +142,7 @@ function App() {
           <Route path='point-table' element={<PointTable />} />
         </Route>
         <Route path="players" element={<Players />} />
-        <Route path="/player/:name" element={<PlayerProfile />} />
+        <Route path="/player/:id" element={<PlayerProfile />} />
       </Route>
     )
   );

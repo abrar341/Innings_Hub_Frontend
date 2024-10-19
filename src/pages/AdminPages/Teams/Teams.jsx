@@ -215,7 +215,6 @@ const Team = () => {
                                     <ActionButtons team={team} />
                                     {!isOpen && (
                                         <AddPlayersToTeamDialog teamId={team?._id} clubId={team?.associatedClub?._id} />
-
                                     )}
                                 </div>
                             </div>

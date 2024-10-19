@@ -5,6 +5,10 @@ import { Controller, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { FaPlus } from "react-icons/fa";
 import { useInitializePlayersMutation } from "../../slices/match/matchApiSlice";
+import ScoreCard from '../../pages/Match/ScoreCard/ScoreCard';
+import { useUpdatePlayerStatsMutation } from '../../slices/player/playerApiSlice';
+import toast from 'react-hot-toast';
+import { useUpdateTeamStatsMutation } from '../../slices/team/teamApiSlice';
 
 // Connect to the backend socket server
 const socket = io('http://localhost:8000');
@@ -19,14 +23,41 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { control, handleSubmit, formState: { errors }, reset } = useForm();
+    const [updatePlayerStats, { isLoading, isSuccess, isError }] = useUpdatePlayerStatsMutation();
+    const [updateTeamStats, { isLoading: updateteamLoading }] = useUpdateTeamStatsMutation();
 
 
     const onSubmit = () => {
         console.log(matchId);
         socket.emit('joinMatch', matchId);
         socket.emit('startNewInnings', { matchId });
-
     }
+
+    const handleUpdateStats = async () => {
+        try {
+            console.log("here");
+
+            await updatePlayerStats({ matchId });
+
+            toast.success("Player stats updated successfully.");
+        } catch (error) {
+            console.error("Failed to update player stats:", error);
+        }
+    };
+
+    const handleUpdateTeamStats = async () => {
+        try {
+            console.log("here");
+
+            await updateTeamStats({ matchId });
+
+            toast.success("Team stats updated successfully.");
+        } catch (error) {
+            console.error("Failed to update team stats:", error);
+        }
+    };
+
+
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             {/* Dialog Trigger and Content */}
@@ -37,14 +68,42 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
                 </button>
             </DialogTrigger>
 
-            <DialogContent className="max-w-lg w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+            <DialogContent className="hide-scrollbar max-w-2xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+
                 {matchInfo?.result?.winner || matchInfo?.result?.isTie === true ? "" :
                     <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-transparent bg-clip-text mb-8">
                         Innings Ended
                     </DialogTitle>}
 
                 {/* {result && <p className='uppercase text-center p-3 my-3 text-xl text-white font-bold tracking-normal	'>{`${winingTeam?.teamName} WON BY ${remainRuns ? `${remainRuns} RUNS` : `${remainingWickets} WICKETS`}`}</p>} */}
-                {matchInfo?.result?.winner ? <p className='uppercase text-center p-3 my-3 text-xl text-white font-bold tracking-normal	'>{matchInfo?.result?.winner?.teamName} WON BY {matchInfo?.result?.margin}</p> : matchInfo?.result?.isTie ? <><p className='uppercase text-center p-3 my-3 text-xl text-white font-bold tracking-normal	'> Match Tie </p></> : ""}
+                {matchInfo?.result?.winner ?
+                    <>
+                        <p className='uppercase text-center p-3 my-3 text-xl text-white font-bold tracking-normal	'>
+                            {matchInfo?.result?.winner?.teamName} WON BY {matchInfo?.result?.margin}
+                        </p>
+                        {matchInfo?.status === 'completed' || matchInfo?.result?.isTie === true ?
+                            <div className='grid grid-cols-1 sm:grid-cols-3 gap-2'>
+                                <button className="text-base font-bold text-center text-white border px-2 py-1 rounded"
+                                    onClick={handleUpdateStats}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? "Updating..." : "Update Player Stats"}
+                                </button>
+                                <button
+                                    onClick={handleUpdateTeamStats}
+                                    disabled={updateteamLoading}
+                                    className="text-base font-bold text-center text-white border px-2 py-1 rounded">
+
+                                    {updateteamLoading ? "Updating..." : "Update Team Stats"}
+
+                                </button>
+                                <button className="text-base font-bold text-center text-white border px-2 py-1 rounded">
+                                    Update Points Table
+                                </button>
+                            </div> : ""}
+                    </>
+                    : matchInfo?.result?.isTie ? <><p className='uppercase text-center p-3 my-3 text-xl text-white font-bold tracking-normal	'> Match Tie </p></> : ""}
+
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     {matchInfo?.result?.winner || matchInfo?.result?.isTie === true ? "" : <motion.button
                         whileHover={{ scale: 1.05 }}
@@ -54,6 +113,7 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
                     >
                         {result ? "Submit Result" : "Start Second Innings"}
                     </motion.button>}
+
                 </form>
 
                 <DialogClose asChild></DialogClose>

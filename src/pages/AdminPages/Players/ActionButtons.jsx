@@ -8,6 +8,8 @@ import { delete_Player } from '../../../slices/player/playerSlice';
 import CreatePlayerDialog from './CreatePlayerDialog';
 
 const ActionButtons = ({ player }) => {
+    console.log(player);
+
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [deletePlayer, { isLoading }] = useDeletePlayerMutation();
@@ -20,7 +22,7 @@ const ActionButtons = ({ player }) => {
     const handleConfirmDelete = async (id) => {
         try {
             const response = await deletePlayer(id);
-            toast.success(response.message);
+            toast.success(response?.data.message);
             setIsAlertOpen(false);
             dispatch(delete_Player(id));
         } catch (error) {

@@ -9,6 +9,8 @@ const TeamProfileLayout = () => {
     const { id } = useParams();
     console.log(id);
     const { data, error, isLoading, refetch } = useGetSingleTeamDetailQuery(id);
+    console.log(data);
+
     const [team, setTeam] = useState();
     console.log(team);
 
@@ -22,17 +24,40 @@ const TeamProfileLayout = () => {
 
     return (
         <>
-            <div className="overflow-hidden border-gray-300 border-b ">
-                <div className="grid grid-cols-1 justify-between items-start gap-1">
-                    <div className="border-t border-gray-300">
-                        <div className="flex text-xl font-bold justify-between text-white p-4">
-                            <div className="text-2xl  my-auto font-bold text-black">{team?.teamName}</div>
-                            <img className="h-10  border-gray-300"
-                                src={team?.teamLogo} />
-                        </div>
-                    </div>
+            <div className="relative overflow-hidden flex justify-between items-center border-gray-300 bg-white px-6 py-4 shadow-md">
+                {/* Team Name with subtle animation */}
+                <div
+                    className="text-4xl sm:text-5xl text-gray-800 font-extrabold cursor-pointer transition-transform duration-300 hover:scale-105 hover:text-blue-600"
+                    title="Team Name"
+                >
+                    {team?.teamName}
                 </div>
+
+                {/* Interactive Team Logo with smooth hover effects */}
+                <div className="relative group">
+                    <img
+                        className="h-16 w-16 sm:h-20 sm:w-20 rounded-full border-4 border-gray-300 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-[15deg] group-hover:shadow-lg"
+                        src={team?.teamLogo}
+                        alt={`${team?.teamName} Logo`}
+                        title={`${team?.teamName} Logo`}
+                    />
+
+                    {/* Glowing effect on hover */}
+                    <div className="absolute inset-0 rounded-full border-4 border-transparent transition-all duration-300 group-hover:border-blue-500 group-hover:shadow-blue-500/40"></div>
+
+                    {/* Subtle pulsing ring effect */}
+                    <div className="absolute inset-0 rounded-full border-4 border-transparent opacity-0 group-hover:opacity-100 group-hover:animate-pulse border-blue-400"></div>
+                </div>
+
+                {/* Floating effect for the entire container */}
+                <div className="absolute inset-0 rounded-lg transition-transform duration-500 group-hover:translate-y-[-5px] group-hover:shadow-xl"></div>
             </div>
+
+
+
+
+
+
             <div className=" pt-4 pb-0 flex flex-row items-center w-full gap-4 overflow-x-auto px-4 border-b border-gray-400 scrollbar-hide">
                 {[
                     { to: 'players', label: 'PLAYERS' },

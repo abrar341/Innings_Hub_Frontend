@@ -127,17 +127,16 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                         </button>
                     )}
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl custom-scrollbar w-full p-8 rounded-lg bg-white shadow-2xl hide-scrollbar">
+                <DialogContent className="hide-scrollbar max-w-2xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
                     <div className="flex justify-between items-center mb-6">
-                        <DialogTitle className="text-2xl font-bold text-gray-800">
-                            {isEditing ? "Edit Team" : "Create Team"}
+                        <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-green-400 via-emerald-500 to-purple-400 text-green-500 bg-clip-text mb-4">                               {isEditing ? "Edit Team" : "Create Team"}
                         </DialogTitle>
                         <DialogClose asChild />
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                            <label className="cursor-pointer border group">
-                                <div className="relative w-full  h-32 rounded-lg border-2 border-gray-300 group-hover:border-green-500 transition-colors">
+                            <label className="cursor-pointer border rounded-lg group">
+                                <div className="relative w-full  h-32 rounded-lg  group-hover:border-green-500 transition-colors">
                                     {logoPreview ? (
                                         <img
                                             src={logoPreview}
@@ -171,8 +170,7 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                                     render={({ field }) => (
                                         <div>
                                             <input
-                                                className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.teamName ? "border-red-500" : ""
-                                                    }`}
+                                                className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.teamName ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                 placeholder="Team Name"
                                                 type="text"
                                                 {...field}
@@ -192,8 +190,7 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                                     render={({ field }) => (
                                         <div>
                                             <input
-                                                className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.shortName ? "border-red-500" : ""
-                                                    }`}
+                                                className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.shortName ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                 placeholder="Short Name"
                                                 type="text"
                                                 {...field}
@@ -216,8 +213,7 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                                 render={({ field }) => (
                                     <div className="w-full">
                                         <select
-                                            className={`form-control w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${errors.teamtype ? "border-red-500" : ""
-                                                }`}
+                                            className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.teamtype ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                             {...field}
                                             value={field.value || ""}
                                         >
@@ -239,7 +235,7 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                             <button
                                 type="submit"
                                 disabled={createLoading || updateLoading}
-                                className={`flex self-end justify-center w-full items-center btn btn-success text-uppercase px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors flex justify-center ${createLoading || updateLoading
+                                className={`flex self-end justify-center w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 ${createLoading || updateLoading
                                     ? "cursor-not-allowed opacity-50"
                                     : ""
                                     }`}
