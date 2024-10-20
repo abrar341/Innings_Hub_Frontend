@@ -5,6 +5,7 @@ import { convertTo12HourFormat, formatDate } from '../../utils/dateFormatter';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import MatchCard1 from './MatchCard';
+import { MatchCard1LoadingSkeleton } from '../AdminPages/Competitions/Tournaments/SingleTournament.jsx/Matches';
 // import matchData from '../../data/matchData'
 
 const Matches_Scroll = () => {
@@ -15,7 +16,7 @@ const Matches_Scroll = () => {
         scheduled: 'bg-blue-500 text-white',
         completed: 'bg-gray-500 text-white',
     };
-    const { data } = useGetAllMatchesQuery();
+    const { data, isLoading } = useGetAllMatchesQuery();
     console.log(data);
     const matches = data?.data;
     console.log(matches);
@@ -58,6 +59,22 @@ const Matches_Scroll = () => {
             container.removeEventListener('scroll', checkScrollPosition);
         };
     }, []);
+
+    if (isLoading) {
+        // Return loading skeletons when the data is loading
+        return (
+            <div className="relative max-w-full overflow-hidden">
+                <div
+                    ref={scrollContainerRef}
+                    className="flex overflow-x-scroll space-x-1 mx-1 my-1 hide-scrollbar"
+                >
+                    {Array.from({ length: 2 }).map((_, index) => (
+                        <MatchCard1LoadingSkeleton key={index} />
+                    ))}
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="relative max-w-full overflow-hidden">
 

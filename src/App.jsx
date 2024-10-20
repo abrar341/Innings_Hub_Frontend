@@ -56,11 +56,15 @@ import ScorerLayout1 from './components/scorer/ScorerLayout';
 import UpcomingItem from './components/upcomingitem';
 import Side from './components/Side';
 import UpdateProfile from './pages/Profile/UpdateProfile';
+import MatchClickDialog from './components/MathcClickDialog';
+import Clicks from './pages/Match/ScoreCard/Clicks';
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
+
+        <Route path='/s' element={<MatchClickDialog />} />
         <Route path='/side' element={<Side />} />
         <Route path='/item' element={<UpcomingItem />} />
         <Route path='/runner/:matchId' element={<Scorer />} />
@@ -85,6 +89,7 @@ function App() {
           <Route path='summery' element={<MatchSummery />} />
           <Route path='innings' element={<ScoreCard_Innings />} />
           <Route path='overs' element={<Overs />} />
+          <Route path='photos' element={<Clicks />} />
           <Route path='match-info' element={<MatchInfo />} />
           <Route path='playing-eleven' element={<PlayingEleven />} />
         </Route>

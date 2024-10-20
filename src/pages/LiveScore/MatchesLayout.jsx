@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import MatchCard1 from '../Match/MatchCard';
 import { useGetAllMatchesQuery } from '../../slices/match/matchApiSlice';
+import { MatchCard1LoadingSkeleton } from '../AdminPages/Competitions/Tournaments/SingleTournament.jsx/Matches';
 
 const MatchesLayout = ({ }) => {
     const [activeFilter, setActiveFilter] = useState('all');
@@ -15,7 +16,7 @@ const MatchesLayout = ({ }) => {
         scheduled: 'bg-blue-500 text-white',
         completed: 'bg-gray-500 text-white',
     };
-    const { data } = useGetAllMatchesQuery();
+    const { data, isLoading } = useGetAllMatchesQuery();
     console.log(data);
     const matches = data?.data;
     console.log(matches);
@@ -64,22 +65,28 @@ const MatchesLayout = ({ }) => {
                     Results
                 </button>
             </div>
-
-            {/* Render the filtered matches list */}
-            <div className="mt-4 grid sm:grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-4">
-                {filteredMatches?.map((matchData) => (
-                    <MatchCard1
-                        key={matchData?._id}
-                        id={matchData?._id}
-                        handleButtonClick={handleButtonClick}
-                        matchData={matchData}
-                        statusStyles={statusStyles}
-                    />
-                ))}
-            </div>
-
-            {/* Outlet for nested routes if needed */}
-            {/* <Outlet /> */}
+            {
+                (isLoading) &&
+                <div className='p-6 grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-2 sm:gap-4'>
+                    {Array.from({ length: 10 }).map((_, index) => (
+                        <MatchCard1LoadingSkeleton key={index} />
+                    ))}
+                </div>
+            }
+            {
+                filteredMatches?.length === 0 ?
+                    <div className=' text-base font-semibold text-gray-600 p-4'>No {activeFilter} matches found</div> :
+                    <div className="mt-4 grid sm:grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-4">
+                        {filteredMatches?.map((matchData) => (
+                            <MatchCard1
+                                key={matchData?._id}
+                                id={matchData?._id}
+                                handleButtonClick={handleButtonClick}
+                                matchData={matchData}
+                                statusStyles={statusStyles}
+                            />
+                        ))}
+                    </div>}
         </div>
     );
 };

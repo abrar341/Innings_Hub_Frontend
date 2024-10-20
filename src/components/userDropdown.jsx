@@ -94,6 +94,9 @@ const UserDropdown = () => {
                         {
                             userInfo?.role === 'admin' || userInfo?.role === 'club-manager' && <Link to={"/"} className='text-gray-700 flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200'>See as Normal User</Link>
                         }
+                        {
+                            userInfo?.role === 'admin' ? <Link to={"/admin"} className='text-gray-700 flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200'>Control Panel</Link> : userInfo?.role === 'club-manager' && <Link to={"/club-manager/dashboard"} className='text-gray-700 flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200'>Control Panel</Link>
+                        }
                     </div>
                 </div>
             )}

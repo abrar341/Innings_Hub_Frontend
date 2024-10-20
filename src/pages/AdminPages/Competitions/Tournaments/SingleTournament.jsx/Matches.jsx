@@ -5,10 +5,58 @@ import Match_Card from './Match_Card'
 import { useGetMatchesByTournamentIdQuery, useGetMatchesByTeamIdQuery } from '../../../../../slices/match/matchApiSlice'
 import { useSelector } from 'react-redux'
 import MatchCard1 from '../../../../Match/MatchCard'
+import OrganizeMatchesDialog from '../../../../../components/OrganizeMatchDialog'
+
+
+export const MatchCard1LoadingSkeleton = () => (
+    <div className="min-w-[380px] bg-gradient-to-r from-gray-50 to-white border border-gray-300 rounded shadow-lg animate-pulse">
+        {/* Match Info (Date, Tournament, Status) */}
+        <div className="px-4 py-1">
+            <div className="bg-gray-50 py-1 border-b border-gray-200 flex justify-between items-center">
+                <div className="w-16 h-4 bg-gray-300 rounded"></div>
+                <div className="w-32 h-4 bg-gray-300 rounded"></div>
+                <div className="w-16 h-4 bg-gray-300 rounded"></div>
+            </div>
+
+            {/* Team and Inning Details */}
+            <div className="mt-4 flex flex-col gap-4">
+                {Array.from({ length: 2 }).map((_, index) => (
+                    <div key={index} className="min-h-[60px] flex items-center space-x-3">
+                        {/* Team Logo */}
+                        <div className="w-10 h-10 rounded bg-gray-300"></div>
+
+                        {/* Team Name */}
+                        <div className="flex-1">
+                            <div className="w-24 h-4 bg-gray-300 rounded"></div>
+                        </div>
+
+                        {/* Runs, Wickets, Overs */}
+                        <div className="flex flex-col justify-center items-end space-y-1">
+                            <div className="w-12 h-4 bg-gray-300 rounded"></div>
+                            <div className="w-16 h-4 bg-gray-300 rounded"></div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        {/* Match Status */}
+        <div className="bg-gray-200 p-2 text-center text-gray-500 font-semibold text-xs border-t border-gray-200">
+            <div className="w-32 h-4 bg-gray-300 rounded mx-auto"></div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-3 justify-center bottom-0 bg-gray-100 p-2 items-center border-t border-gray-300">
+            <div className="w-24 h-6 bg-gray-300 rounded"></div>
+        </div>
+    </div>
+);
+
+
+
 
 const Matches = ({ type }) => {
     console.log(type);
-
     const context = useOutletContext();
     let entity = context;  // This will either be a tournament or team based on the `type`
     console.log(entity);
@@ -25,7 +73,7 @@ const Matches = ({ type }) => {
         ? useGetMatchesByTournamentIdQuery
         : useGetMatchesByTeamIdQuery;
 
-    const { data, error, isLoading, refetch } = queryFn(entityId);
+    const { data, isLoading, error, refetch } = queryFn(entityId);
     console.log(data);
 
     useEffect(() => {
@@ -41,7 +89,13 @@ const Matches = ({ type }) => {
         refetch();
     }, [matches]);
     if (isLoading) {
-        return <div>Loading...</div>;
+        return (
+            <div className='p-6 grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-2 sm:gap-4'>
+                {Array.from({ length: 10 }).map((_, index) => (
+                    <MatchCard1LoadingSkeleton key={index} />
+                ))}
+            </div>
+        );
     }
 
     return (
@@ -55,7 +109,7 @@ const Matches = ({ type }) => {
                             {/* Show create match dialog only for tournaments */}
                             {type === 'tournament' && <>
                                 <CreateMatchDialog tournamentId={entityId} />
-                                <div>Schedule Matches</div>
+                                <OrganizeMatchesDialog />
                             </>}
                         </>
                     )

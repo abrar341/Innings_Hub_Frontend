@@ -26,7 +26,7 @@ const MatchCard1 = ({ id, matchData }) => {
     };
 
     useEffect(() => {
-        if (matchInfo?.status === 'live' && matchInfo?.innings?.length >= 1 && matchInfo?._id === id) {
+        if (matchInfo?.status === 'live' && matchInfo?._id === id) {
             socket.emit('joinMatch', id);
 
             socket.on('newBall', (ballData) => {
@@ -40,7 +40,6 @@ const MatchCard1 = ({ id, matchData }) => {
                     setMatchInfo(data);
                 }
             });
-
             socket.on('newBowlerAssigned', (updatedMatchData) => {
                 setMatchInfo(updatedMatchData);
                 socket.off('newBowlerAssigned');

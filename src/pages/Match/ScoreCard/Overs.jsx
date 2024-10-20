@@ -5,7 +5,7 @@ const Overs = () => {
     const context = useOutletContext();
     let matchInfo = context;
     return (
-        <div className='min-h-screen min-w-[300px]'>
+        <div className='min-h-screen min-w-[300px] p-4'>
             <h2 className='text-2xl font-bold'>Overs</h2>
             {matchInfo?.innings?.map((inning, inningIndex) => (
                 <div key={inningIndex} className='mb-6'>
@@ -34,8 +34,11 @@ const Overs = () => {
                                                             : "border border-gray-300"
                                                 } `}
                                         >
-                                            {ball?.runs?.extras?.type !== "none" ? ball?.runs?.extras?.type : ""}
-                                            {ball?.isOut ? "W" : ball?.runs?.scored}
+                                            {ball?.runs?.scored === 0 && ball?.runs?.extras?.type === "none" && ball?.isOut === false ? "•" : ball?.isOut ? "W" : ball?.runs?.scored}
+
+                                            {/* {ball?.runs?.extras?.type !== "none" ? ball?.runs?.extras?.type : ""}
+                                            {ball?.runs?.scored === 0 && ball?.runs?.extras?.type === "none" && ball?.isOut === false && "•"}
+                                            {ball?.isOut ? "W" : ball?.runs?.scored} */}
                                         </div>
                                     ))}
                                 </div>

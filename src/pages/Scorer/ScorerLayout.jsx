@@ -93,7 +93,7 @@ const ScorerLayout = () => {
                                 ) : matchData?.status === 'live' ? (
                                     <>Match is in Process</>
                                 ) : matchData?.status === 'completed' && matchData?.result?.isTie ? (
-                                    <>Match Tie</>
+                                    <>Match Draw</>
                                 ) : matchData?.status === 'completed' ? (
                                     <>{`${matchData?.result?.winner?.teamName} won by ${matchData?.result.margin}`}</>
                                 ) : ""

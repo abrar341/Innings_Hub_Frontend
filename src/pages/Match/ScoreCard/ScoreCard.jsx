@@ -82,7 +82,7 @@ const ScoreCard = () => {
         <>
             <div className=" p-3 min-w-[200px]">
                 <ScoreCard_Header matchInfo={matchInfo} />
-                <div className="mx-auto  sticky top-14 bg-white flex flex-row items-center w-full gap-4 overflow-x-auto border-b border-gray-300 scrollbar-hide">
+                <div className="mx-auto z-50  sticky top-14 bg-white flex flex-row items-center w-full gap-4 overflow-x-auto border-b border-gray-300 scrollbar-hide">
                     {/* <div className="shrink-0">
                         {!matchInfo?.status === 'live' || !matchInfo?.status === 'scheduled' ? (<NavLink
                             to="summery"
@@ -122,6 +122,14 @@ const ScoreCard = () => {
                             className={tabClasses}
                         >
                             MatchInfo
+                        </NavLink>
+                    </div>
+                    <div className="shrink-0">
+                        <NavLink
+                            to="photos"
+                            className={tabClasses}
+                        >
+                            Photos
                         </NavLink>
                     </div>
                 </div>

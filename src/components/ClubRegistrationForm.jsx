@@ -8,6 +8,7 @@ import { ArrowRight, ArrowLeft, User, MapPin, Calendar, Phone, Mail, Home, Link,
 import { useRegisterClubMutation } from "../slices/club/clubApiSlice";
 import { setCredentials } from "../slices/auth/authSlice";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 
 // Form Steps
@@ -23,6 +24,7 @@ const ClubRegistrationForm = () => {
         mode: 'onChange',
     });
     const dispatch = useDispatch();
+    const navigate = useNavigate()
 
     const [registerClub, { isLoading }] = useRegisterClubMutation();
 
@@ -75,6 +77,7 @@ const ClubRegistrationForm = () => {
             dispatch(setCredentials({ ...user }));
             toast.success(res?.message)
             console.log("Club registered successfully:", res);
+            navigate('/')
         } catch (err) {
             console.error("Error registering club:", err);
         }

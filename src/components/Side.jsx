@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import MatchClickDialog from "./MathcClickDialog";
 
 const Side = () => {
     const [open, setOpen] = useState(true);
@@ -41,6 +42,7 @@ const Side = () => {
                 className={` ${open ? "w-72" : "w-20 "
                     } bg-dark-purple hide-scrollbar  h-screen p-5 pt-8 relative duration-300 sticky top-0 overflow-y-auto`}
             >
+
                 {/* Toggle Button */}
                 <img
                     src="./src/assets/control.png"
@@ -91,6 +93,7 @@ const Side = () => {
                 <p>
                     {/* Repeating content for demonstration */}
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec odio bibendum, pharetra arcu at, vulputate lectus. Nulla facilisi. Integer varius consectetur neque non mollis. Duis convallis eros nec neque feugiat, nec vehicula enim tempor. Fusce in enim eget lectus tincidunt vehicula. Aenean consectetur velit nec felis auctor, et sodales felis tincidunt.
+                    <MatchClickDialog />
                 </p>
                 {/* Add more content as needed */}
             </div>

@@ -13,6 +13,7 @@ import FielderInvolvementDialog from './FielderInvolvementDialog';
 import ScoreDisplay from './scorer/ScoreDisplay';
 import CurrentStriker from '../pages/Match/ScoreCard/CurrentStriker';
 import { TypographyH2 } from './ui/typography';
+import MatchClickDialog from './MathcClickDialog';
 
 // Connect to the backend socket server
 
@@ -223,7 +224,11 @@ const Scorer = () => {
                 <div className="mb-2">
                     <div className='grid grid-cols-2 gap-2'>
                         {matchInfo?.innings?.map((inning, index) => (
-                            <ScoreDisplay key={index} totalOves={totalOves} inning={inning} inningNumber={index + 1} />
+                            <>
+                                <ScoreDisplay key={index} totalOves={totalOves} inning={inning} inningNumber={index + 1} />
+
+                                <MatchClickDialog matchId={matchInfo?._id} />
+                            </>
                         ))}
 
                     </div>

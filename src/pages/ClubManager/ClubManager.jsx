@@ -12,27 +12,24 @@ import { set_Team } from '../../slices/team/teamSlice';
 
 const ClubManager = () => {
     const dispatch = useDispatch();
-    // Define navigation cards for club manager dashboard
+
+    // Get user information from Redux
     const { userInfo } = useSelector((state) => state.auth);
+    const clubId = userInfo?.club?._id;
 
-    if (userInfo?.club) {
-        const id = userInfo?.club._id
-        console.log(id);
+    // Fetch players and teams only if clubId exists
+    const { data: playersData, isLoading: isLoadingPlayers } = useGetClubPlayersQuery(clubId, { skip: !clubId });
+    const { data: teamsData, isLoading: isLoadingTeams } = useGetClubTeamsQuery(clubId, { skip: !clubId });
 
-        const { data, isLoading: isLoadingPlayers } = useGetClubPlayersQuery(id);
-
-        const { data: teams, isLoading, isError, error } = useGetClubTeamsQuery(id);
-        console.log(teams);
-
-        useEffect(() => {
-            if (data) {
-                dispatch(setPlayers({ data: data?.data }));
-            }
-            if (teams) {
-                dispatch(set_Team({ data: teams?.data }));
-            }
-        }, [dispatch, data, teams, userInfo]);  // Access userInfo from Redux
-    }
+    // Use effect to dispatch data to the store
+    useEffect(() => {
+        if (playersData) {
+            dispatch(setPlayers({ data: playersData?.data }));
+        }
+        if (teamsData) {
+            dispatch(set_Team({ data: teamsData?.data }));
+        }
+    }, [dispatch, playersData, teamsData]);
 
     const cards = [
         // { to: 'dashboard', icon: 'fa-users', title: `Dashboard` },
@@ -43,33 +40,33 @@ const ClubManager = () => {
 
     // Class for active and inactive NavLink
     const navLinkClass = ({ isActive }) =>
-        `px-3 py-1  gap-3 text-sm font-semibold transition-all duration-300 ease-in-out transform
+        `px-3 py-1 gap-3 text-sm font-semibold transition-all duration-300 ease-in-out transform
         ${isActive
-            ? 'text-white bg-blue-600 rounded  border-blue-600 shadow-lg  '
+            ? 'text-white bg-blue-600 rounded  border-blue-600 shadow-lg'
             : 'text-gray-600 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-800 hover:scale-105 hover:shadow-md'
         }`;
 
     // Shared part that should render for everyone
     const sharedHeader = (
-        <div >
+        <div>
+            {/* Shared header content */}
         </div>
     );
 
-    // Conditional rendering based on club registration status
+    // Handle unregistered club
     if (!userInfo?.club) {
         toast.dismiss();
-        toast(
-            "Oops! It looks like you haven’t registered a club yet. Please complete the club registration to get started.",
-            {
-                duration: 5000,
-            }
-        );
+        toast("Oops! It looks like you haven’t registered a club yet. Please complete the club registration to get started.", {
+            duration: 5000,
+        });
         return (
-            < >
+            <>
                 <ClubRegistrationForm />
             </>
         );
     }
+
+    // Handle pending club registration status
     if (userInfo?.club.registrationStatus === 'pending') {
         return (
             <>
@@ -85,6 +82,8 @@ const ClubManager = () => {
             </>
         );
     }
+
+    // Handle rejected club registration status
     if (userInfo?.club.registrationStatus === 'rejected') {
         return (
             <>
@@ -105,7 +104,8 @@ const ClubManager = () => {
     return (
         <>
             {sharedHeader}
-            {/* <div className="px-2 py-2 border-b border-gray-300  flex justify-between gap-6 mx-auto my-2">
+            {/* Uncomment and use cards if needed */}
+            {/* <div className="px-2 py-2 border-b border-gray-300 flex justify-between gap-6 mx-auto my-2">
                 <div className="flex justify-center items-center gap-6">
                     {cards.map((card, index) => (
                         <NavLink to={card.to} key={index} className={navLinkClass}>
