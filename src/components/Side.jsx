@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import MatchClickDialog from "./MathcClickDialog";
 
 const Side = () => {
     const [open, setOpen] = useState(true);
@@ -93,7 +92,7 @@ const Side = () => {
                 <p>
                     {/* Repeating content for demonstration */}
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec odio bibendum, pharetra arcu at, vulputate lectus. Nulla facilisi. Integer varius consectetur neque non mollis. Duis convallis eros nec neque feugiat, nec vehicula enim tempor. Fusce in enim eget lectus tincidunt vehicula. Aenean consectetur velit nec felis auctor, et sodales felis tincidunt.
-                    <MatchClickDialog />
+                    <DivideTeamsDialog />
                 </p>
                 {/* Add more content as needed */}
             </div>

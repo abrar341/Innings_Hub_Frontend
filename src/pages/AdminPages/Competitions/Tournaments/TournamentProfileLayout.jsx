@@ -54,6 +54,7 @@ const TournamentProfileLayout = () => {
                 {[
                     { to: 'squads', label: 'SQUADS/TEAMS' },
                     { to: 'matches', label: 'MATCHES' },
+                    { to: 'draws', label: 'DRAWS/ROUNDS' },
                     { to: 'point-table', label: 'POINT-TABLE' },
                 ].map(({ to, label }) => (
                     <div className="shrink-0  relative group" key={to}>

@@ -25,12 +25,15 @@ const StartMatchDialog = ({ setMatchInfo, matchId, matchInfo }) => {
         tossDecision: '',
     });
 
-    const tournamentId = matchInfo?.tournament;
+    const tournamentd = matchInfo?.tournament;
     const team1 = matchInfo?.teams?.[0];
     const team2 = matchInfo?.teams?.[1];
+    const tournamentId = tournamentd?._id;
+    console.log(tournamentId);
 
     const { data: team1data } = useGetSquadPlayersQuery({ tournamentId, teamId: team1?._id });
     const { data: team2data } = useGetSquadPlayersQuery({ tournamentId, teamId: team2?._id });
+    console.log(team2data);
 
     const [StartMatch] = useStartMatchMutation();
 

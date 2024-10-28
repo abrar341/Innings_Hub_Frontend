@@ -214,7 +214,7 @@ const Scorer = () => {
     //     return <InningsEndedDialog remainingWickets={remainingWickets} remainRuns={remainRuns} winingTeam={winingTeam} result={result} matchId={matchId} />;
     // }
     if (fielderInvolved) {
-        return <FielderInvolvementDialog matchId={matchId} matchInfo={matchInfo} fielders={matchInfo?.playing11?.[0]} wicketType={wicketType} setFielderInvolved={setFielderInvolved} />;
+        return <FielderInvolvementDialog matchId={matchId} matchInfo={matchInfo} fielders={bowlingTeam} wicketType={wicketType} setFielderInvolved={setFielderInvolved} />;
     }
     return (
         <div className="mx-auto max-w-2xl w-full bg-white rounded shadow-md p-6 border border-gray-600">

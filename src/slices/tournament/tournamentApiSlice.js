@@ -71,6 +71,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'], // Provide cache on fetch
     }),
+
     getAllSquads: builder.query({
       query: () => ({
         url: `${TOURNAMENTS_URL}/getAllSquads`,
@@ -102,6 +103,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'],
     }),
+
     getSingleTournamentDetail: builder.query({
       query: (id) => ({
         url: `${TOURNAMENTS_URL}/getSingleTournamentDetail/${id}`,
@@ -109,6 +111,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'],
     }),
+
     getAvailableTeamsForTournament: builder.query({
       query: (id) => ({
         url: `${TOURNAMENTS_URL}/getAvailableTeamsForTournament/${id}`,
@@ -116,6 +119,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'],
     }),
+
     addTeamsToTournaments: builder.mutation({
       query: ({ tournamentId, teamIds }) => ({
         url: `${TOURNAMENTS_URL}/addTeamsToTournament`,
@@ -124,6 +128,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Tournament'], // Invalidate the tournament data to refetch after adding teams
     }),
+
     registerTeamsToTournament: builder.mutation({
       query: (data) => ({
         url: `${TOURNAMENTS_URL}/registerTeamsToTournament`,
@@ -132,6 +137,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Tournament'], // Invalidate the tournament data to refetch after adding teams
     }),
+
     removeTeamFromTournament: builder.mutation({
       query: ({ tournamentId, squadId }) => ({
         url: `${TOURNAMENTS_URL}/removeTeamFromTournament`,
@@ -140,6 +146,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Tournament'], // Invalidate the tournament data to refetch after adding teams
     }),
+
     getSingleTournamentSquads: builder.query({
       query: (id) => ({
         url: `${TOURNAMENTS_URL}/getSingleTournamentSquads/${id}`,
@@ -147,6 +154,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'], // Provide cache on fetch
     }),
+
     getAvailablePlayersForTournament: builder.query({
       query: ({ tournamentId, teamId }) => ({
         url: `${TOURNAMENTS_URL}/getAvailablePlayersForTournament/${tournamentId}/${teamId}`,
@@ -154,6 +162,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'], // This will help in caching
     }),
+
     addPlayerToSquad: builder.mutation({
       query: ({ squadId, playerIds }) => ({
         url: `${TOURNAMENTS_URL}/addPlayerToSquad`,
@@ -162,6 +171,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Tournament'], // Invalidate tournament data to refetch after adding players
     }),
+
     removePlayerFromSquad: builder.mutation({
       query: ({ squadId, playerId }) => ({
         url: `${TOURNAMENTS_URL}/removePlayerFromSquad`,
@@ -170,6 +180,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Tournament'], // Invalidate tournament data to refresh
     }),
+
     getTeamsInTournament: builder.query({
       query: (tournamentId) => ({
         url: `${TOURNAMENTS_URL}/getTeamsInTournament/${tournamentId}`,
@@ -177,6 +188,7 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Tournament'], // This will help in caching
     }),
+
     approveSquadById: builder.mutation({
       query: (squadId) => ({
         url: `${TOURNAMENTS_URL}/approveSquadById/${squadId}`,
@@ -184,6 +196,34 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Tournament'], // Invalidate the tournament data to refresh
     }),
+
+    createRound: builder.mutation({
+      query: ({ roundName, scheduleType, tournamentId, numberOfGroups, groups }) => ({
+        url: `${TOURNAMENTS_URL}/createRound`,
+        method: 'POST',
+        body: { roundName, scheduleType, tournamentId, numberOfGroups, groups }, // Pass the necessary fields in the body
+      }),
+      invalidatesTags: ['Round'], // Invalidate the tournament data to refetch after creating a round
+    }),
+
+    getRoundsByTournamentId: builder.query({
+      query: (tournamentId) => ({
+        url: `${TOURNAMENTS_URL}/getRounds/${tournamentId}`,  // API endpoint to fetch rounds by tournament ID
+        method: 'GET',  // Fetch data
+      }),
+      providesTags: (result, error, tournamentId) => [{ type: 'Round', id: tournamentId }],  // Cache the rounds with 'Round' tag
+    }),
+
+    deleteRound: builder.mutation({
+      query: (roundId) => ({
+        url: `${TOURNAMENTS_URL}/deleteRound/${roundId}`,  // API endpoint to delete the round by round ID
+        method: 'DELETE',  // Use DELETE method
+      }),
+      invalidatesTags: (result, error, roundId) => [{ type: 'Round', id: roundId }],  // Invalidate cache for the deleted round
+    }),
+
+
+
 
 
   }),
@@ -208,5 +248,8 @@ export const {
   useGetAvailablePlayersForTournamentQuery,
   useAddPlayerToSquadMutation,
   useRemovePlayerFromSquadMutation,
-  useGetTeamsInTournamentQuery
+  useGetTeamsInTournamentQuery,
+  useCreateRoundMutation,
+  useGetRoundsByTournamentIdQuery,
+  useDeleteRoundMutation
 } = tournamentApiSlice;

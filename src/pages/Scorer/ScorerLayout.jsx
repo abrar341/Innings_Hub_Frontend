@@ -44,7 +44,7 @@ const ScorerLayout = () => {
                 </div>
                 <Outlet />
             </div> */}
-            <div className='grid grid-cols-2 gap-4 p-5'>
+            <div className='grid grid-cols-3 gap-4 p-5'>
                 {matches?.map((matchData) => (
                     <div className=" gap-10 overflow-hidden flex-shrink-0 bg-gradient-to-r from-gray-50 to-white border border-gray-300 rounded shadow-lg transform transition-transform duration-300 ">
                         {/* Card Front */}
@@ -100,7 +100,7 @@ const ScorerLayout = () => {
                             }
                         </div>
                         {/* Action Buttons */}
-                        <div className=" flex flex-col gap-3 justify-center bottom-0 bg-gray-100 p-2   items-center border-t border-gray-300">
+                        <div className=" flex flex gap-3 justify-center bottom-0 bg-gray-100 p-2   items-center border-t border-gray-300">
                             <Link
                                 to="/all-matches/scorecard/summery"
                                 title="MATCH CENTRE"

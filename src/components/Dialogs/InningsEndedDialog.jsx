@@ -83,23 +83,37 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
                         </p>
                         {matchInfo?.status === 'completed' || matchInfo?.result?.isTie === true ?
                             <div className='grid grid-cols-1 sm:grid-cols-3 gap-2'>
-                                <button className="text-base font-bold text-center text-white border px-2 py-1 rounded"
-                                    onClick={handleUpdateStats}
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? "Updating..." : "Update Player Stats"}
-                                </button>
-                                <button
-                                    onClick={handleUpdateTeamStats}
-                                    disabled={updateteamLoading}
-                                    className="text-base font-bold text-center text-white border px-2 py-1 rounded">
 
-                                    {updateteamLoading ? "Updating..." : "Update Team Stats"}
+                                {
+                                    matchInfo?.playerStats ?
+                                        <div className="text-base font-bold text-center bg-green-600 text-white border px-2 py-1 rounded"
+                                        >
+                                            PlayerStats Updated
+                                        </div> : <button className="text-base font-bold text-center text-white border px-2 py-1 rounded"
+                                            onClick={handleUpdateStats}
+                                            disabled={isLoading}
+                                        >
+                                            {isLoading ? "Updating..." : "Update Player Stats"}
+                                        </button>
+                                }
+                                {
+                                    matchInfo?.teamStats ?
+                                        <div className="text-base font-bold text-center bg-green-600 text-white border px-2 py-1 rounded"
+                                        >
+                                            teamStats Updated
+                                        </div> : <button
+                                            onClick={handleUpdateTeamStats}
+                                            disabled={updateteamLoading}
+                                            className="text-base font-bold text-center text-white border px-2 py-1 rounded">
 
-                                </button>
-                                <button className="text-base font-bold text-center text-white border px-2 py-1 rounded">
+                                            {updateteamLoading ? "Updating..." : "Update Team Stats"}
+
+                                        </button>
+                                }
+
+                                {/* <button className="text-base font-bold text-center text-white border px-2 py-1 rounded">
                                     Update Points Table
-                                </button>
+                                </button> */}
                             </div> : ""}
                     </>
                     : matchInfo?.result?.isTie ? <><p className='uppercase text-center p-3 my-3 text-xl text-white font-bold tracking-normal	'> Match Tie </p></> : ""}

@@ -23,11 +23,11 @@ const FielderInvolvementDialog = ({
     const lastBallIndex = lastOver?.balls?.length ? lastOver.balls.length - 1 : 0;
     const lastBall = lastOver?.balls?.[lastBallIndex];
     const lastBallNumber = lastBall?.ballNumber || 0;
-
     const [fielder, setFielder] = useState(""); // Selected fielder
     const [runs, setRuns] = useState(1); // Runs for run-out (1, 2, 3)
     const [batsmanOut, setBatsmanOut] = useState("striker"); // Who's out: striker or non-striker
     const [fielderDialogOpen, setFielderDialogOpen] = useState(false); // Control for fielder selection dialog
+    console.log(fielders);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -125,10 +125,10 @@ const FielderInvolvementDialog = ({
                                             whileHover={{ scale: 1.1 }}
                                             whileTap={{ scale: 0.95 }}
                                             type="button"
-                                            className={`py-2 px-4 rounded-lg font-bold text-white ${batsmanOut === type ? 'bg-green-600' : 'bg-gray-700'}`}
+                                            className={`py-2 px-4 rounded-lg text-sm font-semibold text-white ${batsmanOut === type ? 'bg-green-600' : 'bg-gray-700'}`}
                                             onClick={() => setBatsmanOut(type)}
                                         >
-                                            {type === "striker" ? "Striker" : "Non-Striker"}
+                                            {type === "striker" ? `${matchInfo?.innings?.[matchInfo?.currentInning - 1]?.currentStriker?.playerName}` : `${matchInfo?.innings?.[matchInfo?.currentInning - 1]?.nonStriker?.playerName}`}
                                         </button>
                                     ))}
                                 </div>

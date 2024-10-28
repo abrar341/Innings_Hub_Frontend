@@ -15,7 +15,7 @@ const CreateMatchDialog = ({ tournamentId }) => {
         mode: 'onChange',
     });
     const [teams, setTeams] = useState([]);
-    const [venues, setVenues] = useState(["sda"]);
+    const [venues, setVenues] = useState(["Sundus Cricket Stadium"]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     console.log(tournamentId);
 
@@ -151,7 +151,7 @@ const CreateMatchDialog = ({ tournamentId }) => {
                                     <option value="">Select Venue</option>
                                     {venues.map((venue) => (
                                         <option key={venue._id} value={venue._id}>
-                                            {venue.venueName}ds
+                                            {venue}
                                         </option>
                                     ))}
                                 </select>

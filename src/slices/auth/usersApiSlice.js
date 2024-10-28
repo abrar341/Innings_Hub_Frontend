@@ -51,6 +51,20 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: 'GET',
       }),
     }),
+    getAllScorers: builder.query({
+      query: () => ({
+        url: `${USERS_URL}/getAllScorers`,
+        method: 'GET',
+      }),
+    }),
+    //delete Scorer
+    deleteUser: builder.mutation({
+      query: (userId) => ({
+        url: `${USERS_URL}/deleteUser/${userId}`,
+        method: 'DELETE',
+      }),
+    }),
+
   }),
 });
 
@@ -61,4 +75,6 @@ export const {
   useUpdateUserMutation,
   useVerifyEmailMutation,
   useGetUserInfoQuery,
+  useGetAllScorersQuery,
+  useDeleteUserMutation
 } = userApiSlice;

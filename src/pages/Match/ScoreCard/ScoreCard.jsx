@@ -18,7 +18,7 @@ const ScoreCard = () => {
     useEffect(() => {
         socket.emit('joinMatch', matchId);
         socket.on('matchDetails', (matchData) => {
-            console.log('Received match data:', matchData);
+            console.log('Received match data:', matchData?.tournament);
             setMatchInfo(matchData); // Save match data in the state
         });
         socket.on('newBowlerAssigned', (matchData) => {

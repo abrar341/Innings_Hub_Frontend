@@ -58,6 +58,9 @@ import Side from './components/Side';
 import UpdateProfile from './pages/Profile/UpdateProfile';
 import MatchClickDialog from './components/MathcClickDialog';
 import Clicks from './pages/Match/ScoreCard/Clicks';
+import DrawsAndRounds from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/DrawsAndRounds';
+import Standings from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/Standings';
+import ScorerPage from './pages/AdminPages/Scorer/ScorerPage';
 
 function App() {
   const router = createBrowserRouter(
@@ -67,7 +70,6 @@ function App() {
         <Route path='/s' element={<MatchClickDialog />} />
         <Route path='/side' element={<Side />} />
         <Route path='/item' element={<UpcomingItem />} />
-        <Route path='/runner/:matchId' element={<Scorer />} />
         <Route path='/runner' element={<ScorerLayout1 />} />
         <Route path='/viewer' element={<Viewer />} />
         <Route path='account'>
@@ -99,10 +101,14 @@ function App() {
           <Route element={<DashboardLayout />} >
             <Route path='admin' element={<Dashboard />} />
             <Route path='/admin/competitions' element={<Competitions isAdmin={true} />} />
+            <Route path='/admin/scorers' element={<ScorerPage />} />
+
             <Route path='/admin/clubs' element={<Clubs />} />
             <Route path='/admin/competitions/:id' element={<TournamentProfileLayout />} >
               <Route path='squads' element={<Squads />} />
               <Route path='matches' element={<Matches type={"tournament"} />} />
+              <Route path='draws' element={<DrawsAndRounds />} />
+              <Route path='point-table' element={<Standings />} />
             </Route>
           </Route>
           <Route path='/admin/profile' element={<UpdateProfile />} />
@@ -124,13 +130,14 @@ function App() {
         </Route>
 
 
-        {/* <Route element={<ProtectedRoute allowedRoles={['scorer']} />}> */}
-        <Route path='scorer' element={<ScorerLayout />}>
-          <Route path='live' element={<Live />} />
-          <Route path='upcoming' element={<Upcoming />} />
-          <Route path='results' element={<Result />} />
+        <Route element={<ProtectedRoute allowedRoles={['scorer']} />}>
+          <Route path='scorer' element={<ScorerLayout />}>
+            <Route path='live' element={<Live />} />
+            <Route path='upcoming' element={<Upcoming />} />
+            <Route path='results' element={<Result />} />
+          </Route>
+          <Route path='/runner/:matchId' element={<Scorer />} />
         </Route>
-        {/* </Route> */}
 
         {/* Public Routes */}
         {/* <Route path="clubs" element={<Clubs />} /> */}

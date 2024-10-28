@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Profile from './Profile';
-import { Trophy, Calendar, Users, Briefcase } from 'lucide-react'; // Professional icons
+import { Trophy, Calendar, Users, Briefcase, ClipboardList } from 'lucide-react'; // Professional icons
 import UserDropdown from '../../components/userDropdown';
 
 const AdminDashboard = () => {
@@ -9,7 +9,7 @@ const AdminDashboard = () => {
     { to: 'competitions', icon: <Trophy />, title: 'Competitions' },
     { to: 'competitio', icon: <Calendar />, title: 'Matches Schedules' },
     { to: 'clubs', icon: <Users />, title: 'Clubs' },
-    { to: 'coetitions', icon: <Briefcase />, title: 'Officials' },
+    { to: 'scorers', icon: <ClipboardList />, title: 'Scorers' },
   ];
 
   const navigate = useNavigate();

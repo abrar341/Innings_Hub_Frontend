@@ -97,6 +97,8 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
             } else {
                 const response = await createPlayer(formattedData).unwrap();
                 toast.success("Player created successfully");
+                console.log(response);
+
             }
             setIsOpen(false);
             reset();
