@@ -112,11 +112,11 @@ const LoginPage = () => {
 							/>
 						</div>
 
-						<div className='flex items-center mb-6'>
+						{/* <div className='flex items-center mb-6'>
 							<Link to='/forgot-password' className='text-sm text-green-400 hover:underline'>
 								Forgot password?
 							</Link>
-						</div>
+						</div> */}
 
 						<motion.button
 							whileHover={{ scale: 1.02 }}

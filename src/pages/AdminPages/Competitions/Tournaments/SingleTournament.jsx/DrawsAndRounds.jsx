@@ -7,6 +7,7 @@ import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'; // Arrow Icons
 import { FaSpinner } from 'react-icons/fa'; // Spinner icon
 import toast from 'react-hot-toast';
 import AlertNote from '../../../../../components/AlertNote';
+import ScheduleMatchesDialog from '../../../../../components/Dialogs/ScheduleMatchesDialog';
 
 const DrawsAndRounds = () => {
     const context = useOutletContext();
@@ -37,6 +38,8 @@ const DrawsAndRounds = () => {
             // Remove the deleted round from the rounds array
             setRounds((prevRounds) => prevRounds.filter((round) => round._id !== roundId));
             toast.success("Round deleted successfully");
+            setIsAlertOpen(false);
+
         } catch (error) {
             console.error('Failed to delete the round:', error);
             toast.error('Failed to delete the round');
@@ -151,11 +154,13 @@ const DrawsAndRounds = () => {
 
                                     {/* Schedule Matches and Delete Round buttons */}
                                     <div className="flex justify-end mt-4 space-x-2">
+
+                                        <ScheduleMatchesDialog tournamentId={tournamentId} round={round?._id} groups={round?.groups} />
                                         <button
                                             className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-300"
                                             onClick={() => handleScheduleMatches(round._id)}
                                         >
-                                            Schedule Matches
+                                            Next Round
                                         </button>
 
 

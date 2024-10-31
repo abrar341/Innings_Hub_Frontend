@@ -198,13 +198,23 @@ export const tournamentApiSlice = apiSlice.injectEndpoints({
     }),
 
     createRound: builder.mutation({
-      query: ({ roundName, scheduleType, tournamentId, numberOfGroups, groups }) => ({
+      query: ({ roundName, scheduleType, tournamentId, numberOfGroups, groups, qualifiersPerGroup }) => ({
         url: `${TOURNAMENTS_URL}/createRound`,
         method: 'POST',
-        body: { roundName, scheduleType, tournamentId, numberOfGroups, groups }, // Pass the necessary fields in the body
+        body: { roundName, scheduleType, tournamentId, numberOfGroups, groups, qualifiersPerGroup }, // Pass the necessary fields in the body
       }),
       invalidatesTags: ['Round'], // Invalidate the tournament data to refetch after creating a round
     }),
+
+    scheduleMatches: builder.mutation({
+      query: ({ tournamentId, startDate, round, matchDates, venues, matchTimes, overs, matchesPerDay, groups }) => ({
+        url: `${TOURNAMENTS_URL}/scheduleMatches`,
+        method: 'POST',
+        body: { tournamentId, startDate, round, groups, matchDates, venues, matchTimes, overs, matchesPerDay }, // Pass the necessary fields in the body
+      }),
+      invalidatesTags: ['Match'], // Invalidate match data to refetch after scheduling matches
+    }),
+
 
     getRoundsByTournamentId: builder.query({
       query: (tournamentId) => ({
@@ -251,5 +261,6 @@ export const {
   useGetTeamsInTournamentQuery,
   useCreateRoundMutation,
   useGetRoundsByTournamentIdQuery,
-  useDeleteRoundMutation
+  useDeleteRoundMutation,
+  useScheduleMatchesMutation
 } = tournamentApiSlice;

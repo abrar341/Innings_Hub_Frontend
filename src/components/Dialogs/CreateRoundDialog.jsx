@@ -6,9 +6,7 @@ import { FaPlus } from "react-icons/fa";
 import { useCreateRoundMutation } from '../../slices/tournament/tournamentApiSlice';
 import toast from 'react-hot-toast';
 
-
-
-const CreateRoundDialog = ({ confirmedTeams, tournamentId }) => {
+const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => {
     console.log(confirmedTeams);
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -62,7 +60,11 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId }) => {
             groups: groupTeams,
             numberOfGroups: data.numberOfGroups,
             scheduleType: data.scheduleType,
+            qualifiersPerGroup: data.qualifiersPerGroup
         };
+        console.log(roundDetails);
+
+
         try {
             const response = await createRound(roundDetails).unwrap();
             console.log(response);
