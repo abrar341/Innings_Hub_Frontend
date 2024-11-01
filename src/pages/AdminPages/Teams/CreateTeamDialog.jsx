@@ -113,9 +113,9 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                     {isEditing ? (
                         <button
                             onClick={() => setIsOpen(true)}
-                            className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                            className="p-2  bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-gray-200 focus:outline-none"
                         >
-                            <FaEdit className="text-gray-600" />
+                            <FaEdit className="text-gray-600 dark:text-gray-300" />
                         </button>
                     ) : (
                         <button

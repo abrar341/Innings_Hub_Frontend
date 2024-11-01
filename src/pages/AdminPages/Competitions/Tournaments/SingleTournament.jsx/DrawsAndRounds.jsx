@@ -8,6 +8,7 @@ import { FaSpinner } from 'react-icons/fa'; // Spinner icon
 import toast from 'react-hot-toast';
 import AlertNote from '../../../../../components/AlertNote';
 import ScheduleMatchesDialog from '../../../../../components/Dialogs/ScheduleMatchesDialog';
+import NextRoundDialog from '../../../../../components/Dialogs/NextRoundDialog';
 
 const DrawsAndRounds = () => {
     const context = useOutletContext();
@@ -26,7 +27,7 @@ const DrawsAndRounds = () => {
 
     const { data, isLoading, isError, error, refetch } = useGetSingleTournamentSquadsQuery(tournamentId);
     const { data: round, error: getRoundsError, isLoading: gettingRounds } = useGetRoundsByTournamentIdQuery(tournamentId);
-    console.log(round);
+    console.log(rounds?.[0]?.qualifiedTeams);
 
     const [deleteRound] = useDeleteRoundMutation();
 
@@ -156,14 +157,7 @@ const DrawsAndRounds = () => {
                                     <div className="flex justify-end mt-4 space-x-2">
 
                                         <ScheduleMatchesDialog tournamentId={tournamentId} round={round?._id} groups={round?.groups} />
-                                        <button
-                                            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-300"
-                                            onClick={() => handleScheduleMatches(round._id)}
-                                        >
-                                            Next Round
-                                        </button>
-
-
+                                        <NextRoundDialog tournamentId={tournamentId} qualifiedTeams={round?.qualifiedTeams} />
                                     </div>
                                 </div>
                             )}

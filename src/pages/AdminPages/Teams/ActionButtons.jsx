@@ -9,19 +9,17 @@ import CreateTeamDialog from './CreateTeamDialog';
 import { useNavigate } from 'react-router-dom';
 
 const ActionButtons = ({ team }) => {
-    console.log(team);
-
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [deleteTeam, { isLoading }] = useDeleteTeamMutation();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const handleDeleteClick = () => {
         setIsAlertOpen(true);
     };
-    const navigate = useNavigate();
 
     const handleViewClick = (id) => {
-        // Navigate to the desired route with matchId as a param
         navigate(`/team/${id}/players`);
     };
 
@@ -48,17 +46,17 @@ const ActionButtons = ({ team }) => {
                     />
                 </button>
                 <button
-                    className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                    className="p-2 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none"
                     onClick={handleDeleteClick}
                 >
-                    <FaTrashAlt className="text-gray-600" />
+                    <FaTrashAlt className="text-gray-600 dark:text-gray-300" />
                 </button>
-                <button
-                    className="p-[1px] px-3 bg-gray-100 rounded border hover:bg-gray-200 focus:outline-none"
+                {/* <button
+                    className="p-[1px] px-3 bg-gray-200 dark:bg-gray-700 rounded border hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none"
                     onClick={() => handleViewClick(team?._id)}
                 >
-                    View
-                </button>
+                    <span className="text-gray-600 dark:text-gray-300">View</span>
+                </button> */}
             </div>
             <AlertNote
                 open={isAlertOpen}

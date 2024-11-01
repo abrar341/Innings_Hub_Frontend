@@ -34,7 +34,7 @@ const Players = () => {
 
     return (
         <>
-            <div className="bg-gray-100 mx-auto p-4 pb-0 bg-gray-50 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 ">
+            <div className="bg-gray-100 dark:bg-gray-800 mx-auto p-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {/* Search Bar */}
                 <form onSubmit={handleSearchSubmit} className="w-full col-span-1 sm:col-span-1 lg:col-span-1 lg:order-none">
                     <div className="relative w-full">
@@ -42,7 +42,7 @@ const Players = () => {
                             type="search"
                             value={searchQuery}
                             onChange={handleInputChange}
-                            className="focus:outline-none block p-2.5 w-full z-20 text-sm text-gray-700 bg-gray-50 rounded-lg border bg-white border-gray-300"
+                            className="focus:outline-none block p-2.5 w-full z-20 text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600"
                             placeholder="Search players by name..."
                             required
                         />
@@ -54,7 +54,7 @@ const Players = () => {
                     <select
                         value={selectedTeam}
                         onChange={handleTeamChange}
-                        className="block w-full p-2.5 bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full p-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Filter by team</option>
                         {Array.from(new Set(players.map(player => player.currentTeam?.teamName))).map((teamName, index) => (
@@ -68,7 +68,7 @@ const Players = () => {
                     <select
                         value={selectedClub}
                         onChange={handleClubChange}
-                        className="block w-full p-2.5 bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full p-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Filter by club</option>
                         {Array.from(new Set(players.map(player => player.associatedClub?.clubName))).map((clubName, index) => (
@@ -78,11 +78,11 @@ const Players = () => {
                 </div>
 
                 {/* Reset Button */}
-                <div className="col-span-1 w-full  sm:col-span-1 lg:col-span-1 flex justify-end lg:justify-start lg:mt-0 w-full">
+                <div className="col-span-1 w-full sm:col-span-1 lg:col-span-1 flex justify-end lg:justify-start lg:mt-0">
                     <button
                         type="button"
                         onClick={handleResetFilters}
-                        className="bg-red-500  text-white py-1 px-4 rounded-lg hover:bg-red-600 focus:outline-none w-full "
+                        className="bg-red-500 text-white dark:bg-red-600 py-1 px-4 rounded-lg hover:bg-red-600 dark:hover:bg-red-700 focus:outline-none w-full"
                     >
                         Reset Filters
                     </button>

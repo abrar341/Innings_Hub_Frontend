@@ -3,7 +3,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { Spinner } from 'flowbite-react'; // Optional loading spinner
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import AddPlayerToSqaud from '../../../pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/AddPlayerToSqaud'
+import AddPlayerToSqaud from '../../../pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/AddPlayerToSqaud';
 import { useGetSingleTournamentSquadsQuery, useRemovePlayerFromSquadMutation, useRemoveTeamFromTournamentMutation } from '../../../slices/tournament/tournamentApiSlice';
 import AddTeamToTournamentDialog from '../../AdminPages/Competitions/Tournaments/SingleTournament.jsx/AddTeamToTournamentDialog';
 import { useAllPlayersQuery } from '../../../slices/player/playerApiSlice';
@@ -21,8 +21,6 @@ const PlayersListing = () => {
     let playerss = team?.players;
     console.log(playerss);
 
-    // const { data: playerss } = useAllPlayersQuery();
-    // const players = playerss?.data || [];
     const tournamentId = "66d34efebd6b2b67fba0a424";
     console.log(tournamentId);
 
@@ -62,8 +60,6 @@ const PlayersListing = () => {
 
     const [removeTeamFromTournament] = useRemoveTeamFromTournamentMutation(); // Initialize mutation
 
-
-
     const navigate = useNavigate();
 
     const handleClick = (name) => {
@@ -93,24 +89,24 @@ const PlayersListing = () => {
     }
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
+        <div className="p-6 dark:bg-gray-900 min-h-screen"> {/* Dark background */}
             {/* Header with Add Team button */}
             <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-gray-800">Players</h1>
+                <h1 className="text-2xl font-extrabold text-gray-700 dark:text-white">Players</h1> {/* Lighter text color */}
                 {isAuthenticated && userType === 'club-manager' && team?.associatedClub === userInfo?.club?._id && <AddPlayersToTeamDialog teamId={team?._id} clubId={team?.associatedClub} />
                 }
             </div>
 
             {playerss?.length === 0 ? (
-                <div className="p-4 text-lg text-gray-600">No players available at the moment.</div>
+                <div className="p-4 text-lg text-gray-400">No players available at the moment.</div>
             ) : (
-                <div className="grid gap-4 grid-cols-2 xs-1:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 py-4">
+                <div className="grid gap-4 grid-cols-2 xs-1:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 py-4">
                     {playerss?.map((player, index) => (
                         <UserPlayerCard key={index} player={player} onClick={handleClick} />
                     ))}
                 </div>
             )}
-        </div >
+        </div>
     );
 };
 

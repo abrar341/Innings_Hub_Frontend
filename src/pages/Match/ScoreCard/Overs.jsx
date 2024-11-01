@@ -15,7 +15,7 @@ const Overs = () => {
                     {inning.overs
                         .filter((over) => over.balls.length > 0) // Filter out overs without any balls
                         .map((over, overIndex) => (
-                            <div key={overIndex} className='fp-4 p-2 mt-2 bg-gray-100'>
+                            <div key={overIndex} className='fp-4 p-2 mt-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-300 rounded-lg'>
                                 <h4 className='text-lg my-2 self-center'>
                                     Over: {over.overNumber}
                                 </h4>

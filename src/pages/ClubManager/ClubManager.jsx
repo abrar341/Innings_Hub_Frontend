@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, Outlet } from 'react-router-dom';
-import UserDropdown from '../../components/userDropdown';
 import ClubRegistrationForm from '../../components/ClubRegistrationForm';  // Assuming you have this component
 import toast from 'react-hot-toast';
-import { setCredentials } from '../../slices/auth/authSlice';
-import { useGetUserInfoQuery } from '../../slices/auth/usersApiSlice';
 import { setPlayers } from '../../slices/clubManager/clubManagerSlice';
 import { useGetClubPlayersQuery, useGetClubTeamsQuery } from '../../slices/club/clubApiSlice';
 import { set_Team } from '../../slices/team/teamSlice';
@@ -31,12 +28,6 @@ const ClubManager = () => {
         }
     }, [dispatch, playersData, teamsData]);
 
-    const cards = [
-        // { to: 'dashboard', icon: 'fa-users', title: `Dashboard` },
-        // { to: 'players', icon: 'fa-users', title: `Players` },
-        // { to: 'teams', icon: 'fa-group', title: 'Teams' },
-        // { to: 'tournaments', icon: 'fa-group', title: 'Tournaments' },
-    ];
 
     // Class for active and inactive NavLink
     const navLinkClass = ({ isActive }) =>

@@ -6,32 +6,31 @@ import { FaPlus } from "react-icons/fa";
 import { useCreateRoundMutation } from '../../slices/tournament/tournamentApiSlice';
 import toast from 'react-hot-toast';
 
-const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => {
-    console.log(confirmedTeams);
-
+const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams, roundData, triggerText = "Create New Round" }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const { control, handleSubmit, formState: { errors }, reset, watch } = useForm();
+    const [openGroupDialog, setOpenGroupDialog] = useState(null);
+
+    const { control, handleSubmit, formState: { errors }, reset, watch } = useForm({
+        defaultValues: {
+            roundName: roundData?.roundName || "",
+            groupingType: roundData?.groupingType || "custom",
+            numberOfGroups: roundData?.numberOfGroups || "",
+            scheduleType: roundData?.scheduleType || "round-robin",
+            qualifiersPerGroup: roundData?.qualifiersPerGroup || ""
+        }
+    });
     const [groups, setGroups] = useState([]);
     const [groupTeams, setGroupTeams] = useState({});
-
-    const [openGroupDialog, setOpenGroupDialog] = useState(null);
-    const [knockoutSchedule, setKnockoutSchedule] = useState(null);
     const [createRound] = useCreateRoundMutation();
 
-
-    // Watch the custom or random group selection
     const groupingType = watch("groupingType");
     const numberOfGroups = watch("numberOfGroups");
     const scheduleType = watch("scheduleType");
 
-    // Handle selecting teams for a specific group
     const handleSelectTeam = (groupId, teamId) => {
         setGroupTeams((prev) => {
-            scheduleType
             const updated = { ...prev };
             if (!updated[groupId]) updated[groupId] = [];
-
-            // Toggle team selection
             if (updated[groupId].includes(teamId)) {
                 updated[groupId] = updated[groupId].filter(id => id !== teamId);
             } else if (updated[groupId].length < Math.ceil(confirmedTeams?.length / groups.length)) {
@@ -41,7 +40,6 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => 
         });
     };
 
-    // Filter out teams that have already been selected by other groups
     const getAvailableTeams = (groupId) => {
         const selectedTeams = Object.entries(groupTeams)
             .filter(([key]) => key !== groupId)
@@ -49,10 +47,7 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => 
         return confirmedTeams.filter(team => !selectedTeams.includes(team.team._id));
     };
 
-    // Submit the new round with groups and schedule type
     const onSubmit = async (data) => {
-        console.log(data);
-
         const roundDetails = {
             tournamentId,
             roundName: data.roundName,
@@ -62,23 +57,18 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => 
             scheduleType: data.scheduleType,
             qualifiersPerGroup: data.qualifiersPerGroup
         };
-        console.log(roundDetails);
-
 
         try {
             const response = await createRound(roundDetails).unwrap();
-            console.log(response);
             reset();
             setIsDialogOpen(false);
         } catch (error) {
             console.error("Failed to create round", error);
-            toast.error("Error Occured")
+            toast.error("Error Occurred");
         }
     };
 
     const generateRandomGroups = (teams, groupCount) => {
-        console.log(teams);
-
         const shuffledTeams = [...teams].sort(() => 0.5 - Math.random());
         const groups = [];
         for (let i = 0; i < groupCount; i++) {
@@ -87,7 +77,6 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => 
         return groups;
     };
 
-    // Generate group elements based on the number of groups selected
     const generateGroups = (count) => {
         const newGroups = [];
         for (let i = 0; i < count; i++) {
@@ -95,40 +84,37 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => 
         }
         setGroups(newGroups);
     };
+
     useEffect(() => {
         if (groupingType === "random" && numberOfGroups) {
             setGroups(generateRandomGroups(confirmedTeams, numberOfGroups));
         } else if (groupingType === "custom" && numberOfGroups) {
             generateGroups(numberOfGroups);
         }
-        setGroupTeams({}); // Clear previous selections when the grouping type changes
+        setGroupTeams({});
     }, [groupingType, numberOfGroups, confirmedTeams]);
 
-
-
     return (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-                <button className="flex items-center bg-gradient-to-r from-green-600 to-teal-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg hover:from-green-700 hover:to-teal-700 transition-all duration-200">
-                    <FaPlus className="mr-2" />
-                    Create New Round
-                </button>
-            </DialogTrigger>
+        <>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                    <button className="flex items-center bg-gradient-to-r from-green-600 to-teal-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg hover:from-green-700 hover:to-teal-700 transition-all duration-200">
+                        <FaPlus className="mr-2" />
+                        {triggerText}
+                    </button>
+                </DialogTrigger>
 
-            <DialogContent className="max-w-2xl hide-scrollbar w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
-                <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-green-400 via-teal-400 to-purple-400 text-transparent bg-clip-text mb-4">
-                    Create Round
-                </DialogTitle>
+                <DialogContent className="max-w-2xl hide-scrollbar w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
+                    <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-green-400 via-teal-400 to-purple-400 text-transparent bg-clip-text mb-4">
+                        {triggerText}
+                    </DialogTitle>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    {/* Select Group Type: Custom or Random */}
-                    <Controller
-                        name="roundName"
-                        control={control}
-                        defaultValue=""
-                        rules={{ required: "Round name is required" }}
-                        render={({ field }) => (
-                            <>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                        <Controller
+                            name="roundName"
+                            control={control}
+                            rules={{ required: "Round name is required" }}
+                            render={({ field }) => (
                                 <div className="space-y-2">
                                     <label className="text-lg font-bold text-white">Round Name</label>
                                     <input
@@ -139,104 +125,54 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => 
                                     />
                                     {errors.roundName && <p className="px-1 text-red-500 text-xs font-semibold">{errors.roundName.message}</p>}
                                 </div>
-
-                            </>
-                        )}
-                    />
-
-                    <Controller
-                        name="groupingType"
-                        control={control}
-                        defaultValue="custom"
-                        rules={{ required: "Please select a group type" }}
-                        render={({ field }) => (
-                            <div className="space-y-2">
-                                <p className="text-lg font-bold text-white">Group Division</p>
-                                <div className="flex space-x-4">
-                                    <label className={`p-4 rounded-lg font-semibold text-white cursor-pointer ${field.value === "custom" ? "bg-green-600" : "bg-gray-700"}`}>
-                                        <input type="radio" value="custom" checked={field.value === "custom"} onChange={field.onChange} className="hidden" />
-                                        Custom
-                                    </label>
-                                    <label className={`p-4 rounded-lg font-semibold text-white cursor-pointer ${field.value === "random" ? "bg-green-600" : "bg-gray-700"}`}>
-                                        <input type="radio" value="random" checked={field.value === "random"} onChange={field.onChange} className="hidden" />
-                                        Random
-                                    </label>
-                                </div>
-                            </div>
-                        )}
-                    />
-                    {errors.groupingType && <p className="text-red-500 text-sm">{errors.groupingType.message}</p>}
-                    <div className='grid grid-cols-1 sm:grid-cols-2'>
-                        <Controller
-                            name="numberOfGroups"
-                            control={control}
-                            defaultValue=""
-                            render={({ field }) => {
-                                const totalTeams = confirmedTeams.length;
-                                const possibleGroups = [];
-                                let power = 1;
-
-                                // Generate valid group numbers in powers of 2 that divide totalTeams exactly
-                                while (power <= Math.floor(totalTeams / 2)) {
-                                    if (totalTeams % power === 0) {
-                                        possibleGroups.push(power);
-                                    }
-                                    power *= 2;
-                                }
-
-                                return (
-                                    <div className="space-y-2">
-                                        <p className="text-lg font-bold text-white">Number of Groups</p>
-                                        <div className="flex space-x-4 flex-wrap">
-                                            {possibleGroups.map(value => (
-                                                <label
-                                                    key={value}
-                                                    className={`p-4 font-semibold text-white rounded-lg cursor-pointer ${field.value == value ? "bg-green-600 text-white" : "bg-gray-700"}`}
-                                                >
-                                                    <input
-                                                        type="radio"
-                                                        value={value}
-                                                        checked={field.value == value}
-                                                        onChange={(e) => {
-                                                            field.onChange(e);
-                                                            generateGroups(value);  // Ensure the groups update when selection changes
-                                                        }}
-                                                        className="hidden"
-                                                    />
-                                                    {value}
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-                                );
-                            }}
+                            )}
                         />
 
-                        {
-                            scheduleType !== 'knockout' &&
+                        <Controller
+                            name="groupingType"
+                            control={control}
+                            defaultValue="custom"
+                            rules={{ required: "Please select a group type" }}
+                            render={({ field }) => (
+                                <div className="space-y-2">
+                                    <p className="text-lg font-bold text-white">Group Division</p>
+                                    <div className="flex space-x-4">
+                                        <label className={`p-4 rounded-lg font-semibold text-white cursor-pointer ${field.value === "custom" ? "bg-green-600" : "bg-gray-700"}`}>
+                                            <input type="radio" value="custom" checked={field.value === "custom"} onChange={field.onChange} className="hidden" />
+                                            Custom
+                                        </label>
+                                        <label className={`p-4 rounded-lg font-semibold text-white cursor-pointer ${field.value === "random" ? "bg-green-600" : "bg-gray-700"}`}>
+                                            <input type="radio" value="random" checked={field.value === "random"} onChange={field.onChange} className="hidden" />
+                                            Random
+                                        </label>
+                                    </div>
+                                </div>
+                            )}
+                        />
+                        {errors.groupingType && <p className="text-red-500 text-sm">{errors.groupingType.message}</p>}
+                        <div className='grid grid-cols-1 sm:grid-cols-2'>
                             <Controller
-                                name="qualifiersPerGroup"
+                                name="numberOfGroups"
                                 control={control}
                                 defaultValue=""
                                 render={({ field }) => {
-                                    // Check if confirmedTeams and groups are defined and have valid lengths
-                                    const teamsPerGroup = confirmedTeams?.length && groups?.length ? Math.ceil(confirmedTeams.length / groups.length) : 0;
-                                    const possibleQualifiers = [];
+                                    const totalTeams = confirmedTeams.length;
+                                    const possibleGroups = [];
+                                    let power = 1;
 
-                                    // Generate valid qualifiers in powers of 2 up to teamsPerGroup, only if teamsPerGroup is positive
-                                    if (teamsPerGroup > 0) {
-                                        let power = 1;
-                                        while (power <= teamsPerGroup) {
-                                            possibleQualifiers.push(power);
-                                            power *= 2;
+                                    // Generate valid group numbers in powers of 2 that divide totalTeams exactly
+                                    while (power <= Math.floor(totalTeams / 2)) {
+                                        if (totalTeams % power === 0) {
+                                            possibleGroups.push(power);
                                         }
+                                        power *= 2;
                                     }
 
                                     return (
                                         <div className="space-y-2">
-                                            <p className="text-lg font-bold text-white">Number of Qualifiers per Group</p>
+                                            <p className="text-lg font-bold text-white">Number of Groups</p>
                                             <div className="flex space-x-4 flex-wrap">
-                                                {possibleQualifiers.map(value => (
+                                                {possibleGroups.map(value => (
                                                     <label
                                                         key={value}
                                                         className={`p-4 font-semibold text-white rounded-lg cursor-pointer ${field.value == value ? "bg-green-600 text-white" : "bg-gray-700"}`}
@@ -247,7 +183,7 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => 
                                                             checked={field.value == value}
                                                             onChange={(e) => {
                                                                 field.onChange(e);
-                                                                updateQualifiers(value);  // Handle any updates needed on selection change
+                                                                generateGroups(value);  // Ensure the groups update when selection changes
                                                             }}
                                                             className="hidden"
                                                         />
@@ -259,83 +195,129 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => 
                                     );
                                 }}
                             />
-                        }
+
+                            {
+                                scheduleType !== 'knockout' &&
+                                <Controller
+                                    name="qualifiersPerGroup"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => {
+                                        // Check if confirmedTeams and groups are defined and have valid lengths
+                                        const teamsPerGroup = confirmedTeams?.length && groups?.length ? Math.ceil(confirmedTeams.length / groups.length) : 0;
+                                        const possibleQualifiers = [];
+
+                                        // Generate valid qualifiers in powers of 2 up to teamsPerGroup, only if teamsPerGroup is positive
+                                        if (teamsPerGroup > 0) {
+                                            let power = 1;
+                                            while (power <= teamsPerGroup) {
+                                                possibleQualifiers.push(power);
+                                                power *= 2;
+                                            }
+                                        }
+
+                                        return (
+                                            <div className="space-y-2">
+                                                <p className="text-lg font-bold text-white">Number of Qualifiers per Group</p>
+                                                <div className="flex space-x-4 flex-wrap">
+                                                    {possibleQualifiers.map(value => (
+                                                        <label
+                                                            key={value}
+                                                            className={`p-4 font-semibold text-white rounded-lg cursor-pointer ${field.value == value ? "bg-green-600 text-white" : "bg-gray-700"}`}
+                                                        >
+                                                            <input
+                                                                type="radio"
+                                                                value={value}
+                                                                checked={field.value == value}
+                                                                onChange={(e) => {
+                                                                    field.onChange(e);
+                                                                    updateQualifiers(value);  // Handle any updates needed on selection change
+                                                                }}
+                                                                className="hidden"
+                                                            />
+                                                            {value}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        );
+                                    }}
+                                />
+                            }
 
 
-                    </div>
-
-
-
-
-
-                    {/* Custom Groups */}
-                    {groupingType === "custom" && (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                            {groups.map((group, index) => (
-                                <div
-                                    key={group.groupId}
-                                    className="space-y-1 cursor-pointer"
-                                    onClick={() => setOpenGroupDialog(group.groupId)}
-                                >
-                                    <h3 className="text-lg font-semibold text-white">
-                                        Group {index + 1} ({groupTeams[group.groupId]?.length || 0}/{Math.ceil(confirmedTeams.length / groups.length)})
-                                    </h3>
-                                    <p onClick={() => setOpenGroupDialog(group.groupId)}
-                                        className="text-sm text-gray-300">Click to select teams</p>
-                                </div>
-                            ))}
                         </div>
-                    )}
 
-                    {/* Random Groups */}
-                    {groupingType === "random" && numberOfGroups > 0 && (
-                        <div className="space-y-2">
-                            {generateRandomGroups(confirmedTeams, numberOfGroups).map((group, index) => (
-                                <div key={index} className="space-y-2">
-                                    <h3 className="text-lg font-semibold text-white">Group {index + 1}</h3>
-                                    <div className="text-sm text-gray-300">
-                                        {group.map(team => team.team.teamName).join(', ')}
+
+
+
+
+                        {/* Custom Groups */}
+                        {groupingType === "custom" && (
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                {groups.map((group, index) => (
+                                    <div
+                                        key={group.groupId}
+                                        className="space-y-1 cursor-pointer"
+                                        onClick={() => setOpenGroupDialog(group.groupId)}
+                                    >
+                                        <h3 className="text-lg font-semibold text-white">
+                                            Group {index + 1} ({groupTeams[group.groupId]?.length || 0}/{Math.ceil(confirmedTeams.length / groups.length)})
+                                        </h3>
+                                        <p onClick={() => setOpenGroupDialog(group.groupId)}
+                                            className="text-sm text-gray-300">Click to select teams</p>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    <Controller
-                        name="scheduleType"
-                        control={control}
-                        defaultValue="round-robin"
-                        rules={{ required: "Please select a schedule type" }}
-                        render={({ field }) => (
-                            <div className="space-y-2">
-                                <p className="text-lg font-bold text-white">Schedule Type</p>
-                                <div className="flex space-x-4">
-                                    <label className={`p-4 rounded-lg font-semibold text-white cursor-pointer ${field.value === "round-robin" ? "bg-green-600" : "bg-gray-700"}`}>
-                                        <input type="radio" value="round-robin" checked={field.value === "round-robin"} onChange={field.onChange} className="hidden" />
-                                        Round Robin
-                                    </label>
-
-                                    {numberOfGroups < 2 && <label className={`p-4 rounded-lg font-semibold text-white cursor-pointer ${field.value === "knockout" ? "bg-green-600" : "bg-gray-700"}`}>
-                                        <input type="radio" value="knockout" checked={field.value === "knockout"} onChange={field.onChange} className="hidden" />
-                                        Knockout
-                                    </label>}
-                                </div>
+                                ))}
                             </div>
                         )}
-                    />
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        type="submit"
-                        className="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-green-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                    >
-                        Create Round
-                    </motion.button>
-                </form>
 
-                <DialogClose asChild />
-            </DialogContent>
+                        {/* Random Groups */}
+                        {groupingType === "random" && numberOfGroups > 0 && (
+                            <div className="space-y-2">
+                                {generateRandomGroups(confirmedTeams, numberOfGroups).map((group, index) => (
+                                    <div key={index} className="space-y-2">
+                                        <h3 className="text-lg font-semibold text-white">Group {index + 1}</h3>
+                                        <div className="text-sm text-gray-300">
+                                            {group.map(team => team.team.teamName).join(', ')}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
 
+                        <Controller
+                            name="scheduleType"
+                            control={control}
+                            defaultValue="round-robin"
+                            rules={{ required: "Please select a schedule type" }}
+                            render={({ field }) => (
+                                <div className="space-y-2">
+                                    <p className="text-lg font-bold text-white">Schedule Type</p>
+                                    <div className="flex space-x-4">
+                                        <label className={`p-4 rounded-lg font-semibold text-white cursor-pointer ${field.value === "round-robin" ? "bg-green-600" : "bg-gray-700"}`}>
+                                            <input type="radio" value="round-robin" checked={field.value === "round-robin"} onChange={field.onChange} className="hidden" />
+                                            Round Robin
+                                        </label>
+
+                                        {numberOfGroups < 2 && <label className={`p-4 rounded-lg font-semibold text-white cursor-pointer ${field.value === "knockout" ? "bg-green-600" : "bg-gray-700"}`}>
+                                            <input type="radio" value="knockout" checked={field.value === "knockout"} onChange={field.onChange} className="hidden" />
+                                            Knockout
+                                        </label>}
+                                    </div>
+                                </div>
+                            )}
+                        />
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            type="submit"
+                            className="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-green-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                        >
+                            Create Round
+                        </motion.button>
+                    </form>
+                </DialogContent>
+            </Dialog>
             {/* Team Selection Dialog */}
             {openGroupDialog && (
                 <Dialog open={Boolean(openGroupDialog)} onOpenChange={() => setOpenGroupDialog(null)}>
@@ -373,7 +355,7 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams }) => 
                     </DialogContent>
                 </Dialog>
             )}
-        </Dialog>
+        </>
     );
 };
 

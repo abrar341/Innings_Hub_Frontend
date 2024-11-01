@@ -1,154 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { FaUsers, FaTrophy, FaAddressBook } from 'react-icons/fa'; // Import icons
-import { Tooltip } from 'react-tooltip'; // For tooltips
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Users, Layers, Home } from 'lucide-react'; // Updated icons for Club Manager
 import UserDropdown from '../../components/userDropdown';
-import { LogOut } from 'lucide-react';
-import { useLogoutMutation } from '../../slices/auth/usersApiSlice';
-import { logout } from '../../slices/auth/authSlice';
-import { clearPlayers } from '../../slices/clubManager/clubManagerSlice';
-import { clearClubs } from '../../slices/admin/adminSlice';
-import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 
 const ClubManagerDashboard = () => {
-    const [logoutApiCall] = useLogoutMutation();
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const cards = [
+        { to: 'players', icon: <Users />, title: 'Players' },
+        { to: 'teams', icon: <Layers />, title: 'Teams' },
+        { to: 'club-detail', icon: <Home />, title: 'Club Details' },
+    ];
     const { userInfo } = useSelector((state) => state.auth);
     const club = userInfo?.club;
-    const [open, setOpen] = useState(true);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 768) {
-                setOpen(false);
-            } else {
-                setOpen(true);
-            }
-        };
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    const handleLinkClick = () => {
-        if (window.innerWidth < 768) {
-            setOpen(false);
-        }
-    };
-
-    const logoutHandler = async () => {
-
-        try {
-            const res = await logoutApiCall().unwrap();
-            console.log(res);
-
-            dispatch(logout());
-            dispatch(clearPlayers());
-            dispatch(clearClubs());
-            navigate('/');
-            toast.success(res.message);
-        } catch (err) {
-            console.error(err);
-        }
+    const handleCardClick = (to) => {
+        navigate(`${to}`);
     };
 
     return (
-        <div className="min-h-screen">
-            <header className="flex items-center justify-between bg-green-600 py-2 ">
-                <button
-                    className="w-12 z-50 rounded-full text-white"
-                    onClick={() => setOpen(!open)}
-                >
-                    ☰
-                </button>
-                <h2 className="text-3xl text-white font-extrabold text-center">{club?.clubName}</h2>
-                <div className='z-30 mr-4 '>
-                    <UserDropdown profile={"/club-manager/profile"} />
-                </div>
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8">
+            {/* Header with Profile */}
+            <div className="flex justify-center items-center mb-10">
+                <h2 className="text-4xl text-gray-700 dark:text-gray-300  uppercase font-extrabold text-center">{club?.clubName}</h2>
 
-            </header>
+            </div>
 
-            <div className="flex relative">
-                <nav
-                    className={`flex justify-between max-h-[90vh] flex-col ${open ? 'w-64' : 'w-16'
-                        } bg-white  h-screen p-4 overflow-y-auto hide-scrollbar duration-300 fixed md:relative top-15 left-0 z-40`}
-                >
-                    {window.innerWidth < 768 && open && (
-                        <button
-                            className="absolute -right-6 top-6 bg-red-200 p-1 rounded-full"
-                            onClick={() => setOpen(!open)}
-                        >
-                            X
-                        </button>
-                    )}
-
-                    <ul className="space-y-4">
-                        {/* <li>
-                            <Link
-                                to="/club/details"
-                                onClick={handleLinkClick}
-                                className={`flex ${!open && 'justify-center'} items-center space-x-3 py-2 px-4 text-gray-700 hover:bg-gray-200 rounded-md`}
-                            >
-                                <div className="flex items-center">
-                                    <FaAddressBook />
-
-                                </div>
-                                {open && <span>Club Details</span>}
-                            </Link>
-                        </li> */}
-
-                        <li>
-                            <Link
-                                to="teams"
-                                onClick={handleLinkClick}
-                                className={`flex ${!open && 'justify-center'} items-center space-x-3 py-2 px-4 text-gray-700 hover:bg-gray-200 rounded-md`}                            >
-                                <div className="flex items-center">
-                                    <FaUsers />
-                                </div>
-                                {open && <span>Manage Teams</span>}
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="players"
-                                onClick={handleLinkClick}
-                                className={`flex ${!open && 'justify-center'} items-center space-x-3 py-2 px-4 text-gray-700 hover:bg-gray-200 rounded-md`}                            >
-                                <div className="flex items-center">
-
-                                    <FaTrophy />
-                                </div>
-                                {open && <span>Manage Players</span>}
-                                {!open && (
-                                    <Tooltip title="Manage Players" placement="right" />
-                                )}
-                            </Link>
-                        </li>
-                    </ul>
-                    <button
-                        type="button"
-                        className={`text-gray-700 flex ${!open && 'justify-center'}  items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200`}
-                        role="menuitem"
-                        onClick={logoutHandler}
+            {/* Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {cards.map((card, index) => (
+                    <div
+                        key={index}
+                        onClick={() => handleCardClick(card.to)}
+                        className="group relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer"
                     >
-                        {/* <LogOut className="h-4 w-4" /> */}
-                        {/* Logout Icon */}
-                        <div className="flex items-center">
+                        {/* Subtle Background Ripple Effect */}
+                        <div className="absolute inset-0 rounded-lg bg-green-500 opacity-0 group-hover:opacity-20 transition duration-500"></div>
 
-                            <LogOut className="h-4 w-4" />
+                        {/* Icon and Title */}
+                        <div className="z-10 flex flex-col items-center">
+                            <div className="text-5xl text-green-500 mb-4 transition-transform duration-300 group-hover:scale-110">
+                                {card.icon}
+                            </div>
+                            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 group-hover:text-green-600 transition-colors duration-300">
+                                {card.title}
+                            </h3>
                         </div>
-                        {open && <span>Logout</span>}
-                        {!open && (
-                            <Tooltip title="Manage Players" placement="right" />
-                        )}
-
-                    </button>
-                </nav>
-
-                <main className="flex-1 border-l overflow-y-auto hide-scrollbar p-6 ml-0">
-                    <Outlet />
-                </main>
+                    </div>
+                ))}
             </div>
         </div>
     );

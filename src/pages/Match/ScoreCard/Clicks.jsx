@@ -11,8 +11,8 @@ const Clicks = () => {
     console.log(posts);
 
     return (
-        <div className='p-4'>
-            <h2 className='text-xl text-gray-600 font-extrabold uppercase mb-4'>Photos</h2>
+        <div className='p-4 dark:text-gray-300 '>
+            <h2 className='text-xl dark:text-gray-300  font-extrabold uppercase mb-4'>Photos</h2>
             <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4">
                 {posts?.map((photo, index) => (
                     <div
@@ -26,9 +26,9 @@ const Clicks = () => {
                                 className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                             />
                         </div>
-                        <div className="px-4 py-2 bg-white">
+                        <div className="px-4 py-2 bg-white dark:text-gray-300 dark:bg-gray-700">
                             <p
-                                className="text-gray-600 text-xs f truncate"
+                                className=" text-xs f truncate"
                                 style={{
                                     display: '-webkit-box',
                                     WebkitLineClamp: 2,

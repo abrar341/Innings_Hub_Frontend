@@ -75,22 +75,24 @@ const ScoreCard = () => {
 
     const tabClasses = ({ isActive }) =>
         `flex  justify-center pt-4 pb-2 text-base font-medium transition-colors duration-300 ${isActive
-            ? 'text-gray-900 border-b-4  border-blue-600'
-            : 'text-gray-600 border-transparent hover:text-gray-900 hover:border-gray-300'
+            ? 'text-gray-900 dark:text-gray-300 border-b-4  border-blue-600'
+            : 'text-gray-600 dark:text-gray-300 border-transparent hover:text-gray-900 hover:border-gray-300'
         }`;
     return (
         <>
             <div className=" p-3 min-w-[200px]">
                 <ScoreCard_Header matchInfo={matchInfo} />
-                <div className="mx-auto z-50  sticky top-14 bg-white flex flex-row items-center w-full gap-4 overflow-x-auto border-b border-gray-300 scrollbar-hide">
-                    {/* <div className="shrink-0">
-                        {!matchInfo?.status === 'live' || !matchInfo?.status === 'scheduled' ? (<NavLink
-                            to="summery"
-                            className={tabClasses}
-                        >
-                            Summary
-                        </NavLink>) : (<></>)}
-                    </div> */}
+                <div className="mx-auto z-50 sticky top-14 bg-white dark:bg-gray-800 flex flex-row items-center w-full gap-4 overflow-x-auto border-b border-gray-300 dark:border-gray-700 scrollbar-hide">
+                    <div className="shrink-0">
+                        {(!matchInfo?.status === 'live' || !matchInfo?.status === 'scheduled') ? (
+                            <NavLink
+                                to="summery"
+                                className={tabClasses}
+                            >
+                                Summary
+                            </NavLink>
+                        ) : (<></>)}
+                    </div>
                     <div className="shrink-0">
                         <NavLink
                             to="innings"
@@ -133,6 +135,7 @@ const ScoreCard = () => {
                         </NavLink>
                     </div>
                 </div>
+
                 <Outlet context={matchInfo} />
             </div>
 

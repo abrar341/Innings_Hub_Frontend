@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { NavLink, Outlet, useParams } from 'react-router-dom'
-import TeamProfile from './TeamProfile'
+import React, { useEffect, useState } from 'react';
+import { NavLink, Outlet, useParams } from 'react-router-dom';
+import TeamProfile from './TeamProfile';
 import { useGetSingleTournamentDetailQuery } from '../../slices/tournament/tournamentApiSlice';
 import { useGetSingleTeamDetailQuery } from '../../slices/team/teamApiSlice';
 import teams from '../../data/teams';
@@ -20,14 +20,12 @@ const TeamProfileLayout = () => {
         }
     }, [data]);
 
-
-
     return (
         <>
-            <div className="relative overflow-hidden flex justify-between items-center border-gray-300 bg-white px-6 py-4 shadow-md">
+            <div className="relative overflow-hidden flex justify-between items-center border-gray-300 bg-white dark:bg-gray-800 px-6 py-4 shadow-md">
                 {/* Team Name with subtle animation */}
                 <div
-                    className="text-4xl sm:text-5xl text-gray-800 font-extrabold cursor-pointer transition-transform duration-300 hover:scale-105 hover:text-blue-600"
+                    className="text-4xl sm:text-5xl text-gray-800 dark:text-gray-200 font-extrabold cursor-pointer transition-transform duration-300 hover:scale-105 hover:text-blue-600"
                     title="Team Name"
                 >
                     {team?.teamName}
@@ -36,7 +34,7 @@ const TeamProfileLayout = () => {
                 {/* Interactive Team Logo with smooth hover effects */}
                 <div className="relative group">
                     <img
-                        className="h-16 w-16 sm:h-20 sm:w-20 rounded-full border-4 border-gray-300 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-[15deg] group-hover:shadow-lg"
+                        className="h-16 w-16 sm:h-20 sm:w-20 rounded-full border-4 border-gray-300 dark:border-gray-600 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-[15deg] group-hover:shadow-lg"
                         src={team?.teamLogo}
                         alt={`${team?.teamName} Logo`}
                         title={`${team?.teamName} Logo`}
@@ -53,24 +51,19 @@ const TeamProfileLayout = () => {
                 <div className="absolute inset-0 rounded-lg transition-transform duration-500 group-hover:translate-y-[-5px] group-hover:shadow-xl"></div>
             </div>
 
-
-
-
-
-
-            <div className=" pt-4 pb-0 flex flex-row items-center w-full gap-4 overflow-x-auto px-4 border-b border-gray-400 scrollbar-hide">
+            <div className="pt-4 pb-0 flex flex-row items-center w-full gap-4 overflow-x-auto px-4 border-b border-gray-400 dark:border-gray-600 scrollbar-hide">
                 {[
                     { to: 'players', label: 'PLAYERS' },
                     { to: 'stats', label: 'STATS' },
                     { to: 'matches', label: 'MATCHES' },
                 ].map(({ to, label }) => (
-                    <div className="shrink-0  relative group" key={to}>
+                    <div className="shrink-0 relative group" key={to}>
                         <NavLink
                             to={to}
                             className={({ isActive }) =>
-                                `flex justify-center pb-1 text-sm font-bold text-base  transition-colors duration-300 ease-in-out justify-end  ${isActive
-                                    ? 'text-gray-700 border-b-2  border-customDarkBlue'
-                                    : 'text-gray-700 border-b-2  border-transparent'
+                                `flex justify-center pb-1 text-sm font-bold text-base transition-colors duration-300 ease-in-out justify-end ${isActive
+                                    ? 'text-gray-700 dark:text-gray-300 border-b-2 border-customDarkBlue'
+                                    : 'text-gray-700 dark:text-gray-400 border-b-2 border-transparent'
                                 }`
                             }
                         >
@@ -81,7 +74,7 @@ const TeamProfileLayout = () => {
             </div>
             <Outlet context={team} />
         </>
-    )
+    );
 }
 
-export default TeamProfileLayout
+export default TeamProfileLayout;

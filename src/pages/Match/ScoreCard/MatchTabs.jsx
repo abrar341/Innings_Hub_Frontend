@@ -3,13 +3,13 @@ import { NavLink } from 'react-router-dom';
 
 const MatchTabs = () => {
     const tabClasses = ({ isActive }) =>
-        `flex  justify-center pt-4 pb-2 text-base font-medium transition-colors duration-300 ${isActive
-            ? 'text-gray-900 border-b-4  border-blue-600'
-            : 'text-gray-600 border-transparent hover:text-gray-900 hover:border-gray-300'
+        `flex justify-center pt-4 pb-2 text-base font-medium transition-colors duration-300 ${isActive
+            ? 'text-gray-900 dark:text-red-200 border-b-4 border-blue-600 dark:border-blue-400'
+            : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600'
         }`;
 
     return (
-        <div className="mx-auto  sticky top-14 bg-white flex flex-row items-center w-full gap-4 overflow-x-auto border-b border-gray-300 scrollbar-hide">
+        <div className="mx-auto sticky top-14 bg-white dark:bg-gray-800 flex flex-row items-center w-full gap-4 overflow-x-auto border-b border-gray-300 dark:border-gray-700 scrollbar-hide">
             <div className="shrink-0">
                 <NavLink
                     to="/all-matches/scorecard/summery"

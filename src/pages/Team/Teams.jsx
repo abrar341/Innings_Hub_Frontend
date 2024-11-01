@@ -6,14 +6,14 @@ const Teams = () => {
     const { data, isLoading, isError, error } = useGetAllTeamsQuery();
 
     const teams = data?.data || []; // Fetch all teams
-    const clubs = [...new Set(teams.map(team => team.associatedClub.clubName))]; // Extract unique club names
+    const clubs = [...new Set(teams.map(team => team.associatedClub?.clubName))]; // Extract unique club names
 
     const [selectedClub, setSelectedClub] = useState(''); // State for selected club filter
     const [searchTerm, setSearchTerm] = useState(''); // State for search input
 
     // Filter teams based on the selected club and search term
     const filteredTeams = teams.filter(team => {
-        const matchesClub = selectedClub ? team.associatedClub.clubName === selectedClub : true;
+        const matchesClub = selectedClub ? team.associatedClub?.clubName === selectedClub : true;
         const matchesSearch = team.teamName.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesClub && matchesSearch;
     });
@@ -29,13 +29,13 @@ const Teams = () => {
 
     return (
         <>
-            <div className=" w-full grid gap-4 grid-cols-2 sm:grid-cols-5 place-content-center bg-gray-100 mx-auto p-4 bg-gray-50">
+            <div className="w-full grid gap-4 grid-cols-2 sm:grid-cols-5 place-content-center bg-gray-100 dark:bg-gray-800 mx-auto p-4">
                 <form className="col-span-2">
                     <input
                         type="search"
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        className="focus:outline-none block p-3 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 transition-all duration-300 focus:ring-2 focus:ring-blue-500"
+                        className="focus:outline-none block p-3 w-full text-sm text-gray-900 bg-white dark:bg-gray-700 dark:text-white rounded-lg border border-gray-300 dark:border-gray-600 transition-all duration-300 focus:ring-2 focus:ring-blue-500"
                         placeholder="Search team name..."
                         required
                     />
@@ -45,11 +45,11 @@ const Teams = () => {
                     <select
                         value={selectedClub}
                         onChange={(e) => setSelectedClub(e.target.value)}
-                        className="block w-full p-3 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                        className="block w-full p-3 bg-white dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-600 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 transition-all duration-300"
                     >
-                        <option value="" className="text-gray-500">Filter by club</option>
+                        <option value="" className="text-gray-500 dark:text-gray-400">Filter by club</option>
                         {clubs.map((club, index) => (
-                            <option key={index} value={club} className="text-gray-700">
+                            <option key={index} value={club} className="text-gray-700 dark:text-gray-300">
                                 {club}
                             </option>
                         ))}
@@ -57,7 +57,7 @@ const Teams = () => {
                 </div>
 
                 {/* Reset button */}
-                <div className="col-span-2  w-full sm:col-span-1 place-self-end sm:place-self-start">
+                <div className="col-span-2 w-full sm:col-span-1 place-self-end sm:place-self-start">
                     <button
                         type="button"
                         onClick={handleReset}
@@ -68,16 +68,13 @@ const Teams = () => {
                 </div>
             </div>
 
-
-
-
             {/* Team Cards */}
-            <div className="grid sm:gap-4 md:gap-10 grid-cols-2  sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 p-4">
+            <div className="grid sm:gap-4 md:gap-10 grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 p-4">
                 {filteredTeams.map((team, index) => (
                     <Link
                         to={`/team/${team._id}/players`}
                         key={index}
-                        className="relative rounded-xl overflow-hidden border border-gray-300 hover:shadow-lg transition duration-300 ease-in transform group hover:z-20 hover:scale-110  w-52 h-52 md:w-64 md:h-64">
+                        className="relative rounded-xl overflow-hidden border border-gray-300 dark:border-gray-600 hover:shadow-lg transition duration-300 ease-in transform group hover:z-20 hover:scale-110 w-52 h-52 md:w-64 md:h-64">
 
                         {/* Image as background */}
                         <div className="absolute inset-0 z-0">

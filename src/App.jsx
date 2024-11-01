@@ -102,7 +102,6 @@ function App() {
             <Route path='admin' element={<Dashboard />} />
             <Route path='/admin/competitions' element={<Competitions isAdmin={true} />} />
             <Route path='/admin/scorers' element={<ScorerPage />} />
-
             <Route path='/admin/clubs' element={<Clubs />} />
             <Route path='/admin/competitions/:id' element={<TournamentProfileLayout />} >
               <Route path='squads' element={<Squads />} />
@@ -115,18 +114,20 @@ function App() {
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['club-manager']} />}>
-          <Route path='club-manager' element={<ClubManager />}>
-            <Route path='dashboard' element={<ClubManagerDashboard />}>
-              <Route path='players' element={<PlayersPageLayout />} />
-              <Route path='squads' element={<Squads />} />
-              <Route path='teams' element={<TeamsPageLayout />} >
+          <Route element={<DashboardLayout />} >
+            <Route path='club-manager' element={<ClubManager />}>
+              <Route path='dashboard' element={<ClubManagerDashboard />} />
+              <Route path='dashboard/players' element={<PlayersPageLayout />} />
+              <Route path='dashboard/teams' element={<TeamsPageLayout />} >
                 <Route path='team/:id' element={<TeamProfileLayout />} />
               </Route>
-              <Route path='tournaments' element={<RegisterTeamToTournament />} />
+              <Route path='dashboard/squads' element={<Squads />} />
             </Route>
+
+            <Route path='/dashboard/tournaments' element={<RegisterTeamToTournament />} />
             <Route path='tournaments' element={<RegisterTeamToTournament />} />
+            <Route path='/club-manager/profile' element={<UpdateProfile />} />
           </Route>
-          <Route path='/club-manager/profile' element={<UpdateProfile />} />
         </Route>
 
 
