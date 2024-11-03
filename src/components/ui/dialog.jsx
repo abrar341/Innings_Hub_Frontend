@@ -39,7 +39,7 @@ const DialogContent = React.forwardRef(
                 <DialogPrimitive.Content
                     ref={ref}
                     className={cn(
-                        "relative w-full max-w-lg p-6 bg-white shadow-lg sm:rounded-lg overflow-y-auto max-h-[80vh]",
+                        "relative w-full max-w-lg p-6 bg-gray-900/50 dark:bg-gray-900 shadow-lg sm:rounded-lg overflow-y-auto max-h-[80vh]",
                         className
                     )}
                     // Prevent closing the dialog on outside click
@@ -51,7 +51,7 @@ const DialogContent = React.forwardRef(
                     {children}
                     {!removeCloseButton && (
                         <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-                            <Cross2Icon className="size-4 text-white" />
+                            <Cross2Icon className="w-4 h-4 text-gray-800 dark:text-gray-200" />
                             <span className="sr-only">Close</span>
                         </DialogPrimitive.Close>
                     )}

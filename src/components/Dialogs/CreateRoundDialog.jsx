@@ -55,13 +55,14 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams, round
             groups: groupTeams,
             numberOfGroups: data.numberOfGroups,
             scheduleType: data.scheduleType,
-            qualifiersPerGroup: data.qualifiersPerGroup
+            qualifiersPerGroup: data.scheduleType === 'knockout' ? confirmedTeams?.length / 2 : data.qualifiersPerGroup
         };
 
         try {
             const response = await createRound(roundDetails).unwrap();
             reset();
             setIsDialogOpen(false);
+            toast.success("Round Created Successfully");
         } catch (error) {
             console.error("Failed to create round", error);
             toast.error("Error Occurred");
@@ -247,11 +248,6 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams, round
 
 
                         </div>
-
-
-
-
-
                         {/* Custom Groups */}
                         {groupingType === "custom" && (
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -270,7 +266,6 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams, round
                                 ))}
                             </div>
                         )}
-
                         {/* Random Groups */}
                         {groupingType === "random" && numberOfGroups > 0 && (
                             <div className="space-y-2">

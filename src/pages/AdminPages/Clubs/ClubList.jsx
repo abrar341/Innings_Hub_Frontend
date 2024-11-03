@@ -12,6 +12,8 @@ const ClubList = () => {
     const dispatch = useDispatch();
 
     const clubs = useSelector((state) => state?.admin.clubs);
+    console.log(clubs);
+
 
     // State for registration status
     const [registrationStatus, setRegistrationStatus] = useState('all'); // Default registrationStatus is 'all' for all clubs

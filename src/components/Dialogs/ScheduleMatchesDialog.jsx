@@ -37,6 +37,7 @@ const ScheduleMatchesDialog = ({ tournamentId, round, groups }) => {
             toast.success("Matches scheduled successfully.");
         } catch (error) {
             console.error("Failed to schedule matches:", error);
+            toast.error(error?.data.error);
         }
 
         reset();

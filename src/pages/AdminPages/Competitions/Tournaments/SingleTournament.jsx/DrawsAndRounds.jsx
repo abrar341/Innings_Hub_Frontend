@@ -157,7 +157,16 @@ const DrawsAndRounds = () => {
                                     <div className="flex justify-end mt-4 space-x-2">
 
                                         <ScheduleMatchesDialog tournamentId={tournamentId} round={round?._id} groups={round?.groups} />
-                                        <NextRoundDialog tournamentId={tournamentId} qualifiedTeams={round?.qualifiedTeams} />
+
+                                        <button
+                                            className={`flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-200 ${!round?.completed ? 'hover:from-blue-700 hover:to-indigo-700' : 'opacity-50 cursor-not-allowed'
+                                                }`}
+                                            disabled={round?.completed}
+                                        >
+                                            Update Points Table
+                                        </button>
+                                        <NextRoundDialog disabled={!round?.completed}
+                                            tournamentId={tournamentId} qualifiedTeams={round?.qualifiedTeams} />
                                     </div>
                                 </div>
                             )}

@@ -9,7 +9,7 @@ import * as yup from "yup";
 import { useRegisterMutation } from "../slices/auth/usersApiSlice";
 import { toast } from "react-hot-toast";
 import useDialog from "../hooks/useDialog";
-import EmailVerificationDialog from "./verifyDialog"
+import EmailVerificationDialog from "./verifyDialog";
 
 // Validation schema
 const schema = yup.object().shape({
@@ -29,8 +29,8 @@ const SignUpPage = () => {
     });
 
     const [register, { isLoading }] = useRegisterMutation();
-    const { isVerifyDialogOpen, openVerifyDialog } = useDialog()
-    const [email, setEmail] = useState("")
+    const { isVerifyDialogOpen, openVerifyDialog } = useDialog();
+    const [email, setEmail] = useState("");
 
     const onSubmit = async (data) => {
         try {
@@ -48,29 +48,25 @@ const SignUpPage = () => {
 
             const res = await register(requestData).unwrap();
             setEmail(requestData.email);
-            console.log(email);
-
-            // Wait for email to be set before opening dialog
             openVerifyDialog();
             toast.dismiss();
             toast.success(res.message);
-
         } catch (err) {
-            toast.dismiss()
+            toast.dismiss();
             toast.error(err?.data?.message || "Error occurred while creating account");
         }
     };
 
     return (
-        <div className="flex  justify-center items-center bg-gray-900 min-h-screen py-2">
+        <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900 py-2">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className='max-w-lg w-full bg-gray-700 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl border border-gray-600'
+                className="max-w-lg w-full bg-white dark:bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden dark:bg-gradient-to-b dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 rounded-3xl border border-gray-200 dark:border-gray-600"
             >
-                <div className='p-8'>
-                    <h2 className='text-3xl font-extrabold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
+                <div className="p-8">
+                    <h2 className="text-3xl font-extrabold mb-6 text-center bg-gradient-to-r from-green-500 to-emerald-500 text-transparent bg-clip-text">
                         Create Account
                     </h2>
 
@@ -79,17 +75,14 @@ const SignUpPage = () => {
                             name="name"
                             control={control}
                             render={({ field }) => (
-                                <div>
-                                    <Input
-                                        icon={User}
-                                        type='text'
-                                        placeholder='Full Name'
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        error={errors.name?.message}
-                                    />
-
-                                </div>
+                                <Input
+                                    icon={User}
+                                    type="text"
+                                    placeholder="Full Name"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    error={errors.name?.message}
+                                />
                             )}
                         />
 
@@ -97,16 +90,14 @@ const SignUpPage = () => {
                             name="email"
                             control={control}
                             render={({ field }) => (
-                                <div>
-                                    <Input
-                                        icon={Mail}
-                                        type='email'
-                                        placeholder='Email Address'
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        error={errors.email?.message}
-                                    />
-                                </div>
+                                <Input
+                                    icon={Mail}
+                                    type="email"
+                                    placeholder="Email Address"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    error={errors.email?.message}
+                                />
                             )}
                         />
 
@@ -114,17 +105,14 @@ const SignUpPage = () => {
                             name="username"
                             control={control}
                             render={({ field }) => (
-                                <div>
-                                    <Input
-                                        icon={User}
-                                        type='text'
-                                        placeholder='Username'
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        error={errors.username?.message}
-                                    />
-
-                                </div>
+                                <Input
+                                    icon={User}
+                                    type="text"
+                                    placeholder="Username"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    error={errors.username?.message}
+                                />
                             )}
                         />
 
@@ -133,17 +121,14 @@ const SignUpPage = () => {
                                 name="password"
                                 control={control}
                                 render={({ field }) => (
-                                    <div>
-                                        <Input
-                                            icon={Lock}
-                                            type='password'
-                                            placeholder='Password'
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            error={errors.password?.message}
-                                        />
-
-                                    </div>
+                                    <Input
+                                        icon={Lock}
+                                        type="password"
+                                        placeholder="Password"
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        error={errors.password?.message}
+                                    />
                                 )}
                             />
 
@@ -151,17 +136,14 @@ const SignUpPage = () => {
                                 name="confirmPassword"
                                 control={control}
                                 render={({ field }) => (
-                                    <div>
-                                        <Input
-                                            icon={Lock}
-                                            type='password'
-                                            placeholder='Confirm Password'
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            error={errors.confirmPassword?.message}
-                                        />
-
-                                    </div>
+                                    <Input
+                                        icon={Lock}
+                                        type="password"
+                                        placeholder="Confirm Password"
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        error={errors.confirmPassword?.message}
+                                    />
                                 )}
                             />
                         </div>
@@ -176,26 +158,26 @@ const SignUpPage = () => {
                                         className="mr-2"
                                         {...field}
                                     />
-                                    <label htmlFor="clubManager" className="text-gray-200">Sign up as Club Manager</label>
+                                    <label htmlFor="clubManager" className="text-gray-700 dark:text-gray-300">Sign up as Club Manager</label>
                                 </div>
                             )}
                         />
 
                         <motion.button
-                            className='mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200'
+                            className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-900 transition duration-200"
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            type='submit'
+                            type="submit"
                             disabled={isLoading}
                         >
-                            {isLoading ? <Loader className='animate-spin mx-auto' size={24} /> : "Sign Up"}
+                            {isLoading ? <Loader className="animate-spin mx-auto" size={24} /> : "Sign Up"}
                         </motion.button>
                     </form>
                 </div>
-                <div className='px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center'>
-                    <p className='text-sm text-gray-400'>
+                <div className="px-8 py-4 bg-gray-100 dark:bg-gray-900 bg-opacity-50 flex justify-center">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                         Already have an account?{" "}
-                        <Link to={"/account/login"} className='text-green-400 hover:underline'>
+                        <Link to="/account/login" className="text-green-500 hover:underline">
                             Login
                         </Link>
                     </p>

@@ -25,15 +25,19 @@ const Standings = () => {
 
     return (
         <div className="space-y-8 p-4">
-            {rounds?.length > 0 ? (
-                rounds.map((round) => (
+            {rounds?.filter(round => round.scheduleType === "round-robin").length > 0 ? (
+                rounds.filter(round => round.scheduleType === "round-robin").map((round) => (
                     <div key={round._id} className="space-y-4">
-                        <h2 className="text-3xl font-extrabold text-center text-gray-800 border-b border-gray-400 pb-4">{round.roundName}</h2>
+                        <h2 className="text-3xl font-extrabold text-center text-gray-800 border-b border-gray-400 pb-4">
+                            {round.roundName}
+                        </h2>
                         <div className=''>
                             {round.groups?.length > 0 ? (
                                 round.groups.map((group) => (
                                     <div key={group._id} className="space-y-4 mb-3">
-                                        <h3 className="text-2xl font-bold text-left text-gray-700">{group.groupName}</h3>
+                                        <h3 className="text-2xl font-bold text-left text-gray-700">
+                                            {group.groupName}
+                                        </h3>
                                         <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-300">
                                             <table className="min-w-full bg-white rounded-lg overflow-hidden">
                                                 <thead className="bg-gradient-to-r from-blue-500 to-blue-700 text-white text-sm leading-normal">
@@ -71,13 +75,13 @@ const Standings = () => {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-gray-600">No groups available for this round.</p>
+                                <p className="text-gray-600">No point table available.</p>
                             )}
                         </div>
                     </div>
                 ))
             ) : (
-                <p className="text-gray-600">No rounds available for this tournament.</p>
+                <p className="text-gray-600">No point table available.</p>
             )}
         </div>
     );

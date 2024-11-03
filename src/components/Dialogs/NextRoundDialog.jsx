@@ -6,7 +6,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { useCreateRoundMutation } from '../../slices/tournament/tournamentApiSlice';
 import toast from 'react-hot-toast';
 
-const NextRoundDialog = ({ qualifiedTeams, tournamentId }) => {
+const NextRoundDialog = ({ qualifiedTeams, tournamentId, disabled }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     console.log(qualifiedTeams);
 
@@ -20,6 +20,7 @@ const NextRoundDialog = ({ qualifiedTeams, tournamentId }) => {
     // Watch the custom or random group selection
     const groupingType = watch("groupingType");
     const numberOfGroups = watch("numberOfGroups");
+    const scheduleType = watch("scheduleType");
 
     // Handle selecting teams for a specific group
     const handleSelectTeam = (groupId, teamId) => {
@@ -52,14 +53,16 @@ const NextRoundDialog = ({ qualifiedTeams, tournamentId }) => {
             groupingType: data.groupingType,
             groups: groupTeams,
             numberOfGroups: data.numberOfGroups,
-            scheduleType: "knockout",
-            qualifiersPerGroup: 1
+            scheduleType: data.scheduleType,
+            qualifiersPerGroup: data.scheduleType === 'knockout' ? qualifiedTeams?.length / 2 : data.qualifiersPerGroup
         };
-
+        console.log(roundDetails);
         try {
             const response = await createRound(roundDetails).unwrap();
             reset();
             setIsDialogOpen(false);
+            toast.success("Next Round Created Successfully");
+
         } catch (error) {
             console.error("Failed to create round", error);
             toast.error("Error Occurred");
@@ -96,7 +99,11 @@ const NextRoundDialog = ({ qualifiedTeams, tournamentId }) => {
         <>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                    <button className="flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200">
+                    <button
+                        className={`flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-200 ${!disabled ? 'hover:from-blue-700 hover:to-indigo-700' : 'opacity-50 cursor-not-allowed'
+                            }`}
+                        disabled={disabled}
+                    >
                         <FaArrowRight className="mr-2" />
                         Next Round
                     </button>
@@ -195,6 +202,55 @@ const NextRoundDialog = ({ qualifiedTeams, tournamentId }) => {
                             }}
                         />
 
+                        {
+                            scheduleType !== 'knockout' &&
+                            <Controller
+                                name="qualifiersPerGroup"
+                                control={control}
+                                defaultValue=""
+                                render={({ field }) => {
+                                    // Check if confirmedTeams and groups are defined and have valid lengths
+                                    const teamsPerGroup = qualifiedTeams?.length && groups?.length ? Math.ceil(qualifiedTeams.length / groups.length) : 0;
+                                    const possibleQualifiers = [];
+
+                                    // Generate valid qualifiers in powers of 2 up to teamsPerGroup, only if teamsPerGroup is positive
+                                    if (teamsPerGroup > 0) {
+                                        let power = 1;
+                                        while (power <= teamsPerGroup) {
+                                            possibleQualifiers.push(power);
+                                            power *= 2;
+                                        }
+                                    }
+
+                                    return (
+                                        <div className="space-y-2">
+                                            <p className="text-lg font-bold text-white">Number of Qualifiers per Group</p>
+                                            <div className="flex space-x-4 flex-wrap">
+                                                {possibleQualifiers.map(value => (
+                                                    <label
+                                                        key={value}
+                                                        className={`p-4 font-semibold text-white rounded-lg cursor-pointer ${field.value == value ? "bg-green-600 text-white" : "bg-gray-700"}`}
+                                                    >
+                                                        <input
+                                                            type="radio"
+                                                            value={value}
+                                                            checked={field.value == value}
+                                                            onChange={(e) => {
+                                                                field.onChange(e);
+                                                                updateQualifiers(value);  // Handle any updates needed on selection change
+                                                            }}
+                                                            className="hidden"
+                                                        />
+                                                        {value}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    );
+                                }}
+                            />
+                        }
+
                         {/* Display Groups */}
                         {groupingType === "custom" && (
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -228,6 +284,28 @@ const NextRoundDialog = ({ qualifiedTeams, tournamentId }) => {
                             </div>
                         )}
 
+                        <Controller
+                            name="scheduleType"
+                            control={control}
+                            defaultValue="round-robin"
+                            rules={{ required: "Please select a schedule type" }}
+                            render={({ field }) => (
+                                <div className="space-y-2">
+                                    <p className="text-lg font-bold text-white">Schedule Type</p>
+                                    <div className="flex space-x-4">
+                                        <label className={`p-4 rounded-lg font-semibold text-white cursor-pointer ${field.value === "round-robin" ? "bg-green-600" : "bg-gray-700"}`}>
+                                            <input type="radio" value="round-robin" checked={field.value === "round-robin"} onChange={field.onChange} className="hidden" />
+                                            Round Robin
+                                        </label>
+
+                                        {numberOfGroups < 2 && <label className={`p-4 rounded-lg font-semibold text-white cursor-pointer ${field.value === "knockout" ? "bg-green-600" : "bg-gray-700"}`}>
+                                            <input type="radio" value="knockout" checked={field.value === "knockout"} onChange={field.onChange} className="hidden" />
+                                            Knockout
+                                        </label>}
+                                    </div>
+                                </div>
+                            )}
+                        />
                         <div className="flex justify-end">
                             <button type="submit" className="px-6 py-2 font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
                                 Create Next Round
@@ -271,6 +349,7 @@ const NextRoundDialog = ({ qualifiedTeams, tournamentId }) => {
 
                         <DialogClose asChild />
                     </DialogContent>
+
                 </Dialog>
             )}
         </>

@@ -4,8 +4,11 @@ import AlertNote from '../../../components/AlertNote';
 import { useApproveClubMutation, useRejectClubMutation } from '../../../slices/admin/adminApiSlice';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
+import ClubDetailsDialog from '../../../components/Dialogs/ClubDetailDialog';
 
 const ActionButtons = ({ club }) => {
+    console.log(club);
+
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [actionType, setActionType] = useState(null); // To differentiate between approve and reject
     const [rejectionReason, setRejectionReason] = useState(''); // For custom rejection reason
@@ -93,12 +96,8 @@ const ActionButtons = ({ club }) => {
                 {/* Conditionally render buttons based on club status */}
                 {club?.registrationStatus === 'approved' || club?.registrationStatus === 'rejected' ? (
                     // Show only the 'View' button if already approved or rejected
-                    <button
-                        className="p-2 bg-blue-100 rounded-full hover:bg-blue-200 focus:outline-none"
-                        onClick={() => console.log('Viewing club details...')}
-                    >
-                        <FaEye className="text-blue-600" />
-                    </button>
+
+                    <ClubDetailsDialog clubInfo={club} />
                 ) : (
                     // Show Approve, Reject, and View buttons if the club status is pending
                     <>
@@ -114,12 +113,7 @@ const ActionButtons = ({ club }) => {
                         >
                             <FaTimes className="text-red-600" />
                         </button>
-                        <button
-                            className="p-2 bg-blue-100 rounded-full hover:bg-blue-200 focus:outline-none"
-                            onClick={() => console.log('Viewing club details...')}
-                        >
-                            <FaEye className="text-blue-600" />
-                        </button>
+                        <ClubDetailsDialog clubInfo={club} />
                     </>
                 )}
             </div>

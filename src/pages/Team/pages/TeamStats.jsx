@@ -19,13 +19,13 @@ const ChampionTournaments = ({ tournaments }) => {
                     {tournaments?.length === 0 ? (
                         <div className="text-base dark:text-gray-400">Not Champion in Event Yet.</div>
                     ) : (
-                        tournaments.map((tournament, index) => (
+                        tournaments?.map((tournament, index) => (
                             <li key={index} className="mb-4 list-none">
                                 <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow hover:bg-blue-50 dark:hover:bg-blue-600 transition duration-200 ease-in-out">
                                     <span className="font-semibold text-lg text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-300">
                                         {tournament.name}
                                     </span>
-                                    <span className="text-gray-500 dark:text-gray-400 text-sm"> - {tournament.year}</span>
+                                    <span className="text-gray-800 dark:text-gray-400 font-semibold text-base"> S-{tournament.season}</span>
                                 </div>
                             </li>
                         ))
@@ -40,7 +40,7 @@ const TeamStats = () => {
     // Dummy Data    
     const context = useOutletContext();
     const teamStats = context?.stats;
-    console.log(teamStats);
+    console.log("context", context?.tournamentsWon);
 
     // Dummy Champion Tournaments Data
     const championTournaments = [
@@ -62,7 +62,7 @@ const TeamStats = () => {
             </div>
 
             {/* Champion Tournaments Section */}
-            <ChampionTournaments tournaments={championTournaments} />
+            <ChampionTournaments tournaments={context?.tournamentsWon} />
         </div>
     );
 };

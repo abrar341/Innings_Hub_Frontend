@@ -47,9 +47,12 @@ const MainNavbar = () => {
     return (
         <nav className="bg-white dark:bg-gray-800 p-4 md:p-3 sticky top-0 z-10 border-b dark:border-gray-700">
             <div className="container mx-auto flex justify-between gap-3 items-center">
-                <div className="order-1 md:order-0 text-2xl font-extrabold tracking-wide dark:text-white text-black">
-                    InningsHub
-                </div>
+                <h1 class="ml-3 order-1 md:order-0 text-xl font-extrabold px-2 py-1 border border-transparent rounded-lg shadow-2xl shadow-green-500/40 tracking-wide
+           transition-all duration-300 ease-in-out transform scale-110 bg-blue-500
+           dark:bg-blue-600 text-white dark:text-gray-200 rotate-3
+           cursor-pointer ">
+                    Innings_Hub
+                </h1>
                 <div className="order-2 flex items-center space-x-4">
 
                     <button
