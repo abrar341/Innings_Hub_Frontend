@@ -35,7 +35,7 @@ const LoginPage = () => {
 
 			const role = res.data.user.role;
 			if (role === 'admin' || role === 'club-manager' || role === 'scorer') {
-				if (role === 'admin') {
+				if (role === 'admin' || role === 'scorer') {
 					navigate(`/${role}`);
 				} else {
 					navigate(`/${role}/dashboard`);
@@ -121,7 +121,6 @@ const LoginPage = () => {
 						<Link to="/account/signup" className="text-green-500 hover:underline">
 							Sign up
 						</Link>
-						<ClubDetailsDialog />
 					</p>
 				</div>
 			</motion.div>

@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import AlertNote from '../../../../../components/AlertNote';
 import ScheduleMatchesDialog from '../../../../../components/Dialogs/ScheduleMatchesDialog';
 import NextRoundDialog from '../../../../../components/Dialogs/NextRoundDialog';
+import { useUpdatePointsTableMutation } from "../../../../../slices/match/matchApiSlice";
 
 const DrawsAndRounds = () => {
     const context = useOutletContext();
@@ -22,10 +23,31 @@ const DrawsAndRounds = () => {
         setIsAlertOpen(true);
     };
 
+    const handleUpdatePoints = async (round, group) => {
+        try {
+            console.log(group);
 
+            const roundId = round?._id;
+
+            // Extract teamIds from group.teams array
+            const teamIds = group.teams.map(team => team._id);
+
+            // Log roundId and teamIds for debugging
+            console.log('Round ID:', roundId);
+            console.log('Team IDs:', teamIds);
+
+            // Trigger the mutation
+            await updatePointsTable({ roundId, teamIds });
+            toast.success('points table updated successfully')
+        } catch (err) {
+            console.error('Failed to update points table:', err);
+            toast.error('Error points table updated successfully')
+        }
+    };
     const [deleteLoading, setDeleteLoading] = useState(false); // Loading state for delete
 
     const { data, isLoading, isError, error, refetch } = useGetSingleTournamentSquadsQuery(tournamentId);
+    const [updatePointsTable, { isLoading: pointtableisLoading, isSuccess: pointtableisSuccess, error: pointsTableError }] = useUpdatePointsTableMutation();
     const { data: round, error: getRoundsError, isLoading: gettingRounds } = useGetRoundsByTournamentIdQuery(tournamentId);
     console.log(rounds?.[0]?.qualifiedTeams);
 
@@ -128,29 +150,42 @@ const DrawsAndRounds = () => {
                             {activeRound === round._id && (
                                 <div className="mt-4 space-y-4">
                                     {round.groups?.map((group, idx) => (
-                                        <div key={idx} className="bg-gray-50 p-4 rounded-lg shadow-inner border border-gray-300">
-                                            <h3 className="text-lg font-bold text-gray-700 mb-3">{group.groupName}</h3>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                                                {group.teams.map((team) => (
-                                                    <div
-                                                        key={team._id}
-                                                        className="bg-white p-4 border border-gray-200 rounded-lg shadow-md flex flex-col items-center hover:shadow-lg hover:scale-105 transition-transform duration-300"
-                                                    >
-                                                        <div className="flex flex-col items-center">
-                                                            {/* Add a placeholder for team logos if available */}
-                                                            <img
-                                                                className="rounded-full mb-3"
-                                                                src={team?.teamLogo || 'https://via.placeholder.com/60'}
-                                                                alt={team?.teamName}
-                                                                height="60"
-                                                                width="60"
-                                                            />
-                                                            <span className="text-gray-800 font-semibold text-lg">{team.teamName}</span>
+                                        <>
+                                            <div key={idx} className="bg-gray-50 p-4 rounded-lg shadow-inner border border-gray-300">
+                                                <h3 className="text-lg font-bold text-gray-700 mb-3">{group.groupName}</h3>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                                                    {group.teams.map((team) => (
+                                                        <div
+                                                            key={team._id}
+                                                            className="bg-white p-4 border border-gray-200 rounded-lg shadow-md flex flex-col items-center hover:shadow-lg hover:scale-105 transition-transform duration-300"
+                                                        >
+                                                            <div className="flex flex-col items-center">
+                                                                {/* Add a placeholder for team logos if available */}
+                                                                <img
+                                                                    className="rounded-full mb-3"
+                                                                    src={team?.teamLogo || 'https://via.placeholder.com/60'}
+                                                                    alt={team?.teamName}
+                                                                    height="60"
+                                                                    width="60"
+                                                                />
+                                                                <span className="text-gray-800 font-semibold text-lg">{team.teamName}</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                ))}
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
+                                            <div className='flex justify-end'>
+                                                <button onClick={() => handleUpdatePoints(round, group)}
+                                                    className={`flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-200 ${!round?.completed ? 'hover:from-blue-700 hover:to-indigo-700' : 'opacity-50 cursor-not-allowed'
+                                                        }`}
+                                                    disabled={round?.completed || pointtableisLoading}
+                                                >                                                {pointtableisLoading ? 'Updating...' : 'Update Points Table'}
+                                                </button>
+
+
+                                                {pointsTableError && <p>Failed to update points table. Please try again.</p>}
+                                            </div>
+                                        </>
                                     ))}
 
                                     {/* Schedule Matches and Delete Round buttons */}
@@ -158,13 +193,12 @@ const DrawsAndRounds = () => {
 
                                         <ScheduleMatchesDialog tournamentId={tournamentId} round={round?._id} groups={round?.groups} />
 
-                                        <button
-                                            className={`flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-200 ${!round?.completed ? 'hover:from-blue-700 hover:to-indigo-700' : 'opacity-50 cursor-not-allowed'
-                                                }`}
-                                            disabled={round?.completed}
-                                        >
-                                            Update Points Table
-                                        </button>
+
+
+
+
+
+
                                         <NextRoundDialog disabled={!round?.completed}
                                             tournamentId={tournamentId} qualifiedTeams={round?.qualifiedTeams} />
                                     </div>

@@ -66,10 +66,10 @@ const ClubList = () => {
             ),
         },
         {
-            accessorKey: 'email',
+            accessorKey: 'Email',
             header: 'Email',
             cell: ({ row }) => (
-                <span>{row.original.manager.email}</span>
+                <span>{row.original.manager?.email}</span>
             ),
         },
         {

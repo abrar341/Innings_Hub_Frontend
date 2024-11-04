@@ -1,15 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Input from "./Input";
-import { ArrowRight, ArrowLeft, User, MapPin, Calendar, Phone, Mail, Home, Link, ImageIcon, ArrowLeftCircle } from "lucide-react";
+import {
+    ArrowRight,
+    ArrowLeftCircle,
+    User,
+    MapPin,
+    Phone,
+    Mail,
+    Home,
+    Link,
+    ImageIcon,
+} from "lucide-react";
 import { useRegisterClubMutation } from "../slices/club/clubApiSlice";
 import { setCredentials } from "../slices/auth/authSlice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
 
 // Form Steps
 const steps = [
@@ -19,35 +27,31 @@ const steps = [
 ];
 
 const ClubRegistrationForm = () => {
-
-    const { control, handleSubmit, setValue, formState: { errors }, watch } = useForm({
+    const { control, handleSubmit, setValue, formState: { errors }, register } = useForm({
         mode: 'onChange',
     });
     const dispatch = useDispatch();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const [registerClub, { isLoading }] = useRegisterClubMutation();
-
     const userInfo = useSelector((state) => state.auth.userInfo);
     const [step, setStep] = useState(0);
+
     const isLastStep = step === steps.length - 1;
     const isFirstStep = step === 0;
 
     const currentYear = new Date().getFullYear();
     const years = Array.from(new Array(125), (val, index) => currentYear - index);
 
-
-
     const [logoPreview, setLogoPreview] = useState(null);
 
     const handleLogoChange = (e) => {
-        const file = e.target.files[0]; // Get the first file from the input
+        const file = e.target.files[0];
         if (file) {
-            setLogoPreview(URL.createObjectURL(file)); // Preview the logo
-            setValue("clubLogo", file); // Store the file in form state, not the entire file list
+            setLogoPreview(URL.createObjectURL(file));
+            setValue("clubLogo", file);
         }
     };
-
 
     useEffect(() => {
         if (userInfo) {
@@ -62,51 +66,46 @@ const ClubRegistrationForm = () => {
     const onSubmit = async (data) => {
         try {
             if (!isLastStep) {
-                // If it's not the last step, advance the form
                 nextStep();
                 return;
             }
 
-            console.log("Form Data: ", data); // Logs the form data
-
-            // Await the API call to register the club
             const res = await registerClub(data).unwrap();
-            console.log(res?.data?.user);
             const { user } = res?.data;
-            // console.log(res.data?.id);
             dispatch(setCredentials({ ...user }));
-            toast.success(res?.message)
-            console.log("Club registered successfully:", res);
-            navigate('/')
+            toast.success(res?.message);
+            navigate('/');
         } catch (err) {
             console.error("Error registering club:", err);
         }
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen py-2 bg-gray-900">
+        <div className="flex justify-center items-center min-h-screen py-2">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="max-w-2xl w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-xl shadow-2xl p-6 border border-gray-600"
+                className="max-w-2xl w-full rounded-xl shadow-2xl p-6 border dark:bg-gray-800 bg-white border-gray-300 dark:border-gray-600"
             >
-                <h2 className="text-3xl font-extrabold text-center mb-6 bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
-                    {steps[step].label}
-                </h2>
+                <div className="flex justify-between mb-6">
+                    <h2 className="text-3xl font-extrabold text-center dark:text-white text-gray-900">
+                        {steps[step].label}
+                    </h2>
+                </div>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     {step === 0 && (
                         <>
                             {/* Step 1: Club Details */}
-                            <div className="grid grid-cols-1 sm:grid-cols-3 ">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
                                     <Controller
                                         name="clubLogo"
                                         control={control}
                                         render={() => (
                                             <label className="cursor-pointer group">
-                                                <div className="relative mx-auto w-32 h-32 rounded-full border-2 border-gray-300 group-hover:border-green-500 transition-colors">
+                                                <div className="relative mx-auto w-32 h-32 rounded-full border-2 border-gray-300 dark:border-gray-600 group-hover:border-green-500 transition-colors">
                                                     {logoPreview ? (
                                                         <img
                                                             src={logoPreview}
@@ -114,7 +113,7 @@ const ClubRegistrationForm = () => {
                                                             className="w-full h-full object-cover rounded-full"
                                                         />
                                                     ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-gray-300 group-hover:text-green-500 transition-colors">
+                                                        <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500 group-hover:text-green-500 transition-colors">
                                                             <span className="text-sm font-medium">Upload Logo</span>
                                                         </div>
                                                     )}
@@ -124,50 +123,52 @@ const ClubRegistrationForm = () => {
                                                         className="absolute inset-0 opacity-0 cursor-pointer"
                                                         onChange={handleLogoChange}
                                                     />
-                                                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-25 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <span className="text-white text-sm font-medium">Change</span>
-                                                    </div>
                                                 </div>
                                             </label>
                                         )}
                                     />
                                 </div>
-                                <div className="sm:col-span-2 pt-5"><Controller
-                                    name="clubName"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Input
-                                            icon={User}
-                                            placeholder="Club Name"
-                                            {...field}
-                                            error={errors.clubName?.message}
-                                        />
-                                    )}
-                                />
+                                <div className="sm:col-span-2 pt-5">
+                                    <Controller
+                                        name="clubName"
+                                        control={control}
+                                        rules={{ required: "Club name is required" }}
+                                        render={({ field }) => (
+                                            <Input
+                                                icon={User}
+                                                placeholder="Club Name"
+                                                {...field}
+                                                error={errors.clubName?.message}
+                                                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                            />
+                                        )}
+                                    />
                                     <Controller
                                         name="location"
                                         control={control}
+                                        rules={{ required: "Location is required" }}
                                         render={({ field }) => (
                                             <Input
                                                 icon={MapPin}
                                                 placeholder="Location"
                                                 {...field}
                                                 error={errors.location?.message}
+                                                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                             />
                                         )}
-                                    /></div>
-
+                                    />
+                                </div>
                             </div>
-
 
                             <Controller
                                 name="yearEstablished"
                                 control={control}
+                                rules={{ required: "Please select a year" }}
                                 render={({ field }) => (
                                     <div className="relative">
                                         <select
                                             {...field}
-                                            className="w-full px-4 py-2 border bg-gray-800 border-gray-700 rounded-lg shadow-md text-white"
+                                            className="w-full px-4 py-2 border dark:bg-gray-700 bg-white border-gray-300 dark:border-gray-600 rounded-lg shadow-md text-gray-900 dark:text-white"
                                         >
                                             <option value="">Year Established</option>
                                             {years.map((year) => (
@@ -176,14 +177,10 @@ const ClubRegistrationForm = () => {
                                                 </option>
                                             ))}
                                         </select>
-                                        {errors.year && <span className="text-red-500">{errors.year.message}</span>}
+                                        {errors.yearEstablished && <span className="text-red-500">{errors.yearEstablished.message}</span>}
                                     </div>
                                 )}
                             />
-
-
-
-
                         </>
                     )}
 
@@ -193,6 +190,7 @@ const ClubRegistrationForm = () => {
                             <Controller
                                 name="managerName"
                                 control={control}
+                                rules={{ required: "Manager name is required" }}
                                 render={({ field }) => (
                                     <Input
                                         icon={User}
@@ -200,12 +198,20 @@ const ClubRegistrationForm = () => {
                                         {...field}
                                         error={errors.managerName?.message}
                                         disabled
+                                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     />
                                 )}
                             />
                             <Controller
                                 name="managerEmail"
                                 control={control}
+                                rules={{
+                                    required: "Manager email is required",
+                                    pattern: {
+                                        value: /^\S+@\S+$/i,
+                                        message: "Please enter a valid email",
+                                    },
+                                }}
                                 render={({ field }) => (
                                     <Input
                                         icon={Mail}
@@ -214,12 +220,17 @@ const ClubRegistrationForm = () => {
                                         {...field}
                                         error={errors.managerEmail?.message}
                                         disabled
+                                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     />
                                 )}
                             />
                             <Controller
                                 name="managerPhone"
                                 control={control}
+                                rules={{
+                                    required: "Manager phone number is required",
+                                    minLength: { value: 10, message: "Phone number should be at least 10 digits" },
+                                }}
                                 render={({ field }) => (
                                     <Input
                                         icon={Phone}
@@ -227,18 +238,21 @@ const ClubRegistrationForm = () => {
                                         type="tel"
                                         {...field}
                                         error={errors.managerPhone?.message}
+                                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     />
                                 )}
                             />
                             <Controller
                                 name="managerAddress"
                                 control={control}
+                                rules={{ required: "Manager address is required" }}
                                 render={({ field }) => (
                                     <Input
                                         icon={Home}
                                         placeholder="Manager Address"
                                         {...field}
                                         error={errors.managerAddress?.message}
+                                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     />
                                 )}
                             />
@@ -251,11 +265,14 @@ const ClubRegistrationForm = () => {
                             <Controller
                                 name="socialLink"
                                 control={control}
+                                rules={{ required: "Please enter at least one social link" }}
                                 render={({ field }) => (
                                     <Input
                                         icon={Link}
                                         placeholder="Social Links (e.g., Facebook, Twitter)"
                                         {...field}
+                                        error={errors.socialLink?.message}
+                                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     />
                                 )}
                             />
@@ -267,23 +284,20 @@ const ClubRegistrationForm = () => {
                             <motion.button
                                 type="button"
                                 onClick={prevStep}
-                                className="flex items-center text-gray-300 bg-gray-800 py-2 px-4 rounded shadow-lg"
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
+                                className="flex items-center text-gray-700 dark:text-white"
+                                whileTap={{ scale: 0.95 }}
                             >
-                                <ArrowLeft size={20} className="mr-2" />
-                                Back
+                                <ArrowLeftCircle className="mr-2" />
+                                Previous
                             </motion.button>
                         )}
-
                         <motion.button
                             type="submit"
-                            className="flex items-center justify-center bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4 rounded shadow-lg"
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            className="flex items-center px-6 py-2 font-bold text-white bg-blue-600 rounded-full shadow-md dark:bg-green-500"
+                            whileTap={{ scale: 0.95 }}
                         >
                             {isLastStep ? "Submit" : "Next"}
-                            {!isLastStep && <ArrowRight size={20} className="ml-2" />}
+                            {!isLastStep && <ArrowRight className="ml-2" />}
                         </motion.button>
                     </div>
                 </form>

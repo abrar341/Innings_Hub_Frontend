@@ -22,7 +22,7 @@ const validationSchema = yup.object().shape({
         .number()
         .typeError("Season must be a number")
         .required("Season is required"),
-    type: yup.string().required("Series Type is required"),
+    // type: yup.string().required("Series Type is required"),
     start_date: yup
         .date()
         .required("Start Date is required")
@@ -269,9 +269,9 @@ const CreateTournamentDialog = ({ open, action, tournamentData }) => {
                                     render={({ field }) => (
                                         <div className="w-full">
                                             <select
-                                                className={`w-full outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.type ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
+                                                className={`w-full hidden outline-none px-4 py-3 bg-gray-800 bg-opacity-50 rounded-lg border ${errors.type ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500'} text-white placeholder-gray-400 transition duration-200`}
                                                 {...field}
-                                                value={field.value || ""}
+                                                value={field.value || "Club"}
                                             >
                                                 <option value="">Select Series Type</option>
                                                 <option value="Open">Open</option>

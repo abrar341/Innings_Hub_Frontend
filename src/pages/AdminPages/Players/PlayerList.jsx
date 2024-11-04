@@ -12,6 +12,8 @@ import CreatePlayerDialog from './CreatePlayerDialog';
 
 const PlayerList = () => {
     const players = useSelector((state) => state.clubManager.players);
+    console.log(players);
+
     const navigate = useNavigate();
 
     // Filter states
@@ -60,6 +62,20 @@ const PlayerList = () => {
             header: 'DOB',
             cell: ({ row }) => (
                 <span>{formatDateToYMD(row.original.DOB)}</span>
+            ),
+        },
+        {
+            accessorKey: 'CNIC',
+            header: 'CNIC',
+            cell: ({ row }) => (
+                <span>{row.original?.CNIC}</span>
+            ),
+        },
+        {
+            accessorKey: 'Phone',
+            header: 'Phone',
+            cell: ({ row }) => (
+                <span>+{row.original?.phone}</span>
             ),
         },
         {

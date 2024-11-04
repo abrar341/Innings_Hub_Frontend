@@ -58,7 +58,7 @@ const ClubManager = () => {
     }
 
     // Handle pending club registration status
-    if (userInfo?.club.registrationStatus === 'pending') {
+    if (userInfo?.club.registrationStatus === 'pending' || !userInfo?.club.registrationStatus) {
         return (
             <>
                 {sharedHeader}

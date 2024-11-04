@@ -56,14 +56,6 @@ const NextStepsDialog = ({ isOpen, onClose, navigateToProfile }) => {
                         </div>
                     </div>
                 </div>
-                <div className="mt-6 flex justify-end">
-                    <button
-                        onClick={handleLetsGo}
-                        className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200"
-                    >
-                        OK, LET'S GO
-                    </button>
-                </div>
             </DialogContent>
         </Dialog>
     );

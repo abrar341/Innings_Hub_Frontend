@@ -18,14 +18,14 @@ const SingleSeriesProfile = () => {
     return (
         <div className="hover:cursor-pointer transition duration-300 ease-in group border-t border-gray-300 overflow-hidden">
             <div className="bg-customDarkBlue p-4 flex items-center justify-between">
-                <img
+                {/* <img
                     className="transition duration-300 ease-in group-hover:scale-110 h-16 w-16 rounded-full border-2 border-customDarkBlue"
                     src="https://wassets.hscicdn.com/static/images/trophy.svg"
                     alt={` Logo`}
-                />
+                /> */}
                 <div className="text-white font-bold">
                     <div className=''>
-                        {tournament.name}
+                        {tournament?.name}
                     </div>
                     <div className="flex justify-between mt-2 text-sm text-gray-400">
                         <div className="flex-1">

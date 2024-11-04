@@ -7,7 +7,7 @@ import UserDropdown from '../../components/userDropdown';
 const AdminDashboard = () => {
   const cards = [
     { to: 'competitions', icon: <Trophy />, title: 'Competitions' },
-    { to: 'competitio', icon: <Calendar />, title: 'Matches Schedules' },
+    // { to: 'competitio', icon: <Calendar />, title: 'Matches Schedules' },
     { to: 'clubs', icon: <Users />, title: 'Clubs' },
     { to: 'scorers', icon: <ClipboardList />, title: 'Scorers' },
   ];
@@ -31,7 +31,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {cards.map((card, index) => (
           <div
             key={index}

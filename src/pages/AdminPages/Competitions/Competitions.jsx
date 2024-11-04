@@ -9,8 +9,9 @@ const Competitions = () => {
 
     return (
         <>
-            <div className=" bg-gray-100 mx-auto gap-3  p-4 pb-0  bg-gray-50 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
-                <div className=" flex items-center ">
+            {/* <div className=" bg-gray-100 mx-auto gap-3  p-4 pb-0  bg-gray-50 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 "> */}
+            <div className='flex justify-end p-4 border-b border-gray-300'>
+                {/* <div className=" flex items-center ">
                     <Link to='' className="bg-blue-600 rounded text-white hover:text-white text-sm font-medium text-gray-400 py-2 px-4 hover:text-gray-600">
                         Ongoing
                     </Link>
@@ -32,7 +33,7 @@ const Competitions = () => {
                             <span className="sr-only">Search</span>
                         </button>
                     </div>
-                </form>
+                </form> */}
 
                 <CreateTournamentDialog
                 />

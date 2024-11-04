@@ -15,7 +15,7 @@ const UserPlayerCard = ({ player }) => {
 
     return (
         <div
-            className="border rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-md transition-transform transform hover:scale-105 hover:shadow-lg duration-300 ease-in-out px-2 pt-2 pb-5 cursor-pointer group relative"
+            className="border rounded-xl min-w-[230px] border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-md transition-transform transform hover:scale-105 hover:shadow-lg duration-300 ease-in-out px-2 pt-2 pb-5 cursor-pointer group relative"
             onClick={() => handleClick(player?._id)}
         >
             {/* Player's Team Logo and Name */}

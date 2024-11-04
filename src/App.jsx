@@ -156,7 +156,7 @@ function App() {
         <Route path="series" element={<Series />} />
         <Route path='series/:id' element={<SeriesPageLayout />} >
           <Route path='fixtures' element={<Matches type={"tournament"} />} />
-          <Route path='point-table' element={<PointTable />} />
+          <Route path='point-table' element={<Standings />} />
         </Route>
         <Route path="players" element={<Players />} />
         <Route path="/player/:id" element={<PlayerProfile />} />

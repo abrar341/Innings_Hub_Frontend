@@ -4,6 +4,7 @@ import ScorerProfile from './ScorerProfile'
 import { useGetAllMatchesQuery } from '../../slices/match/matchApiSlice'
 import { convertTo12HourFormat, formatDate } from '../../utils/dateFormatter'
 import matchData from '../../data/matchData'
+import UserDropdown from '../../components/userDropdown'
 
 const ScorerLayout = () => {
     const { data } = useGetAllMatchesQuery();
@@ -44,6 +45,11 @@ const ScorerLayout = () => {
                 </div>
                 <Outlet />
             </div> */}
+            <div className='p-4 flex justify-end'>
+                <UserDropdown />
+
+            </div>
+
             <div className='grid grid-cols-3 gap-4 p-5'>
                 {matches?.map((matchData) => (
                     <div className=" gap-10 overflow-hidden flex-shrink-0 bg-gradient-to-r from-gray-50 to-white border border-gray-300 rounded shadow-lg transform transition-transform duration-300 ">

@@ -29,7 +29,6 @@ const ClubManagerDashboard = () => {
             {/* Header with Profile */}
             <div className="flex justify-center items-center mb-10">
                 <h2 className="text-4xl text-gray-700 dark:text-gray-300  uppercase font-extrabold text-center">{club?.clubName}</h2>
-
             </div>
 
             {/* Cards Grid */}

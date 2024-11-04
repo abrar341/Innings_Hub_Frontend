@@ -2,6 +2,8 @@
 import { apiSlice } from '../apiSlice';
 
 const MATCHES_URL = '/api/match';
+const TOURNAMENTS_URL = '/api/tournament';
+
 
 export const matchApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -83,6 +85,18 @@ export const matchApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Match'], // Helps to re-fetch and update match-related data after starting the match
         }),
+        updatePointsTable: builder.mutation({
+            query: ({ roundId, teamIds }) => ({
+                url: `${TOURNAMENTS_URL}/updateStandings`, // Sending roundId as a parameter
+                method: 'POST',
+                body: {
+                    roundId,
+                    teamIds,
+                },
+            }),
+            invalidatesTags: ['PointsTable'], // Invalidate the points table to refresh data after updating
+        }),
+
 
 
     }),
@@ -96,5 +110,6 @@ export const {
     useInitializePlayersMutation,
     useGetAllMatchesQuery,
     useGetSquadPlayersQuery,
-    useStartMatchMutation
+    useStartMatchMutation,
+    useUpdatePointsTableMutation,
 } = matchApiSlice;

@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogTitle, DialogClose, DialogTrigger } from "
 import { Controller, useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { FaPlus } from "react-icons/fa";
-import { useInitializePlayersMutation } from "../../slices/match/matchApiSlice";
+import { useInitializePlayersMutation, useUpdatePointsTableMutation } from "../../slices/match/matchApiSlice";
 import ScoreCard from '../../pages/Match/ScoreCard/ScoreCard';
 import { useUpdatePlayerStatsMutation } from '../../slices/player/playerApiSlice';
 import toast from 'react-hot-toast';
@@ -14,10 +14,12 @@ import { useUpdateTeamStatsMutation } from '../../slices/team/teamApiSlice';
 const socket = io('http://localhost:8000');
 
 const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTeam, matchId, result }) => {
+    const [updatePointsTable, { isLoading: pointtableisLoading, isSuccess: pointtableisSuccess, error }] = useUpdatePointsTableMutation();
+
+    console.log(matchInfo.teams);
 
     if (result) {
         console.log("match ended")
-        console.log(winingTeam?.teamName, "");
     }
     console.log(remainRuns);
 
@@ -32,6 +34,23 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
         socket.emit('joinMatch', matchId);
         socket.emit('startNewInnings', { matchId });
     }
+
+    const handleUpdatePoints = async () => {
+        try {
+            // Define the parameters you want to send in the request
+            const roundId = matchInfo?.round;
+            // const teamIds = ['team1', 'team2'];
+            const teamIds = matchInfo.teams.map(team => team._id);
+            console.log(roundId, teamIds);
+
+
+            // Trigger the mutation
+            await updatePointsTable({ roundId, teamIds });
+            toast.success('points table updated successfully')
+        } catch (err) {
+            console.error('Failed to update points table:', err);
+        }
+    };
 
     const handleUpdateStats = async () => {
         try {
@@ -86,10 +105,10 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
 
                                 {
                                     matchInfo?.playerStats ?
-                                        <div className="text-base font-bold text-center bg-green-600 text-white border px-2 py-1 rounded"
+                                        <div className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                                         >
                                             PlayerStats Updated
-                                        </div> : <button className="text-base font-bold text-center text-white border px-2 py-1 rounded"
+                                        </div> : <button className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                                             onClick={handleUpdateStats}
                                             disabled={isLoading}
                                         >
@@ -98,22 +117,26 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
                                 }
                                 {
                                     matchInfo?.teamStats ?
-                                        <div className="text-base font-bold text-center bg-green-600 text-white border px-2 py-1 rounded"
+                                        <div className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                                         >
                                             teamStats Updated
                                         </div> : <button
                                             onClick={handleUpdateTeamStats}
                                             disabled={updateteamLoading}
-                                            className="text-base font-bold text-center text-white border px-2 py-1 rounded">
+                                            className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
 
                                             {updateteamLoading ? "Updating..." : "Update Team Stats"}
 
                                         </button>
                                 }
 
-                                {/* <button className="text-base font-bold text-center text-white border px-2 py-1 rounded">
-                                    Update Points Table
-                                </button> */}
+                                <div>
+                                    <button className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" onClick={handleUpdatePoints} disabled={pointtableisLoading}>
+                                        {pointtableisLoading ? 'Updating...' : 'Update Points Table'}
+                                    </button>
+
+
+                                </div>
                             </div> : ""}
                     </>
                     : matchInfo?.result?.isTie ? <><p className='uppercase text-center p-3 my-3 text-xl text-white font-bold tracking-normal	'> Match Tie </p></> : ""}

@@ -23,10 +23,10 @@ const MatchInfo = () => {
                     <p className="">{`${matchInfo?.teams[0].teamName} vs ${matchInfo?.teams[1].teamName}`}</p>
                 </li>
 
-                <li className="flex justify-between items-center border-b pb-4">
+                {/* <li className="flex justify-between items-center border-b pb-4">
                     <h6 className="text-green-600 font-bold text-base">Venue</h6>
                     <p className="">{matchInfo?.venue}</p>
-                </li>
+                </li> */}
 
                 <li className="flex justify-between items-center border-b pb-4">
                     <h6 className="text-green-600 font-bold text-base">Toss</h6>

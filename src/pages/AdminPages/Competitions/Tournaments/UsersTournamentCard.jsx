@@ -56,22 +56,20 @@ const UsersTournamentCard = ({ tournament }) => {
                 </div>
 
                 {/* Conditionally render "Fixtures/Points Table" if the start date is present */}
-                {currentDate > registrationDeadline && (
-                    <div className="mt-6 flex justify-center gap-5">
-                        <Link
-                            to={`/series/${tournament._id}/fixtures`}
-                            className="transition duration-300 ease-in text-sm border-b border-gray-500 text-center"
-                        >
-                            Fixtures
-                        </Link>
-                        <Link
-                            to={`/series/${tournament._id}/point-table`}
-                            className="transition duration-300 ease-in text-sm border-b border-gray-800 text-center"
-                        >
-                            Points Table
-                        </Link>
-                    </div>
-                )}
+                <div className="mt-6 flex justify-center gap-5">
+                    <Link
+                        to={`/series/${tournament._id}/fixtures`}
+                        className="transition duration-300 ease-in text-sm border-b border-gray-500 text-center"
+                    >
+                        Fixtures
+                    </Link>
+                    <Link
+                        to={`/series/${tournament._id}/point-table`}
+                        className="transition duration-300 ease-in text-sm border-b border-gray-800 text-center"
+                    >
+                        Points Table
+                    </Link>
+                </div>
 
                 {/* Conditionally render "RegisterTeamToTournament" if registration is still open */}
                 {isAuthenticated && userType === 'club-manager' && currentDate < registrationDeadline && (
