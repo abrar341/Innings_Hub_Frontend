@@ -61,6 +61,7 @@ import Clicks from './pages/Match/ScoreCard/Clicks';
 import DrawsAndRounds from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/DrawsAndRounds';
 import Standings from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/Standings';
 import ScorerPage from './pages/AdminPages/Scorer/ScorerPage';
+import ClubDetailsPage from './components/Dialogs/ClubDetail';
 
 function App() {
   const router = createBrowserRouter(
@@ -102,7 +103,9 @@ function App() {
             <Route path='admin' element={<Dashboard />} />
             <Route path='/admin/competitions' element={<Competitions isAdmin={true} />} />
             <Route path='/admin/scorers' element={<ScorerPage />} />
-            <Route path='/admin/clubs' element={<Clubs />} />
+            <Route path='/admin/clubs' element={<Clubs />} >
+            </Route>
+            <Route path='/admin/clubs/club-detail' element={<ClubDetailsPage />} />
             <Route path='/admin/competitions/:id' element={<TournamentProfileLayout />} >
               <Route path='squads' element={<Squads />} />
               <Route path='matches' element={<Matches type={"tournament"} />} />
@@ -122,6 +125,7 @@ function App() {
                 <Route path='team/:id' element={<TeamProfileLayout />} />
               </Route>
               <Route path='dashboard/squads' element={<Squads />} />
+              <Route path='dashboard/club-detail' element={<ClubDetailsPage />} />
             </Route>
 
             <Route path='/dashboard/tournaments' element={<RegisterTeamToTournament />} />

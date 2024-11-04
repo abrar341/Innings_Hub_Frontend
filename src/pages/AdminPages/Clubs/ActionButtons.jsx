@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import { FaCheck, FaTimes, FaEye } from 'react-icons/fa';
+import { FaCheck, FaInfoCircle, FaTimes } from 'react-icons/fa';
 import AlertNote from '../../../components/AlertNote';
 import { useApproveClubMutation, useRejectClubMutation } from '../../../slices/admin/adminApiSlice';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
-import ClubDetailsDialog from '../../../components/Dialogs/ClubDetailDialog';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ActionButtons = ({ club }) => {
-    console.log(club);
-
     const [isAlertOpen, setIsAlertOpen] = useState(false);
-    const [actionType, setActionType] = useState(null); // To differentiate between approve and reject
-    const [rejectionReason, setRejectionReason] = useState(''); // For custom rejection reason
-    const [selectedReasons, setSelectedReasons] = useState([]); // For checkbox reasons
+    const [actionType, setActionType] = useState(null);
+    const [rejectionReason, setRejectionReason] = useState('');
+    const [selectedReasons, setSelectedReasons] = useState([]);
     const [approveClub, { isLoading: isApproving }] = useApproveClubMutation();
     const [rejectClub, { isLoading: isRejecting }] = useRejectClubMutation();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const predefinedReasons = [
         'Incomplete information',
@@ -39,29 +39,27 @@ const ActionButtons = ({ club }) => {
         try {
             if (actionType === 'approve') {
                 const response = await approveClub(id);
-                toast.dismiss()
                 toast.success(response.message || 'Club approved successfully');
             } else if (actionType === 'reject') {
                 if (!selectedReasons.length && !rejectionReason.trim()) {
-                    toast.dismiss()
                     toast.error('Please select or provide a reason for rejection');
                     return;
                 }
 
                 const reason = [...selectedReasons, rejectionReason].filter(Boolean).join(', ');
                 const response = await rejectClub({ clubId: id, reason });
-                toast.dismiss()
                 toast.success(response.message || 'Club rejected successfully');
             }
             setIsAlertOpen(false);
         } catch (error) {
-            toast.dismiss()
-
             toast.error(error?.data?.message || `Error processing club ${actionType}`);
         }
     };
 
-    // The rejection content passed to AlertNote when actionType === 'reject'
+    const handleViewDetail = () => {
+        navigate('club-detail', { state: { clubInfo: club } });
+    };
+
     const rejectionContent = (
         <div>
             <div className="mb-4">
@@ -90,16 +88,21 @@ const ActionButtons = ({ club }) => {
         </div>
     );
 
+    // Check if the current path ends with `/club-detail`
+    const isClubDetailPage = /\/club-detail$/.test(location.pathname);
+
     return (
         <>
             <div className={`flex mt-4 justify-start items-center gap-3`}>
-                {/* Conditionally render buttons based on club status */}
                 {club?.registrationStatus === 'approved' || club?.registrationStatus === 'rejected' ? (
-                    // Show only the 'View' button if already approved or rejected
+                    !isClubDetailPage && (
 
-                    <ClubDetailsDialog clubInfo={club} />
+                        <button onClick={handleViewDetail} className="flex items-center bg-gray-300 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-400 dark:hover:bg-gray-700 text-sm font-medium py-2 px-4 rounded-lg shadow-md transition duration-200">
+                            <FaInfoCircle className="mr-2 text-gray-600 dark:text-gray-400" />
+                            View Club Details
+                        </button>
+                    )
                 ) : (
-                    // Show Approve, Reject, and View buttons if the club status is pending
                     <>
                         <button
                             className="p-2 bg-green-100 rounded-full hover:bg-green-200 focus:outline-none"
@@ -113,12 +116,16 @@ const ActionButtons = ({ club }) => {
                         >
                             <FaTimes className="text-red-600" />
                         </button>
-                        <ClubDetailsDialog clubInfo={club} />
+                        {!isClubDetailPage && (
+                            <button onClick={handleViewDetail} className="flex items-center bg-gray-300 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-400 dark:hover:bg-gray-700 text-sm font-medium py-2 px-4 rounded-lg shadow-md transition duration-200">
+                                <FaInfoCircle className="mr-2 text-gray-600 dark:text-gray-400" />
+                                View Club Details
+                            </button>
+                        )}
                     </>
                 )}
             </div>
 
-            {/* Render AlertNote for approve/reject actions */}
             <AlertNote
                 open={isAlertOpen}
                 setOpen={setIsAlertOpen}

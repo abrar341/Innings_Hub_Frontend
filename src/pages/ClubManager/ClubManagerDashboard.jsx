@@ -15,7 +15,13 @@ const ClubManagerDashboard = () => {
     const navigate = useNavigate();
 
     const handleCardClick = (to) => {
-        navigate(`${to}`);
+        if (to === 'club-detail' && club) {
+            // Pass club data to `club-detail` route
+            navigate(to, { state: { clubInfo: club } });
+        } else {
+            // Navigate without additional state
+            navigate(to);
+        }
     };
 
     return (
