@@ -131,7 +131,7 @@ const Team = () => {
                 <CreateTeamDialog />
 
                 {/* Status Filter */}
-                <div className="col-span-2 sm:col-span-3">
+                {/* <div className="col-span-2 sm:col-span-3">
                     <select
                         id="statusFilter"
                         value={statusFilter}
@@ -142,19 +142,17 @@ const Team = () => {
                         <option value="Active">Active</option>
                         <option value="inActive">Inactive</option>
                     </select>
-                </div>
+                </div> */}
 
-                <div className="flex sm:col-span-2 justify-center">
-                    <button
-                        onClick={() => {
-                            setStatusFilter('');
-                            setSearchQuery('');
-                        }}
-                        className="px-4 py-2 w-full bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-md shadow-sm transition-all duration-200"
-                    >
-                        Reset
-                    </button>
-                </div>
+                <button
+                    onClick={() => {
+                        setStatusFilter('');
+                        setSearchQuery('');
+                    }}
+                    className="px-4 py-2 w-full bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-md shadow-sm transition-all duration-200"
+                >
+                    Reset
+                </button>
             </div>
 
             {/* Team List Table */}

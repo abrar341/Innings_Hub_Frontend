@@ -55,7 +55,7 @@ const Standings = () => {
                                                     {group.standings?.map((standing, index) => (
                                                         <tr key={standing._id} className={`border-b border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out ${index % 2 === 0 ? 'bg-gray-50' : ''}`}>
                                                             <td className="py-3 px-6 text-left max-w-xs truncate whitespace-nowrap">
-                                                                <span className="font-semibold">{standing?.team.teamName}</span>
+                                                                <span className="font-semibold">{standing?.team?.teamName}</span>
                                                             </td>
                                                             <td className="py-3 px-6 text-center">{standing.played}</td>
                                                             <td className="py-3 px-6 text-center">{standing.won}</td>

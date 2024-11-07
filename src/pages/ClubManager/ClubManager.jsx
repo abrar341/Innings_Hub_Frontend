@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import ClubRegistrationForm from '../../components/ClubRegistrationForm';  // Assuming you have this component
@@ -9,10 +9,13 @@ import { set_Team } from '../../slices/team/teamSlice';
 
 const ClubManager = () => {
     const dispatch = useDispatch();
+    const [openForm, setOpenForm] = useState(false); // Control form visibility
 
     // Get user information from Redux
     const { userInfo } = useSelector((state) => state.auth);
     const clubId = userInfo?.club?._id;
+    console.log(userInfo?.club);
+
 
     // Fetch players and teams only if clubId exists
     const { data: playersData, isLoading: isLoadingPlayers } = useGetClubPlayersQuery(clubId, { skip: !clubId });
@@ -28,7 +31,10 @@ const ClubManager = () => {
         }
     }, [dispatch, playersData, teamsData]);
 
-
+    const handleReviewClick = () => {
+        setOpenForm(true);  // Open the form when review button is clicked
+        // dispatch(setReviewData(userInfo?.club));
+    };
     // Class for active and inactive NavLink
     const navLinkClass = ({ isActive }) =>
         `px-3 py-1 gap-3 text-sm font-semibold transition-all duration-300 ease-in-out transform
@@ -45,14 +51,16 @@ const ClubManager = () => {
     );
 
     // Handle unregistered club
-    if (!userInfo?.club) {
-        toast.dismiss();
-        toast("Oops! It looks like you haven’t registered a club yet. Please complete the club registration to get started.", {
-            duration: 5000,
-        });
+    if (!userInfo?.club || openForm) {
+        // {
+        //     toast.dismiss();
+        // }
+        //  toast("Oops! It looks like you haven’t registered a club yet. Please complete the club registration to get started.", {
+        //     duration: 5000,
+        // });
         return (
             <>
-                <ClubRegistrationForm />
+                <ClubRegistrationForm reviewData={userInfo?.club} />
             </>
         );
     }
@@ -67,7 +75,7 @@ const ClubManager = () => {
                         Your club registration status is Pending.
                     </h2>
                     <p className="text-gray-600">
-                        Please wait for approval from the association before accessing the dashboard.
+                        Please wait for approval from the association before accessing the control panel.
                     </p>
                 </div>
             </>
@@ -86,6 +94,10 @@ const ClubManager = () => {
                     <p className="text-gray-600">
                         Please review your application and submit again.
                     </p>
+                    <p className="text-gray-600">
+                        Check the {userInfo?.club?.rejectionReason}
+                    </p>
+                    <button onClick={handleReviewClick} className='px-4 py-2 mt-4 border border-gray-400 rounded'>Review Form</button>
                 </div>
             </>
         );

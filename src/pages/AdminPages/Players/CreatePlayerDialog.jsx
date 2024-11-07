@@ -103,7 +103,8 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
             setIsOpen(false);
             reset();
         } catch (error) {
-            toast.error("An error occurred");
+            toast.dismiss()
+            toast.error(error?.data?.message);
         }
     };
 
@@ -432,7 +433,7 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                             <button
                                 type="submit"
                                 disabled={createLoading || updateLoading}
-                                className={`flex self-end justify-center w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 ${createLoading || updateLoading
+                                className={`flex self-end justify-center items-center w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 ${createLoading || updateLoading
                                     ? "cursor-not-allowed opacity-50"
                                     : ""
                                     }`}

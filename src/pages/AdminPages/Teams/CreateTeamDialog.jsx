@@ -21,7 +21,6 @@ const validationSchema = yup.object().shape({
         .string()
         .max(3, "Short Name must be less than 4 characters")
         .required("Short Name is required"),
-    teamtype: yup.string().required("Team Type is required"),
 });
 
 const CreateTeamDialog = ({ open, action, teamData }) => {
@@ -51,7 +50,7 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
             console.log(teamData);
             setValue("teamName", teamData.teamName);
             setValue("shortName", teamData.shortName);
-            setValue("teamtype", teamData.teamtype);
+            setValue("teamtype", 'senior');
             if (teamData.teamLogo) setLogoPreview(teamData.teamLogo);
         }
     }, [teamData, isOpen, setValue]);
@@ -206,7 +205,7 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                                 />
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                             <Controller
                                 name="teamtype"
                                 control={control}
@@ -230,12 +229,12 @@ const CreateTeamDialog = ({ open, action, teamData }) => {
                                     </div>
                                 )}
                             />
-                        </div>
+                        </div> */}
                         <div className="flex flex-col text-center">
                             <button
                                 type="submit"
                                 disabled={createLoading || updateLoading}
-                                className={`flex self-end justify-center w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 ${createLoading || updateLoading
+                                className={`flex self-end items-center justify-center w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 ${createLoading || updateLoading
                                     ? "cursor-not-allowed opacity-50"
                                     : ""
                                     }`}

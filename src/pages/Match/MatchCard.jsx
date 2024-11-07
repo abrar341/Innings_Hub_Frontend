@@ -65,8 +65,12 @@ const MatchCard1 = ({ id, matchData }) => {
                     <div className="text-gray-600 dark:text-gray-400 text-xs truncate">
                         {formatDateToYMD(matchInfo.date)}
                     </div>
-                    <div className="text-gray-600 dark:text-gray-300 text-sm truncate">
-                        {matchInfo?.tournament?.name}-{matchInfo?.tournament?.season}
+                    <div className="text-gray-600 flex gap-2 dark:text-gray-300 text-sm truncate">
+                        <p>{matchInfo?.round?.roundName} </p>
+                        <p>
+                            {matchInfo?.tournament?.name}-{matchInfo?.tournament?.season}
+
+                        </p>
                     </div>
                     <div className={clsx(
                         'px-2 py-1 rounded text-xs',

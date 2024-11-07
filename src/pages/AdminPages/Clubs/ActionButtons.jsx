@@ -18,9 +18,8 @@ const ActionButtons = ({ club }) => {
     const location = useLocation();
 
     const predefinedReasons = [
-        'Incomplete information',
+        'Phone',
         'Invalid club details',
-        'Inappropriate content',
         'Other'
     ];
 

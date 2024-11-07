@@ -26,12 +26,15 @@ const steps = [
     { label: "Social Links" },
 ];
 
-const ClubRegistrationForm = () => {
+const ClubRegistrationForm = ({ reviewData }) => {
     const { control, handleSubmit, setValue, formState: { errors }, register } = useForm({
         mode: 'onChange',
     });
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    // const reviewData = useSelector((state) => state.auth.reviewData);
+    console.log(reviewData);
+
 
     const [registerClub, { isLoading }] = useRegisterClubMutation();
     const userInfo = useSelector((state) => state.auth.userInfo);
@@ -44,6 +47,24 @@ const ClubRegistrationForm = () => {
     const years = Array.from(new Array(125), (val, index) => currentYear - index);
 
     const [logoPreview, setLogoPreview] = useState(null);
+
+    useEffect(() => {
+        if (reviewData) {
+            console.log(reviewData);
+
+            // Set each form field individually with reviewData values
+            setValue("clubLogo", reviewData.clubLogo);
+            setValue("clubName", reviewData.clubName);
+            setValue("location", reviewData.location);
+            setValue("yearEstablished", reviewData.yearEstablished);
+            setValue("managerName", reviewData.managerName);
+            setValue("managerEmail", reviewData.managerEmail);
+            setValue("managerPhone", reviewData.manager.phone);
+            setValue("managerAddress", reviewData.manager.address);
+            setValue("socialLink", reviewData.socialLink);
+        }
+    }, [reviewData, setValue]);
+
 
     const handleLogoChange = (e) => {
         const file = e.target.files[0];
@@ -69,8 +90,8 @@ const ClubRegistrationForm = () => {
                 nextStep();
                 return;
             }
-
             const res = await registerClub(data).unwrap();
+            console.log(res);
             const { user } = res?.data;
             dispatch(setCredentials({ ...user }));
             toast.success(res?.message);
