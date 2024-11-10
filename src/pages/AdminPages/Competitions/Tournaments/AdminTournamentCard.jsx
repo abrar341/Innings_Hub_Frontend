@@ -17,7 +17,7 @@ const AdminTournamentCard = ({ tournament }) => {
   const [deleteTournament, { isLoading }] = useDeleteTournamentMutation();
   const dispatch = useDispatch()
   const handleTournamentClick = () => {
-    navigate(`/admin/competitions/${tournament._id}`);
+    navigate(`/admin/competitions/${tournament._id}/squads`);
   };
 
   const handleDeleteClick = () => {

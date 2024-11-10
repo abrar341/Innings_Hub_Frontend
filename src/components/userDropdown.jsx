@@ -71,7 +71,7 @@ const UserDropdown = () => {
                 >
                     <div className="py-1" role="none">
                         <Link
-                            to={`/${userInfo?.role}/profile`}
+                            to={`/${userInfo?.role}/profile/profile`}
                             className="text-gray-700 dark:text-gray-300 flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
                             role="menuitem"
                         >

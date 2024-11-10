@@ -131,7 +131,7 @@ const ScoreCard_Innings = () => {
                                 <td className="py-2 px-4 text-center text-gray-800 dark:text-gray-200">{Math.floor(bowler.balls / 6) + (bowler.balls % 6) / 10}</td>
                                 <td className="py-2 px-4 text-center text-gray-800 dark:text-gray-200">{bowler?.runsConceded}</td>
                                 <td className="py-2 px-4 text-center text-gray-800 dark:text-gray-200">{bowler?.wickets}</td>
-                                <td className="py-2 px-4 text-center text-gray-800 dark:text-gray-200">{bowler.runs > 0 ? (bowler.runs / (bowler.balls / 6)).toFixed(2) : 0}</td>
+                                <td className="py-2 px-4 text-center text-gray-800 dark:text-gray-200">{bowler?.runsConceded > 0 ? (bowler?.runsConceded / (bowler?.balls / 6)).toFixed(2) : 0}</td>
                             </tr>
                         ))}
                     </tbody>

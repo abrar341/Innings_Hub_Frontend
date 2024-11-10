@@ -28,7 +28,7 @@ const Layout = () => {
     }, [isLoading, dispatch]);
 
     const location = useLocation();
-    const noNavbarRoutes = ['/account', '/runner', '/side', '/club-manager', '/admin', '/scorer', '/b'];
+    const noNavbarRoutes = ['/account', '/runner', '/side', '/club-manager', '/admin', '/scorer', '/b', 'profile'];
     const currentPath = location.pathname;
     const shouldHideNavbar = noNavbarRoutes.some((route) => currentPath.includes(route));
 

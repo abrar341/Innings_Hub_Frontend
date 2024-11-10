@@ -35,7 +35,7 @@ const StartMatchDialog = ({ setMatchInfo, matchId, matchInfo }) => {
     const { data: team2data } = useGetSquadPlayersQuery({ tournamentId, teamId: team2?._id });
     console.log(team2data);
 
-    const [StartMatch] = useStartMatchMutation();
+    const [StartMatch, { isLoading }] = useStartMatchMutation();
 
     const onSubmit = async () => {
         if (!tossWinner) {
@@ -227,10 +227,15 @@ const StartMatchDialog = ({ setMatchInfo, matchId, matchInfo }) => {
                             type="submit"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="w-full py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all duration-200"
+                            disabled={isLoading}
+                            className={`w-full py-2 font-semibold rounded-lg shadow-md transition-all duration-200 ${isLoading
+                                ? 'bg-gray-500 cursor-not-allowed'
+                                : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white'
+                                }`}
                         >
-                            Start Match
+                            {isLoading ? 'Starting...' : 'Start Match'}
                         </motion.button>
+
                     </form>
                 </DialogContent>
             </Dialog>

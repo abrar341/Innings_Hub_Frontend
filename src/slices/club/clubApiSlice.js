@@ -16,6 +16,7 @@ export const clubApiSlice = apiSlice.injectEndpoints({
                 formData.append("managerEmail", data.managerEmail);
                 formData.append("managerPhone", data.managerPhone);
                 formData.append("managerAddress", data.managerAddress);
+                formData.append("review", JSON.stringify(data.review));
                 if (data.clubLogo) {
 
                     formData.append("clubLogo", data.clubLogo);

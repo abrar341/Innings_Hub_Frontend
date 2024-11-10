@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import ClubRegistrationForm from '../../components/ClubRegistrationForm';  // Assuming you have this component
 import toast from 'react-hot-toast';
 import { setPlayers } from '../../slices/clubManager/clubManagerSlice';
@@ -10,6 +10,7 @@ import { set_Team } from '../../slices/team/teamSlice';
 const ClubManager = () => {
     const dispatch = useDispatch();
     const [openForm, setOpenForm] = useState(false); // Control form visibility
+
 
     // Get user information from Redux
     const { userInfo } = useSelector((state) => state.auth);
@@ -103,20 +104,13 @@ const ClubManager = () => {
         );
     }
 
+    // else {
+    //     navigate('/dashboard');
+    // }
     // Otherwise, render the Club Manager dashboard
     return (
         <>
-            {sharedHeader}
-            {/* Uncomment and use cards if needed */}
-            {/* <div className="px-2 py-2 border-b border-gray-300 flex justify-between gap-6 mx-auto my-2">
-                <div className="flex justify-center items-center gap-6">
-                    {cards.map((card, index) => (
-                        <NavLink to={card.to} key={index} className={navLinkClass}>
-                            <span className='text-base font-bold transition duration-300 ease-in group-hover:scale-102 group-hover:text-black'>{card.title}</span>
-                        </NavLink>
-                    ))}
-                </div>
-            </div> */}
+
             <Outlet />
         </>
     );

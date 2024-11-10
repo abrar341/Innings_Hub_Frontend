@@ -27,7 +27,6 @@ const AdminRegisterScorerDialog = ({ onAddScorer }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [register, { isLoading }] = useRegisterMutation();
 
-
     const onSubmit = async (data) => {
         try {
             const { name, email, username, password, confirmPassword } = data;
@@ -44,14 +43,12 @@ const AdminRegisterScorerDialog = ({ onAddScorer }) => {
 
             const res = await register(requestData).unwrap();
 
-            // Close the dialog and reset form
             setIsDialogOpen(false);
 
-            // Notify parent component of new scorer
             if (onAddScorer) {
                 onAddScorer(res?.data); // Pass the new scorer data to parent
             }
-            // Display success message
+
             toast.dismiss();
             toast.success("Scorer Created Successfully");
         } catch (err) {
@@ -60,19 +57,17 @@ const AdminRegisterScorerDialog = ({ onAddScorer }) => {
         }
     };
 
-
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <button className="fixed bottom-6 right-6 flex items-center justify-center bg-gradient-to-r from-green-600 to-teal-600 text-white text-base font-medium px-4 py-3 rounded shadow-lg hover:from-green-700 hover:to-teal-700 transition-all duration-200 z-50">
+                <button className="fixed bottom-6 right-6 flex items-center justify-center bg-gradient-to-r from-green-600 to-teal-600 dark:from-green-700 dark:to-teal-700 text-white text-base font-medium px-4 py-3 rounded shadow-lg hover:from-green-700 hover:to-teal-700 dark:hover:from-green-800 dark:hover:to-teal-800 transition-all duration-200 z-50">
                     <FaPlus className="mr-2" />
-
                     Register New Scorer
                 </button>
             </DialogTrigger>
 
-            <DialogContent className="hide-scrollbar max-w-lg w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 rounded-3xl shadow-2xl p-6 border border-gray-600">
-                <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-400 to-indigo-500 text-transparent bg-clip-text mb-8">
+            <DialogContent className="hide-scrollbar max-w-lg w-full bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-300 dark:border-gray-600">
+                <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-500 to-indigo-500 dark:from-blue-400 dark:to-indigo-600 text-transparent bg-clip-text mb-8">
                     Register Scorer
                 </DialogTitle>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -154,13 +149,13 @@ const AdminRegisterScorerDialog = ({ onAddScorer }) => {
                     </div>
 
                     <motion.button
-                        className='mt-5 w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200'
+                        className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 text-white font-bold rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 dark:hover:from-blue-700 dark:hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-900 transition duration-200"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        type='submit'
+                        type="submit"
                         disabled={isLoading}
                     >
-                        {isLoading ? <Loader className='animate-spin mx-auto' size={24} /> : "Register Scorer"}
+                        {isLoading ? <Loader className="animate-spin mx-auto" size={24} /> : "Register Scorer"}
                     </motion.button>
                 </form>
 

@@ -10,6 +10,7 @@ const AdminDashboard = () => {
     // { to: 'competitio', icon: <Calendar />, title: 'Matches Schedules' },
     { to: 'clubs', icon: <Users />, title: 'Clubs' },
     { to: 'scorers', icon: <ClipboardList />, title: 'Scorers' },
+    { to: 'assign-matches', icon: <ClipboardList />, title: 'Assign Matches' },
   ];
 
   const navigate = useNavigate();
@@ -21,13 +22,13 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8">
       {/* Header with Profile */}
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex justify-center items-center mb-10">
         <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100">
           Admin
         </h1>
-        <div className='mr-2 z-10 self-end'>
+        {/* <div className='mr-2 z-10 self-end'>
           <UserDropdown />
-        </div>
+        </div> */}
       </div>
 
       {/* Cards Grid */}

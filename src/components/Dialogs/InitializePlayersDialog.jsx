@@ -7,21 +7,14 @@ import { useInitializePlayersMutation } from "../../slices/match/matchApiSlice";
 // Main InitializePlayersDialog component
 const InitializePlayersDialog = ({ matchInfo, matchId, setCurrentInning, setMatchInfo }) => {
 
-
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [initializePlayers] = useInitializePlayersMutation()
+  const [initializePlayers, { isLoading }] = useInitializePlayersMutation()
   const currentInning = matchInfo?.innings?.[matchInfo?.currentInning - 1];
-  console.log("currentInning", currentInning);
 
   const battingTeamId = currentInning?.team?._id; // Get the team ID for this inning
   const battingTeam = matchInfo?.playing11?.find((team) => team?.team?._id === battingTeamId);
   const bowlingTeam = matchInfo?.playing11?.find((team) => team?.team?._id !== battingTeamId);
   const playing11 = battingTeam?.players;
-  console.log("playing11", playing11);
-
-
-
   const [isSelectionDialogOpen, setIsSelectionDialogOpen] = useState(false);
   const [selectionRole, setSelectionRole] = useState(""); // "striker", "nonStriker", "bowler"
   const [selectedPlayers, setSelectedPlayers] = useState({
@@ -176,10 +169,12 @@ const InitializePlayersDialog = ({ matchInfo, matchId, setCurrentInning, setMatc
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            disabled={isLoading}
+
             onClick={onSubmit}
             className="w-full mt-8 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-800 transition-all duration-300"
           >
-            Initialize Players
+            {isLoading ? " Initializing" : 'Initialize Players'}
           </motion.button>
 
           <DialogClose asChild></DialogClose>
@@ -216,6 +211,7 @@ const InitializePlayersDialog = ({ matchInfo, matchId, setCurrentInning, setMatc
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+
             onClick={() => setIsSelectionDialogOpen(false)}
             className="w-full mt-8 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-800 transition-all duration-300"
           >

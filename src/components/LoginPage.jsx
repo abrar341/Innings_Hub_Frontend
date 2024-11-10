@@ -99,11 +99,11 @@ const LoginPage = () => {
 								)}
 							/>
 						</div>
-						{/* <div className='flex items-center mb-6'>
-							<Link to='/forgot-password' className='text-sm text-green-400 hover:underline'>
+						<div className='flex items-center mb-6'>
+							<Link to='/account/forgot-password' className='text-sm text-green-400 hover:underline'>
 								Forgot password?
 							</Link>
-						</div> */}
+						</div>
 						<motion.button
 							whileHover={{ scale: 1.02 }}
 							whileTap={{ scale: 0.98 }}

@@ -50,7 +50,7 @@ const SignUpPage = () => {
             setEmail(requestData.email);
             openVerifyDialog();
             toast.dismiss();
-            toast.success(res.message);
+            toast.success("verification code send ...");
         } catch (err) {
             toast.dismiss();
             toast.error(err?.data?.message || "Error occurred while creating account");

@@ -79,7 +79,7 @@ const ScoreCard_Header = ({ matchInfo }) => {
                                 <div className="text-sm text-gray-600 dark:text-gray-300 font-semibold">Runs: <span className="text-gray-800 dark:text-gray-100 font-bold text-lg">{matchInfo?.innings?.[1]?.runs}/{matchInfo?.innings?.[1]?.wickets}</span></div>
                                 <div className="text-sm text-gray-600 dark:text-gray-300 font-semibold">Overs:
                                     <span className="text-sm text-gray-700 dark:text-gray-200 text-lg">
-                                        {lastOver2?.overNumber < 0 ? 0 : lastOver2?.overNumber - 1}.{lastBallNumber2 || 0}/{matchInfo?.overs || 0}
+                                        {lastOver2?.overNumber < 0 ? 0 : lastOver2?.overNumber - 1 || 0}.{lastBallNumber2 || 0}/{matchInfo?.overs || 0}
                                     </span>
                                     <p className="text-sm text-gray-700 dark:text-gray-200 text-lg">
                                         CRR {`${(matchInfo?.innings?.[matchInfo?.currentInning - 1]?.runs / (lastOver2?.overNumber + lastBallNumber2 / 6)).toFixed(2)}`}

@@ -24,6 +24,22 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    changePassword: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/change-password`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+
+    forgotPassword: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/forgot-password`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+
     updateUser: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/profile`,
@@ -31,13 +47,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    updateUser: builder.mutation({
-      query: (data) => ({
-        url: `${USERS_URL}/profile`,
-        method: 'PUT',
-        body: data,
-      }),
-    }),
+    // updateUser: builder.mutation({
+    //   query: (data) => ({
+    //     url: `${USERS_URL}/profile`,
+    //     method: 'PUT',
+    //     body: data,
+    //   }),
+    // }),
     verifyEmail: builder.mutation({
       query: ({ email, code }) => ({
         url: `${USERS_URL}/verify-email`,
@@ -76,5 +92,7 @@ export const {
   useVerifyEmailMutation,
   useGetUserInfoQuery,
   useGetAllScorersQuery,
-  useDeleteUserMutation
+  useDeleteUserMutation,
+  useForgotPasswordMutation,
+  useChangePasswordMutation
 } = userApiSlice;

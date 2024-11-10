@@ -38,7 +38,8 @@ const DrawsAndRounds = () => {
 
             // Trigger the mutation
             await updatePointsTable({ roundId, teamIds });
-            toast.success('points table updated successfully')
+            toast.dismiss()
+            toast.success('Update Successfully')
         } catch (err) {
             console.error('Failed to update points table:', err);
             toast.error('Error points table updated successfully')
@@ -117,7 +118,7 @@ const DrawsAndRounds = () => {
                             <div className="flex justify-between items-center cursor-pointer p-4 rounded-lg" onClick={() => toggleRound(round._id)}>
                                 <div className="flex items-center">
                                     <div className="text-left">
-                                        <h2 className="text-2xl font-extrabold text-gray-600">{round?.roundName}</h2>
+                                        <h2 className="text-2xl font-extrabold text-gray-600">{round?.roundName} {round?.isFinalRound && "(Final)"} </h2>
                                     </div>
                                 </div>
 
@@ -179,11 +180,8 @@ const DrawsAndRounds = () => {
                                                     className={`flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-200 ${!round?.completed ? 'hover:from-blue-700 hover:to-indigo-700' : 'opacity-50 cursor-not-allowed'
                                                         }`}
                                                     disabled={round?.completed || pointtableisLoading}
-                                                >                                                {pointtableisLoading ? 'Updating...' : 'Update Points Table'}
+                                                >                                                {pointtableisLoading ? 'Updating...' : 'Update'}
                                                 </button>
-
-
-                                                {pointsTableError && <p>Failed to update points table. Please try again.</p>}
                                             </div>
                                         </>
                                     ))}
@@ -192,12 +190,6 @@ const DrawsAndRounds = () => {
                                     <div className="flex justify-end mt-4 space-x-2">
 
                                         <ScheduleMatchesDialog tournamentId={tournamentId} round={round?._id} groups={round?.groups} />
-
-
-
-
-
-
 
                                         <NextRoundDialog disabled={!round?.completed}
                                             tournamentId={tournamentId} qualifiedTeams={round?.qualifiedTeams} />

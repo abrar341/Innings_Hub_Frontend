@@ -63,8 +63,6 @@ export const playerApiSlice = apiSlice.injectEndpoints({
             providesTags: (result, error, playerId) => [{ type: 'Player', id: playerId }], // Cache by player ID
         }),
 
-
-
         deletePlayer: builder.mutation({
             query: (playerId) => ({
                 url: `${PLAYERS_URL}/deletePlayer/${playerId}`,

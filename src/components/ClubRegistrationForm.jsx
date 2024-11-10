@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useForm, Controller } from "react-hook-form";
 import Input from "./Input";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css'; // Import the default styles
 import {
     ArrowRight,
     ArrowLeftCircle,
@@ -39,6 +41,7 @@ const ClubRegistrationForm = ({ reviewData }) => {
     const [registerClub, { isLoading }] = useRegisterClubMutation();
     const userInfo = useSelector((state) => state.auth.userInfo);
     const [step, setStep] = useState(0);
+    let review = false;
 
     const isLastStep = step === steps.length - 1;
     const isFirstStep = step === 0;
@@ -51,7 +54,6 @@ const ClubRegistrationForm = ({ reviewData }) => {
     useEffect(() => {
         if (reviewData) {
             console.log(reviewData);
-
             // Set each form field individually with reviewData values
             setValue("clubLogo", reviewData.clubLogo);
             setValue("clubName", reviewData.clubName);
@@ -62,6 +64,7 @@ const ClubRegistrationForm = ({ reviewData }) => {
             setValue("managerPhone", reviewData.manager.phone);
             setValue("managerAddress", reviewData.manager.address);
             setValue("socialLink", reviewData.socialLink);
+            review = true;
         }
     }, [reviewData, setValue]);
 
@@ -90,6 +93,14 @@ const ClubRegistrationForm = ({ reviewData }) => {
                 nextStep();
                 return;
             }
+            if (reviewData) {
+                data.review = true;
+            } else {
+                data.review = false;
+
+            }
+            console.log(data);
+
             const res = await registerClub(data).unwrap();
             console.log(res);
             const { user } = res?.data;
@@ -245,13 +256,51 @@ const ClubRegistrationForm = ({ reviewData }) => {
                                     />
                                 )}
                             />
+
+                            {/* <Controller
+                                name="managerPhone"
+                                control={control}
+                                render={({ field }) => (
+                                    <div>
+                                        <PhoneInput
+                                            {...field}
+                                            country={'pk'} // Default country code as +92 for Pakistan
+                                            value={field.value || ""}
+                                            onChange={field.onChange}
+                                            inputProps={{
+                                                className: `border w-full outline-none px-12 py-3 rounded-lg transition duration-200
+                        ${errors.managerPhone
+                                                        ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                                        : 'border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-500 dark:border-gray-700 dark:focus:border-green-500 dark:focus:ring-green-500'
+                                                    }
+                        ${errors.managerPhone
+                                                        ? 'dark:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500'
+                                                        : 'dark:bg-gray-800 dark:bg-opacity-50'
+                                                    }
+                        bg-white text-black placeholder-gray-500 dark:text-white dark:placeholder-gray-400`,
+                                                placeholder: "Manager Phone Number"
+                                            }}
+                                        />
+                                        {errors.managerPhone && (
+                                            <p className="text-red-500 mb-2 px-1 font-semibold text-xs mt-1 dark:text-red-400">
+                                                {errors.managerPhone.message}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+                            /> */}
+
                             <Controller
                                 name="managerPhone"
                                 control={control}
                                 rules={{
                                     required: "Manager phone number is required",
-                                    minLength: { value: 10, message: "Phone number should be at least 10 digits" },
+                                    pattern: {
+                                        value: /^\+?[1-9]\d{1,14}$/, // Allows international format with 1-15 digits
+                                        message: "Enter a valid phone number",
+                                    },
                                 }}
+
                                 render={({ field }) => (
                                     <Input
                                         icon={Phone}

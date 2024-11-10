@@ -62,12 +62,19 @@ import DrawsAndRounds from './pages/AdminPages/Competitions/Tournaments/SingleTo
 import Standings from './pages/AdminPages/Competitions/Tournaments/SingleTournament.jsx/Standings';
 import ScorerPage from './pages/AdminPages/Scorer/ScorerPage';
 import ClubDetailsPage from './components/Dialogs/ClubDetail';
+import AssignMatchesPage from './components/AssignMatchesPage';
+import ForgotPasswordPage from './components/ForgotPasswordPage';
+import ProfileInfo from './pages/Profile/ProfileInfo';
+import ChangePassword from './pages/Profile/ChangePassword';
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
-
+        <Route path='/regular-user/profile' element={<UpdateProfile />} >
+          <Route path="profile" element={<ProfileInfo />} />
+          <Route path="password" element={<ChangePassword />} />
+        </Route>
         <Route path='/s' element={<MatchClickDialog />} />
         <Route path='/side' element={<Side />} />
         <Route path='/item' element={<UpcomingItem />} />
@@ -75,6 +82,7 @@ function App() {
         <Route path='/viewer' element={<Viewer />} />
         <Route path='account'>
           <Route path='login' element={<LoginPage />} />
+          <Route path='forgot-password' element={<ForgotPasswordPage />} />
           <Route path='signup' element={<SignUpPage />} />
           <Route path='verify' element={<EmailVerificationPage />} />
           <Route path='register-club' element={<ClubRegistrationForm />} />
@@ -103,6 +111,8 @@ function App() {
             <Route path='admin' element={<Dashboard />} />
             <Route path='/admin/competitions' element={<Competitions isAdmin={true} />} />
             <Route path='/admin/scorers' element={<ScorerPage />} />
+            <Route path='/admin/assign-matches' element={<AssignMatchesPage />} />
+
             <Route path='/admin/clubs' element={<Clubs />} >
             </Route>
             <Route path='/admin/clubs/club-detail' element={<ClubDetailsPage />} />
@@ -113,7 +123,10 @@ function App() {
               <Route path='point-table' element={<Standings />} />
             </Route>
           </Route>
-          <Route path='/admin/profile' element={<UpdateProfile />} />
+          <Route path='/admin/profile' element={<UpdateProfile />} >
+            <Route path="profile" element={<ProfileInfo />} />
+            <Route path="password" element={<ChangePassword />} />
+          </Route>
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['club-manager']} />}>
@@ -127,10 +140,13 @@ function App() {
               <Route path='dashboard/squads' element={<Squads />} />
               <Route path='dashboard/club-detail' element={<ClubDetailsPage />} />
             </Route>
+            <Route path="/club-manager/profile" element={<UpdateProfile />}>
+              <Route path="profile" element={<ProfileInfo />} />
+              <Route path="password" element={<ChangePassword />} />
+            </Route>
 
             <Route path='/dashboard/tournaments' element={<RegisterTeamToTournament />} />
             <Route path='tournaments' element={<RegisterTeamToTournament />} />
-            <Route path='/club-manager/profile' element={<UpdateProfile />} />
           </Route>
         </Route>
 
@@ -142,17 +158,22 @@ function App() {
             <Route path='results' element={<Result />} />
           </Route>
           <Route path='/runner/:matchId' element={<Scorer />} />
+          <Route path="/scorer/profile" element={<UpdateProfile />}>
+            <Route path="profile" element={<ProfileInfo />} />
+            <Route path="password" element={<ChangePassword />} />
+          </Route>
+
         </Route>
 
         {/* Public Routes */}
         {/* <Route path="clubs" element={<Clubs />} /> */}
-        <Route path="team" element={<Teams />} />
-        <Route path='/team/:id' element={<TeamProfileLayout />} >
+        < Route path="team" element={< Teams />} />
+        < Route path='/team/:id' element={< TeamProfileLayout />} >
           <Route path='squad' element={<TeamSqaud />} />
           <Route path='players' element={<PlayersListing />} />
           <Route path='stats' element={<TeamStats />} />
           <Route path='matches' element={<Matches type={"team"} />} />
-        </Route>
+        </ Route>
         <Route path="series" element={<Series />} />
         <Route path='series/:id' element={<SeriesPageLayout />} >
           <Route path='fixtures' element={<Matches type={"tournament"} />} />
@@ -160,7 +181,7 @@ function App() {
         </Route>
         <Route path="players" element={<Players />} />
         <Route path="/player/:id" element={<PlayerProfile />} />
-      </Route>
+      </Route >
     )
   );
 

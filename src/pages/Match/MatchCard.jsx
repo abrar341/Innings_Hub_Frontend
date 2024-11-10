@@ -10,6 +10,7 @@ const socket = io('http://localhost:8000');
 const MatchCard1 = ({ id, matchData }) => {
     const navigate = useNavigate();
     const [matchInfo, setMatchInfo] = useState(matchData);
+    console.log(matchInfo);
 
     const handleButtonClick = (matchData) => {
         navigate(`/match/${matchData?._id}/innings`);

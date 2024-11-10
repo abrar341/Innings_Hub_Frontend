@@ -34,8 +34,10 @@ const DashboardLayout = () => {
         });
 
     // Conditionally show breadcrumbs, excluding when on '/admin'
-    const showBreadcrumbs = location.pathname !== '/admin';
+    // const showBreadcrumbs = true;
 
+    // const showBreadcrumbs = location.pathname !== '/admin'
+    const showBreadcrumbs = !location.pathname.includes('/profile');
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             {showBreadcrumbs && (
