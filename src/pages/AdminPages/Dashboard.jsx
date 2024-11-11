@@ -10,7 +10,7 @@ const AdminDashboard = () => {
     // { to: 'competitio', icon: <Calendar />, title: 'Matches Schedules' },
     { to: 'clubs', icon: <Users />, title: 'Clubs' },
     { to: 'scorers', icon: <ClipboardList />, title: 'Scorers' },
-    { to: 'assign-matches', icon: <ClipboardList />, title: 'Assign Matches' },
+    // { to: 'assign-matches', icon: <ClipboardList />, title: 'Assign Matches' },
   ];
 
   const navigate = useNavigate();

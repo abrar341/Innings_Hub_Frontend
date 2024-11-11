@@ -158,7 +158,7 @@ const MatchCard1 = ({ id, matchData }) => {
 
             <div className="bg-gray-200 dark:bg-gray-700 p-2 text-center text-gray-500 dark:text-gray-300 font-semibold text-xs border-t border-gray-200 dark:border-gray-700">
                 {matchInfo.status === 'scheduled'
-                    ? convertTo12HourFormat(matchInfo.time)
+                    ? convertTo12HourFormat(matchInfo?.time)
                     : matchInfo.status === 'live'
                         ? 'Match is live'
                         : matchInfo.status === 'completed' && matchInfo?.result?.isTie

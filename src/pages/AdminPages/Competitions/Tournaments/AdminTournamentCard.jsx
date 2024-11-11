@@ -39,9 +39,9 @@ const AdminTournamentCard = ({ tournament }) => {
     <div className="p-6 bg-white shadow-md rounded-lg relative transition-transform transform hover:scale-105 hover:shadow-lg duration-200 ease-in-out">
       <div className="flex justify-between items-start">
         <div className="flex items-center">
-          <span className="bg-green-100 text-green-700 rounded-full px-3 py-1 text-xs font-semibold">
+          {/* <span className="bg-green-100 text-green-700 rounded-full px-3 py-1 text-xs font-semibold">
             Completed
-          </span>
+          </span> */}
         </div>
         <div className="flex space-x-2">
           <button

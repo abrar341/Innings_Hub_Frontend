@@ -107,7 +107,7 @@ const ScoreCard_Header = ({ matchInfo }) => {
                     matchInfo?.result?.isTie ? <div className="text-gray-600 dark:text-gray-200">Match Tied</div> :
                         matchInfo?.result?.winner ? (
                             <div className="text-gray-600 dark:text-gray-200">
-                                {`${matchInfo?.result.winner?.teamName} by ${matchInfo?.result.margin}`}
+                                {`${matchInfo?.result.winner?.teamName} won by ${matchInfo?.result.margin}`}
                             </div>
                         ) :
                             (
