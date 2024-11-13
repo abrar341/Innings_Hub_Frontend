@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useAllPlayersQuery } from '../../slices/player/playerApiSlice';
+import { useAllPlayersQuery, useGetRandomPlayersQuery } from '../../slices/player/playerApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import UserPlayerCard from './UserPlayerCard';
 
@@ -27,7 +27,7 @@ const PlayerCardLoadingSkeleton = () => (
 );
 
 const PlayerScroll = () => {
-    const { data, isLoading, isError, error } = useAllPlayersQuery();
+    const { data, isLoading, isError, error } = useGetRandomPlayersQuery();
     const players = data?.data || [];
     const scrollContainerRef = useRef(null);
     const [atStart, setAtStart] = useState(true);

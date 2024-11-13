@@ -20,7 +20,7 @@ const MainNavbar = () => {
     }, [isMenuOpen]);
 
     const navLinkClass = ({ isActive }) =>
-        `flex items-center font-semibold text-sm px-3 py-1 transition duration-300 ease-in-out ${isActive ? 'border-b' : ''
+        `flex items-center font-semibold text-xs px-3 py-1 transition duration-300 ease-in-out ${isActive ? 'border-b' : ''
         } dark:text-white text-black dark:border-white border-black`;
 
     const links = [
@@ -43,7 +43,7 @@ const MainNavbar = () => {
         ));
 
     return (
-        <nav className="bg-white dark:bg-gray-800 p-4 md:p-3 sticky top-0 z-10 border-b dark:border-gray-700">
+        <nav className="bg-gray-50 dark:bg-gray-800 px-4 md:px-3 py-2 sticky top-0 z-10 border-b dark:border-gray-700">
             <div className="container mx-auto flex justify-between gap-3 items-center">
                 <h1 class="ml-3 order-1 md:order-0 text-2xl font-extrabold px-2 py-1 border border-transparent rounded-lg shadow-2xl shadow-green-500/40 tracking-wide
            transition-all duration-300 ease-in-out transform scale-110 

@@ -1,6 +1,18 @@
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Extra styling if needed */
+.carousel-next,
+.carousel-prev {
+    font-size: 1.5rem;
+    color: white;
+    z-index: 10;
+}
+
 
 /* Add this to your global CSS file or in a style tag */
 .hide-scrollbar {

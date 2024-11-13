@@ -10,7 +10,7 @@ const socket = io('http://localhost:8000');
 const MatchCard1 = ({ id, matchData }) => {
     const navigate = useNavigate();
     const [matchInfo, setMatchInfo] = useState(matchData);
-    console.log(matchInfo);
+    console.log(matchInfo?.round);
 
     const handleButtonClick = (matchData) => {
         navigate(`/match/${matchData?._id}/innings`);
@@ -31,6 +31,7 @@ const MatchCard1 = ({ id, matchData }) => {
             socket.emit('joinMatch', id);
 
             socket.on('newBall', (ballData) => {
+                console.log(ballData);
                 if (ballData._id === id) {
                     setMatchInfo(ballData);
                 }
@@ -58,10 +59,17 @@ const MatchCard1 = ({ id, matchData }) => {
 
     return (
         <div
-            className="min-w-[380px] bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 border border-gray-300 dark:border-gray-700 rounded shadow-lg transform transition-transform duration-300"
+            className="min-w-[380px] bg-gradient-to-r from-white to-gray-100 dark:from-gray-800 dark:to-gray-900  dark:border-gray-700  shadow-2xl border border-gray-200 transform transition-transform duration-300"
             whileHover={{ scale: 1.05 }}
         >
             <div className="px-4 py-1">
+
+                {/* <div
+            className="min-w-[380px] p-2 bg-gradient-to-r from-white to-gray-100 border
+             dark:from-gray-900 dark:to-gray-800 shadow-2xl rounded-lg transform transition-transform hover:scale-105"
+            whileHover={{ scale: 1.05 }}
+        >
+            <div className="px-4 py-1"> */}
                 <div className="bg-gray-50 dark:bg-gray-800 py-1 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                     <div className="text-gray-600 dark:text-gray-400 text-xs truncate">
                         {formatDateToYMD(matchInfo.date)}

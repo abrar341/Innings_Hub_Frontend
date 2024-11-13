@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import UserPlayerCard from './UserPlayerCard';
 
 const PlayerCardLoadingSkeleton = () => (
-    <div className="border rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-md transition-transform transform hover:scale-105 hover:shadow-lg duration-300 ease-in-out px-2 pt-2 pb-5 cursor-pointer">
+    <div className="border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-md transition-transform transform hover:scale-105 hover:shadow-lg duration-300 ease-in-out px-2 pt-2 pb-5 cursor-pointer">
         {/* Team Logo and Player Name Skeleton */}
         <div className="flex justify-between items-center p-3 py-2 rounded-t-lg bg-gray-100 dark:bg-gray-600 animate-pulse">
             <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-500" />

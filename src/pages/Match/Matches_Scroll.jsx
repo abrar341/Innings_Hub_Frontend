@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Match_Card from './Match_Card';
-import { useGetAllMatchesQuery } from '../../slices/match/matchApiSlice';
+import { useGetAllMatchesQuery, useGetParticularMatchesQuery } from '../../slices/match/matchApiSlice';
 import { convertTo12HourFormat, formatDate } from '../../utils/dateFormatter';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
@@ -16,7 +16,7 @@ const Matches_Scroll = () => {
         scheduled: 'bg-blue-500 text-white',
         completed: 'bg-gray-500 text-white',
     };
-    const { data, isLoading } = useGetAllMatchesQuery();
+    const { data, isLoading } = useGetParticularMatchesQuery();
     console.log(data);
     const matches = data?.data;
     console.log(matches);
@@ -96,7 +96,7 @@ const Matches_Scroll = () => {
             )}
             <div
                 ref={scrollContainerRef}
-                className="flex overflow-x-scroll space-x-1 mx-1 my-1  hide-scrollbar"
+                className="flex overflow-x-scroll space-x-1 mx-1 my-1 gap-1 py-1 hide-scrollbar"
             >
                 {matches?.map((matchData) => (
                     <MatchCard1 id={matchData?._id} handleButtonClick={handleButtonClick} matchData={matchData} statusStyles={statusStyles} />

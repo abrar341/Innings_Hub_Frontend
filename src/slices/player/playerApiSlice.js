@@ -55,6 +55,13 @@ export const playerApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Player'], // Provide cache tags for the fetched players
         }),
+        getRandomPlayers: builder.query({
+            query: () => ({
+                url: `${PLAYERS_URL}/getRandomPlayers`,
+                method: 'GET',
+            }),
+            providesTags: ['Player'], // Provide cache tags for the fetched players
+        }),
         getPlayerById: builder.query({
             query: (playerId) => ({
                 url: `${PLAYERS_URL}/getPlayerById/${playerId}`, // URL with dynamic player ID
@@ -134,5 +141,6 @@ export const {
     useUpdatePlayerMutation, // Export the updatePlayer mutation hook
     useAllPlayersQuery,
     useUpdatePlayerStatsMutation,
-    useGetPlayerByIdQuery
+    useGetPlayerByIdQuery,
+    useGetRandomPlayersQuery
 } = playerApiSlice;
