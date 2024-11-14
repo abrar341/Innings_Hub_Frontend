@@ -5,26 +5,24 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { useAddPlayerToSquadMutation, useGetAvailablePlayersForTournamentQuery } from "../../../../../slices/tournament/tournamentApiSlice";
-// import { useAddPlayerToSquadMutation, useGetAvailablePlayersForTournamentQuery } from "../../../../../slices/tournament/tournamentApiSlice";
 
 const AddPlayerToSquad = ({ tournamentId, teamId, squadId }) => {
-    const [players, setPlayers] = useState([]); // Update state to hold players instead of teams
-    const [selectedPlayers, setSelectedPlayers] = useState([]); // Track selected players
-    const [isDialogOpen, setIsDialogOpen] = useState(false); // Track dialog state
+    const [players, setPlayers] = useState([]);
+    const [selectedPlayers, setSelectedPlayers] = useState([]);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { data, isLoading, isError, error, refetch } = useGetAvailablePlayersForTournamentQuery({ tournamentId, teamId });
     const [addPlayerToSquad, { isLoading: createLoading }] = useAddPlayerToSquadMutation();
     const navigate = useNavigate();
-    // Fetch players when the dialog opens
+
     useEffect(() => {
         if (isDialogOpen) {
-            refetch(); // Trigger API call to fetch players
+            refetch();
         }
     }, [isDialogOpen, refetch]);
 
-    // Set players when data is fetched
     useEffect(() => {
         if (data) {
-            setPlayers(data?.data || []); // Set players list
+            setPlayers(data?.data || []);
         }
     }, [data]);
 
@@ -37,18 +35,25 @@ const AddPlayerToSquad = ({ tournamentId, teamId, squadId }) => {
         });
     };
 
+    // Select up to 15 players
+    const handleSelectAll = () => {
+        const selectablePlayers = players.map((player) => player._id);
+        setSelectedPlayers(selectablePlayers.slice(0, 15));
+    };
+
+    // Deselect all players
+    const handleDeselectAll = () => {
+        setSelectedPlayers([]);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(squadId, selectedPlayers);
 
         try {
             const res = await addPlayerToSquad({
                 squadId,
-                playerIds: selectedPlayers, // Send selected players to API
+                playerIds: selectedPlayers,
             }).unwrap();
-
-            console.log(res);
-
 
             toast.dismiss();
             toast.success("Player(s) added to Squad successfully!");
@@ -69,7 +74,7 @@ const AddPlayerToSquad = ({ tournamentId, teamId, squadId }) => {
                 </button>
             </DialogTrigger>
 
-            <DialogContent className="max-w-lg w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
+            <DialogContent className="max-w-lg w-full bg-gray-800 hide-scrollbar bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-y-auto">
                 <DialogTitle className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
                     Add Player to Squad
                 </DialogTitle>
@@ -78,20 +83,33 @@ const AddPlayerToSquad = ({ tournamentId, teamId, squadId }) => {
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="max-h-60 overflow-y-auto grid grid-cols-1 gap-4">
-                        {players.map((player) => (
-                            <div key={player.id} className="flex items-center space-x-4">
-                                <input
-                                    type="checkbox"
-                                    id={`player-${player.id}`}
-                                    value={player.id}
-                                    checked={selectedPlayers.includes(player._id)}
-                                    onChange={() => handleSelectPlayer(player._id)}
-                                    className="h-5 w-5 text-green-600 bg-gray-700 border-gray-600 rounded-lg focus:ring-green-500"
-                                />
-                                <label htmlFor={`player-${player._id}`} className="text-gray-300 font-medium">
-                                    {player.playerName}
-                                </label>
+                    <div className="flex justify-between mb-4">
+                        <button
+                            type="button"
+                            onClick={handleSelectAll}
+                            className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
+                        >
+                            Select All
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleDeselectAll}
+                            className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
+                        >
+                            Deselect All
+                        </button>
+                    </div>
+                    <div className="max-h-60 overflow-y-auto grid grid-cols-3 gap-4">
+                        {players?.map((player) => (
+                            <div
+                                key={player.id}
+                                onClick={() => handleSelectPlayer(player._id)}
+                                className={`flex items-center space-x-4 p-3 rounded-lg cursor-pointer transition-colors duration-200 ${selectedPlayers.includes(player._id)
+                                    ? "bg-green-600 text-white"
+                                    : "bg-gray-700 text-gray-300"
+                                    }`}
+                            >
+                                <span className="font-medium">{player.playerName}</span>
                             </div>
                         ))}
                     </div>

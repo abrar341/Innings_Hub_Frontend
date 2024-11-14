@@ -184,6 +184,18 @@ const StartMatchDialog = ({ setMatchInfo, matchId, matchInfo }) => {
                                         <DialogTitle className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-transparent bg-clip-text mb-8">
                                             {team?.teamName} Playing XI
                                         </DialogTitle>
+                                        {/* Select First 11 Button */}
+                                        <div className="flex justify-center mb-4">
+                                            <button
+                                                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+                                                onClick={() => {
+                                                    const first11 = playersData.slice(0, 11).map(player => player._id);
+                                                    handlePlaying11Change(index === 0 ? 'team1' : 'team2', first11);
+                                                }}
+                                            >
+                                                Select First 11
+                                            </button>
+                                        </div>
                                         <div className="gap-4 grid grid-cols-2">
                                             {playersData?.map((player) => (
                                                 <div

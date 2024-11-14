@@ -118,16 +118,25 @@ const CreateRoundDialog = ({ confirmedTeams, tournamentId, qualifiedTeams, round
                             render={({ field }) => (
                                 <div className="space-y-2">
                                     <label className="text-lg font-bold text-white">Round Name</label>
-                                    <input
+                                    <select
                                         {...field}
-                                        type="text"
-                                        placeholder="Enter round name"
                                         className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                    />
-                                    {errors.roundName && <p className="px-1 text-red-500 text-xs font-semibold">{errors.roundName.message}</p>}
+                                    >
+                                        <option value="" disabled>
+                                            Select round type
+                                        </option>
+                                        <option value="Group Stage">Group Stage</option>
+                                        <option value="Knockout">Knockout</option>
+                                    </select>
+                                    {errors.roundName && (
+                                        <p className="px-1 text-red-500 text-xs font-semibold">
+                                            {errors.roundName.message}
+                                        </p>
+                                    )}
                                 </div>
                             )}
                         />
+
 
                         <Controller
                             name="groupingType"

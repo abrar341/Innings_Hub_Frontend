@@ -24,7 +24,7 @@ const PlayerCardLoadingSkeleton = () => (
     </div>
 );
 
-const PlayerList = ({ isLoading, isError, searchQuery, selectedTeam, selectedClub, players }) => {
+const PlayerList = ({ isLoading, isError, searchQuery, showInactivePlayers, selectedTeam, selectedClub, players }) => {
     // Normalize search query to lowercase for case-insensitive filtering
     const normalizedSearchQuery = searchQuery.toLowerCase();
 
@@ -33,8 +33,11 @@ const PlayerList = ({ isLoading, isError, searchQuery, selectedTeam, selectedClu
         const matchesSearchQuery = player.playerName?.toLowerCase().includes(normalizedSearchQuery);
         const matchesTeam = selectedTeam ? player.currentTeam?.teamName === selectedTeam : true;
         const matchesClub = selectedClub ? player.associatedClub?.clubName === selectedClub : true;
-        return matchesSearchQuery && matchesTeam && matchesClub;
+        const matchesInactive = showInactivePlayers ? player.associatedClub === null : true;
+
+        return matchesSearchQuery && matchesTeam && matchesClub && matchesInactive;
     });
+
 
     if (isLoading) {
         return (

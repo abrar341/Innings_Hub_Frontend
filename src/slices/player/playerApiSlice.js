@@ -77,6 +77,28 @@ export const playerApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Player'], // Invalidate the cache when a player is deleted
         }),
+        releasePlayerFromClub: builder.mutation({
+            query: (playerId) => ({
+                url: `${PLAYERS_URL}/releasePlayerFromClub/${playerId}`,
+                method: 'PUT',
+            }),
+            invalidatesTags: ['Player'], // Invalidate the cache when a player is deleted
+        }),
+        addPlayerToClub: builder.mutation({
+            query: ({ playerId, clubId }) => ({
+                url: `${PLAYERS_URL}/addPlayerToClub/${playerId}/${clubId}`,
+                method: 'PUT',
+            }),
+            invalidatesTags: ['Player'], // Invalidate the cache when a player is added to a club
+        }),
+        addPlayerToClubReq: builder.mutation({
+            query: ({ playerId, clubId }) => ({
+                url: `${PLAYERS_URL}/addPlayerToClubReq/${playerId}/${clubId}`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Player'], // Invalidate the cache when a player is added to a club
+        }),
+
 
         // Add the updatePlayer mutation
         updatePlayer: builder.mutation({
@@ -142,5 +164,8 @@ export const {
     useAllPlayersQuery,
     useUpdatePlayerStatsMutation,
     useGetPlayerByIdQuery,
-    useGetRandomPlayersQuery
+    useGetRandomPlayersQuery,
+    useReleasePlayerFromClubMutation,
+    useAddPlayerToClubMutation,
+    useAddPlayerToClubReqMutation
 } = playerApiSlice;

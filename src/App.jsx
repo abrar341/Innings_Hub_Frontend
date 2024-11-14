@@ -111,6 +111,7 @@ function App() {
             <Route path='admin' element={<Dashboard />} />
             <Route path='/admin/competitions' element={<Competitions isAdmin={true} />} />
             <Route path='/admin/scorers' element={<ScorerPage />} />
+            <Route path='/admin/players' element={<PlayersPageLayout />} />
             <Route path='/admin/assign-matches' element={<AssignMatchesPage />} />
 
             <Route path='/admin/clubs' element={<Clubs />} >

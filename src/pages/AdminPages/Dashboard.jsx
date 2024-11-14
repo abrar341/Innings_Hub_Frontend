@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Profile from './Profile';
 import { Trophy, Calendar, Users, Briefcase, ClipboardList } from 'lucide-react'; // Professional icons
 import UserDropdown from '../../components/userDropdown';
+import { setPlayers } from '../../slices/clubManager/clubManagerSlice';
+import { useDispatch } from 'react-redux';
+import { data } from 'autoprefixer';
+import { useGetInactivePlayersQuery } from '../../slices/admin/adminApiSlice';
 
 const AdminDashboard = () => {
   const cards = [
@@ -10,10 +14,27 @@ const AdminDashboard = () => {
     // { to: 'competitio', icon: <Calendar />, title: 'Matches Schedules' },
     { to: 'clubs', icon: <Users />, title: 'Clubs' },
     { to: 'scorers', icon: <ClipboardList />, title: 'Scorers' },
+    { to: 'players', icon: <ClipboardList />, title: 'Inactive Player' },
     // { to: 'assign-matches', icon: <ClipboardList />, title: 'Assign Matches' },
   ];
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // const { data: playersData, isLoading: isLoadingPlayers, refetch } = useGetInactivePlayersQuery();
+  // console.log(playersData);
+
+  // // Ensure the data is fetched when the page is loaded or navigated back to
+  // useEffect(() => {
+  //   if (!playersData) {
+  //     refetch(); // Force refetch if data is empty or not loaded
+  //   }
+
+  //   if (playersData) {
+  //     dispatch(setPlayers({ data: playersData?.data }));
+  //   }
+  // }, [dispatch, playersData, refetch]);  // Add refetch as a dependency to ensure the data is fetched correctly
+
 
   const handleCardClick = (to) => {
     navigate(`/admin/${to}`);

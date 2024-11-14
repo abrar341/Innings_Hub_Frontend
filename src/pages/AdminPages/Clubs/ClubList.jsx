@@ -15,10 +15,10 @@ const ClubList = () => {
     console.log(clubs);
 
 
-    // State for registration status
-    const [registrationStatus, setRegistrationStatus] = useState('all'); // Default registrationStatus is 'all' for all clubs
     // State for search query
     const [searchQuery, setSearchQuery] = useState('');
+    // State for registration status
+    const [registrationStatus, setRegistrationStatus] = useState('all'); // Default registrationStatus is 'all' for all clubs
 
     const { data, isLoading, refetch } = useGetClubsQuery(registrationStatus);
 

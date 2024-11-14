@@ -13,6 +13,35 @@
     z-index: 10;
 }
 
+/* Center the dots horizontally at the bottom of the carousel */
+.slick-dots {
+    position: absolute;
+    bottom: 20px;
+    /* Adjust distance from the bottom as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    /* Center horizontally */
+    display: flex !important;
+    justify-content: center;
+    gap: 10px;
+    /* Add space between dots if needed */
+    z-index: 10;
+    /* Ensure dots are above the slide content */
+}
+
+/* Customize dots appearance */
+.slick-dots li button:before {
+    font-size: 12px;
+    /* Adjust dot size */
+    color: white;
+    /* Color of the dots */
+}
+
+.slick-dots li.slick-active button:before {
+    color: #FF6347;
+    /* Color for the active dot */
+}
+
 
 /* Add this to your global CSS file or in a style tag */
 .hide-scrollbar {

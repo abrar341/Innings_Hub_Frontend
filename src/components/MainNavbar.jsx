@@ -29,6 +29,7 @@ const MainNavbar = () => {
         { to: '/team', label: 'TEAMS' },
         { to: '/series', label: 'COMPETITIONS' },
         { to: '/players', label: 'PLAYERS' },
+        { to: '/gallery', label: 'GALLERY' },
     ];
     const renderNavLinks = (isMobile = false) =>
         links.map((link) => (

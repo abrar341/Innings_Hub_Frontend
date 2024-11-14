@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     useReactTable,
     getCoreRowModel,
@@ -9,12 +9,30 @@ import {
 import ActionButtons from './ActionButtons';
 import { formatDateToYMD } from '../../../utils/dateUtils';
 import CreatePlayerDialog from './CreatePlayerDialog';
+import { setPlayers } from '../../../slices/clubManager/clubManagerSlice';
+import { useGetInactivePlayersQuery } from '../../../slices/admin/adminApiSlice';
 
 const PlayerList = () => {
     const players = useSelector((state) => state.clubManager.players);
-    console.log(players);
 
+    const { isAuthenticated, userType } = useSelector((state) => state.auth);
     const navigate = useNavigate();
+
+
+    const { data: playersData, isLoading: isLoadingPlayers, refetch } = useGetInactivePlayersQuery();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (isAuthenticated && userType === 'admin') {  // Only run this logic if the user is an admin
+            if (!playersData) {
+                refetch();  // Force refetch if data is empty or not loaded
+            }
+
+            if (playersData) {
+                dispatch(setPlayers({ data: playersData?.data }));
+            }
+        }
+    }, [dispatch, playersData, refetch, userType]);  // Add userType to dependencies to re-run if it changes
 
     // Filter states
     const [statusFilter, setStatusFilter] = useState('');
@@ -108,7 +126,10 @@ const PlayerList = () => {
                         />
                     </form>
                 </div>
-                <CreatePlayerDialog />
+
+                {isAuthenticated && userType === 'club-manager' && (
+
+                    <CreatePlayerDialog />)}
 
                 {/* Role Filter */}
                 <div className="col-span-1 sm:col-span-2">

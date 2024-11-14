@@ -2,6 +2,8 @@ import { apiSlice } from '../apiSlice';
 
 const CLUBS_URL = '/api/club'; // Assuming this is the correct base URL for clubs
 const MATCHES_URL = '/api/match';
+const PLAYERS_URL = '/api/player';
+
 
 
 export const clubApiSlice = apiSlice.injectEndpoints({
@@ -16,7 +18,13 @@ export const clubApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Admin'], // Provide cache for clubs
         }),
-
+        getInactivePlayers: builder.query({
+            query: () => ({
+                url: `${PLAYERS_URL}/getInactivePlayers`,
+                method: 'GET',
+            }),
+            providesTags: ['Player'], // Provide cache for club details
+        }),
 
         // Approve a club registration
         approveClub: builder.mutation({
@@ -78,5 +86,6 @@ export const {
     useApproveClubMutation, // Export the mutation hook for approving clubs
     useRejectClubMutation,  // Export the mutation hook for rejecting clubs
     useCreatePostMutation,
-    useGetPostsByMatchIdQuery
+    useGetPostsByMatchIdQuery,
+    useGetInactivePlayersQuery
 } = clubApiSlice;
