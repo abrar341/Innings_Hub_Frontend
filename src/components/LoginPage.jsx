@@ -31,6 +31,8 @@ const LoginPage = () => {
 		try {
 			const res = await login(data).unwrap();
 			const { user } = res?.data;
+			console.log(user);
+
 			dispatch(setCredentials({ ...user }));
 
 			const role = res.data.user.role;

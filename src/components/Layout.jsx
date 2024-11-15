@@ -8,6 +8,7 @@ import { setCredentials } from '../slices/auth/authSlice';
 import AsideMenu from "./asideMenu/AsideMenu";
 import { ThemeContext } from "./ThemeContext";
 import ImageCarousel from "./ImageCrousal";
+import { disconnectSocket, initializeSocket } from "../slices/socket/socketSlice";
 
 const Layout = () => {
     const [isMobileExpanded, setIsMobileExpanded] = useState(false);
@@ -28,6 +29,21 @@ const Layout = () => {
         }
     }, [isLoading, dispatch]);
 
+
+    useEffect(() => {
+        if (userInfo) {
+            // Initialize the socket connection only if there is a logged-in user
+            dispatch(initializeSocket(userInfo));
+        }
+
+        // Disconnect socket on app unmount
+        return () => {
+            if (userInfo) {
+                dispatch(disconnectSocket());
+            }
+        };
+    }, [dispatch, userInfo]);
+
     const location = useLocation();
     const noNavbarRoutes = ['/account', '/runner', '/side', '/club-manager', '/admin', '/scorer', '/b', 'profile'];
     const currentPath = location.pathname;
@@ -41,8 +57,10 @@ const Layout = () => {
             <div className="bg-white min-h-screen dark:bg-gray-900 text-gray-900 dark:text-gray-100">
                 {!shouldHideNavbar && <Header />}
                 <Outlet />
-                <Toaster />
-            </div>
+                <Toaster
+                    position="top-center"
+                    reverseOrder={false}
+                />            </div>
         </div>
     );
 }

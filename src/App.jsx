@@ -66,11 +66,13 @@ import AssignMatchesPage from './components/AssignMatchesPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ProfileInfo from './pages/Profile/ProfileInfo';
 import ChangePassword from './pages/Profile/ChangePassword';
+import { Notification } from './components/Notification';
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
+        <Route path='/notifications' element={<Notification />} />
         <Route path='/regular-user/profile' element={<UpdateProfile />} >
           <Route path="profile" element={<ProfileInfo />} />
           <Route path="password" element={<ChangePassword />} />

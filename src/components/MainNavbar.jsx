@@ -3,6 +3,8 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UserDropdown from './userDropdown';
 import { ThemeContext } from './ThemeContext';
+import { FaBell } from 'react-icons/fa6';
+import NotificationBell from './Notification/NotificationBell';
 
 const MainNavbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,7 +13,10 @@ const MainNavbar = () => {
     const navigate = useNavigate();
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+    const notifications = useSelector((state) => state.socket.notifications);
+    const unreadNotifications = notifications.filter((notif) => !notif.isRead);
 
+    const unreadCount = unreadNotifications.length;
     useEffect(() => {
         if (isMenuOpen) {
             const timer = setTimeout(() => setIsMenuOpen(false), 5000);
@@ -53,6 +58,9 @@ const MainNavbar = () => {
                     Innings_Hub
                 </h1>
                 <div className="order-2 flex items-center space-x-4">
+                    {isAuthenticated && <NotificationBell onClose={() => setIsMenuOpen(false)} />}
+
+
 
                     <button
                         onClick={toggleTheme}

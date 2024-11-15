@@ -19,20 +19,50 @@ const PlayerList = () => {
     const navigate = useNavigate();
 
 
-    const { data: playersData, isLoading: isLoadingPlayers, refetch } = useGetInactivePlayersQuery();
+    const { data: playersData, isLoading: isLoadingPlayers, refetch } = useGetInactivePlayersQuery(undefined, {
+        skip: !(isAuthenticated && userType === 'admin') // Skip query if not authenticated or not admin
+    });
     const dispatch = useDispatch();
-
+    // Refetch players data whenever the page is accessed
     useEffect(() => {
-        if (isAuthenticated && userType === 'admin') {  // Only run this logic if the user is an admin
-            if (!playersData) {
-                refetch();  // Force refetch if data is empty or not loaded
-            }
-
-            if (playersData) {
-                dispatch(setPlayers({ data: playersData?.data }));
-            }
+        if (isAuthenticated && userType === 'admin') {
+            refetch(); // Trigger refetch on component mount
         }
-    }, [dispatch, playersData, refetch, userType]);  // Add userType to dependencies to re-run if it changes
+    }, [isAuthenticated, userType, refetch]);
+
+    // Update players state when the fetched data changes
+    useEffect(() => {
+        if (isAuthenticated && userType === 'admin' && playersData) {
+            dispatch(setPlayers({ data: playersData?.data }));
+        }
+    }, [isAuthenticated, userType, playersData, dispatch]);
+
+
+    // // Refetch players data whenever the page is accessed
+    // useEffect(() => {
+    //     if (isAuthenticated && userType === 'admin') {
+    //         refetch(); // Trigger refetch on component mount
+    //     }
+    // }, [isAuthenticated, userType, refetch]);
+
+    // // Update players state when data changes
+    // useEffect(() => {
+    //     if (playersData) {
+    //         dispatch(setPlayers({ data: playersData?.data }));
+    //     }
+    // }, [dispatch, playersData]);
+
+    // useEffect(() => {
+    //     if (isAuthenticated && userType === 'admin') {  // Only run this logic if the user is an admin
+    //         if (!playersData) {
+    //             refetch();  // Force refetch if data is empty or not loaded
+    //         }
+
+    //         if (playersData) {
+    //             dispatch(setPlayers({ data: playersData?.data }));
+    //         }
+    //     }
+    // }, [dispatch, playersData, refetch, userType]);
 
     // Filter states
     const [statusFilter, setStatusFilter] = useState('');

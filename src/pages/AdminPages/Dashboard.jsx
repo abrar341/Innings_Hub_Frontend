@@ -4,11 +4,16 @@ import Profile from './Profile';
 import { Trophy, Calendar, Users, Briefcase, ClipboardList } from 'lucide-react'; // Professional icons
 import UserDropdown from '../../components/userDropdown';
 import { setPlayers } from '../../slices/clubManager/clubManagerSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { data } from 'autoprefixer';
 import { useGetInactivePlayersQuery } from '../../slices/admin/adminApiSlice';
+import { io } from 'socket.io-client';
+import toast from 'react-hot-toast';
 
 const AdminDashboard = () => {
+
+  const { isAuthenticated, userType, userInfo } = useSelector((state) => state.auth);
+
   const cards = [
     { to: 'competitions', icon: <Trophy />, title: 'Competitions' },
     // { to: 'competitio', icon: <Calendar />, title: 'Matches Schedules' },
@@ -35,6 +40,28 @@ const AdminDashboard = () => {
   //   }
   // }, [dispatch, playersData, refetch]);  // Add refetch as a dependency to ensure the data is fetched correctly
 
+
+  // useEffect(() => {
+  //   const socket = io('http://localhost:8000', {
+  //     query: { role: 'admin', userId: userInfo?._id },
+  //   });
+  //   socket.on('connect', () => {
+  //     toast.success('Connected to server');
+  //   });
+
+  //   socket.on('notification', (notification) => {
+  //     console.log(notification?.message);
+  //     toast.success(notification?.message);
+  //   });
+
+  //   socket.on('disconnect', () => {
+  //     toast.success('Disconnected from server');
+  //   });
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
 
   const handleCardClick = (to) => {
     navigate(`/admin/${to}`);

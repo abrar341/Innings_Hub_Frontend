@@ -35,11 +35,24 @@ const AssignPlayerDialog = ({ playerId, setPlayerClub, reqClubs: clubData }) => 
         <>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger className="flex justify-center items-center" asChild>
-                    <button
-                        className=" p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
-                    >
-                        <FaPlus className="text-gray-600" />
-                    </button>
+                    <div className="relative">
+                        <button
+                            className={`p-2 rounded-full focus:outline-none ${clubData?.length > 0
+                                    ? "bg-gray-100 hover:bg-gray-200"
+                                    : "bg-gray-300 cursor-not-allowed"
+                                }`}
+                            disabled={clubData?.length === 0}
+                        >
+                            <FaPlus className={`text-gray-${clubData?.length > 0 ? "600" : "400"}`} />
+                        </button>
+                        {clubData?.length > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                {clubData.length}
+                            </span>
+                        )}
+                    </div>
+
+
                 </DialogTrigger>
 
                 <DialogContent className="max-w-2xl w-full bg-white rounded-3xl shadow-xl p-6 border border-gray-300">

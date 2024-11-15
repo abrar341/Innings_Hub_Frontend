@@ -7,6 +7,8 @@ import dialogReducer from './slices/dialogbox/dialogSlice';
 import clubManagerReducer from './slices/clubManager/clubManagerSlice'; // Import the Club Manager Slice
 import adminReducer from './slices/admin/adminSlice'; // Import the Club Manager Slice
 import { apiSlice } from './slices/apiSlice';
+import socketReducer from './slices/socket/socketSlice'
+
 
 // Import redux-persist dependencies
 import { persistReducer, persistStore } from 'redux-persist';
@@ -44,8 +46,12 @@ const store = configureStore({
         dialog: dialogReducer,                    // Dialog slice
         clubManager: persistedClubManagerReducer, // Club Manager slice with persistence
         admin: persistedadminReducer, // Club Manager slice with persistence
+        socket: socketReducer,
+
         // Add other reducers here if necessary
     },
+
+
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: false, // Disable serializable checks because of redux-persist

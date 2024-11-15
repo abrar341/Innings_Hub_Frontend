@@ -1,8 +1,12 @@
 import React from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import UserDropdown from '../../components/userDropdown';
+import NotificationBell from '../../components/Notification/NotificationBell';
+import { useSelector } from 'react-redux';
 
 const DashboardLayout = () => {
+    const { isAuthenticated, userType } = useSelector((state) => state.auth);
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -53,7 +57,10 @@ const DashboardLayout = () => {
                         {breadcrumbs.length > 0 && ' / '}
                         {breadcrumbs}
                     </div>
-                    <div className="mr-2">
+
+
+                    <div className="mr-2 flex justif-center items-center gap-4">
+                        {isAuthenticated && <NotificationBell />}
                         <UserDropdown />
                     </div>
                 </div>
