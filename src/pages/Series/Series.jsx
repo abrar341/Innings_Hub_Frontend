@@ -5,6 +5,8 @@ import { useGetAllTournamentsQuery } from '../../slices/tournament/tournamentApi
 
 const Series = () => {
     const { data, isLoading, isError, error } = useGetAllTournamentsQuery();
+    console.log(data);
+
     const tournaments = data?.data || []; // Fallback to empty array
     const [filterType, setFilterType] = useState('all'); // 'all', 'ongoing', 'upcoming', 'concluded'
     const [searchQuery, setSearchQuery] = useState(''); // Search query state

@@ -7,7 +7,7 @@ import { useGetUserInfoQuery } from '../slices/auth/usersApiSlice';
 import { setCredentials } from '../slices/auth/authSlice';
 import AsideMenu from "./asideMenu/AsideMenu";
 import { ThemeContext } from "./ThemeContext";
-import ImageCarousel from "./ImageCrousal";
+import ImageCarousel from "./Crousal/ImageCrousal";
 import { disconnectSocket, initializeSocket } from "../slices/socket/socketSlice";
 
 const Layout = () => {

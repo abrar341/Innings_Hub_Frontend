@@ -7,9 +7,12 @@ import AddPlayerToSqaud from './AddPlayerToSqaud';
 import toast from 'react-hot-toast';
 import { FaCheck } from 'react-icons/fa';
 import { useApproveSquadByIdMutation, useGetSingleTournamentSquadsQuery, useRemovePlayerFromSquadMutation, useRemoveTeamFromTournamentMutation } from '../../../../../slices/tournament/tournamentApiSlice';
+import { useSelector } from 'react-redux';
 
 const Squads = () => {
     const context = useOutletContext();
+    const { isAuthenticated, userType } = useSelector((state) => state.auth);
+
     let tournament = context;
     const tournamentId = tournament?._id;
     const [removePlayerFromSquad] = useRemovePlayerFromSquadMutation();
@@ -31,20 +34,31 @@ const Squads = () => {
     const [squads, setSquads] = useState([]);
     const { data, isLoading, isError, error, refetch } = useGetSingleTournamentSquadsQuery(tournamentId);
 
+    // Trigger refetch whenever the component is mounted or when the tournamentId changes
+    useEffect(() => {
+        refetch();
+    }, [refetch, tournamentId]);
+
     useEffect(() => {
         if (data) {
             setSquads(data?.data);
-        }
-        if (!data) {
+        } else {
             setSquads([]);
         }
     }, [data]);
 
-    // Filtered squads based on the selected filter (approved, pending, or all)
+    // Assuming isAuthenticated and userType are passed or available in the context
     const filteredSquads = squads.filter((squad) => {
-        if (filter === 'all') return true;
-        return squad?.status === filter;
+        if (isAuthenticated && userType === 'admin') {
+            // Admin can see all squads
+            if (filter === 'all') return true; // 'all' shows everything
+            return squad?.status === filter;  // Respect the filter (e.g., approved, pending)
+        }
+        // Non-admin users only see approved squads
+        return squad?.status === 'approved';
     });
+
+
 
     const [removeTeamFromTournament] = useRemoveTeamFromTournamentMutation(); // Initialize mutation
     const [openSquad, setOpenSquad] = useState(null); // State to track which squad is open
@@ -86,32 +100,34 @@ const Squads = () => {
     return (
         <div className="p-6 bg-gray-50 min-h-screen">
             {/* Header with Add Team button */}
-            <div className="flex justify-between items-center mb-6">
+            {isAuthenticated && userType === "admin" && (<div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold text-gray-800">Squads</h1>
                 <AddTeamToTournamentDialog tournamentId={tournamentId} />
-            </div>
+            </div>)}
 
             {/* Filter buttons */}
-            <div className="mb-6 flex gap-4">
-                <button
-                    className={`inline-flex items-center justify-center whitespace-nowrap py-1 px-3 font-medium rounded transition-colors duration-300 rounded ${filter === 'all' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-200'}`}
-                    onClick={() => setFilter('all')}
-                >
-                    All
-                </button>
-                <button
-                    className={`inline-flex items-center justify-center whitespace-nowrap py-1 px-3 font-medium rounded transition-colors duration-300 ${filter === 'approved' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-200'}`}
-                    onClick={() => setFilter('approved')}
-                >
-                    Approved
-                </button>
-                <button
-                    className={`inline-flex items-center justify-center whitespace-nowrap py-1 px-3 font-medium rounded transition-colors duration-300 ${filter === 'pending' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-200'}`}
-                    onClick={() => setFilter('pending')}
-                >
-                    Pending
-                </button>
-            </div>
+            {isAuthenticated && userType === "admin" &&
+                <div className="mb-6 flex gap-4">
+                    <button
+                        className={`inline-flex items-center justify-center whitespace-nowrap py-1 px-3 font-medium rounded transition-colors duration-300 rounded ${filter === 'all' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-200'}`}
+                        onClick={() => setFilter('all')}
+                    >
+                        All
+                    </button>
+                    <button
+                        className={`inline-flex items-center justify-center whitespace-nowrap py-1 px-3 font-medium rounded transition-colors duration-300 ${filter === 'approved' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-200'}`}
+                        onClick={() => setFilter('approved')}
+                    >
+                        Approved
+                    </button>
+                    <button
+                        className={`inline-flex items-center justify-center whitespace-nowrap py-1 px-3 font-medium rounded transition-colors duration-300 ${filter === 'pending' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-200'}`}
+                        onClick={() => setFilter('pending')}
+                    >
+                        Pending
+                    </button>
+                </div>
+            }
 
             {/* Squads list */}
             {filteredSquads?.length === 0 ? (
@@ -154,33 +170,36 @@ const Squads = () => {
                                     )}
                                 </div>
 
-                                <div className="flex flex items-center gap-5 gap-2">
-                                    {squad?.status === 'pending' ? (
+                                {isAuthenticated && userType === "admin" &&
+                                    <div className="flex flex items-center gap-5 gap-2">
+                                        {squad?.status === 'pending' ? (
+                                            <button
+                                                className="bg-green-500 text-white py-1 px-4 rounded hover:bg-red-600 transition-colors duration-300"
+                                                onClick={() => handleApproveSquad(squad._id)} // Call the approve function on click
+                                                disabled={squadApproving} // Disable the button if the mutation is in progress
+                                            >
+                                                {squadApproving ? 'Approving...' : 'Approve'}
+                                            </button>
+                                        ) : (
+                                            <FaCheck className="text-green-600" />
+                                        )}
                                         <button
-                                            className="bg-green-500 text-white py-1 px-4 rounded hover:bg-red-600 transition-colors duration-300"
-                                            onClick={() => handleApproveSquad(squad._id)} // Call the approve function on click
-                                            disabled={squadApproving} // Disable the button if the mutation is in progress
+                                            className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 transition-colors duration-300"
+                                            onClick={() => handleRemoveTeam(squadId)} // Call the remove function
                                         >
-                                            {squadApproving ? 'Approving...' : 'Approve'}
+                                            Remove
                                         </button>
-                                    ) : (
-                                        <FaCheck className="text-green-600" />
-                                    )}
-                                    <button
-                                        className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 transition-colors duration-300"
-                                        onClick={() => handleRemoveTeam(squadId)} // Call the remove function
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
+                                    </div>}
                             </div>
 
                             {/* Players list */}
                             {isOpen && (
                                 <div className="flex items-center flex-col">
-                                    <div className="self-end">
-                                        <AddPlayerToSqaud tournamentId={tournamentId} teamId={team?._id} squadId={squadId} />
-                                    </div>
+                                    {isAuthenticated && userType === "admin" &&
+                                        <div className="self-end">
+                                            <AddPlayerToSqaud tournamentId={tournamentId} teamId={team?._id} squadId={squadId} />
+                                        </div>
+                                    }
                                     <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                                         {players.length === 0 ? (
                                             <div className="col-span-full text-base text-gray-500">No Players Added Yet</div>
@@ -205,13 +224,15 @@ const Squads = () => {
                                                     </div>
 
                                                     {/* Cross (X) button on top-right */}
-                                                    <button
-                                                        className="absolute text-sm font-bold top-2 right-2 text-gray-500 hover:text-red-500"
-                                                        onClick={() => handleRemovePlayer({ playerId: player?._id, squadId })}
-                                                        disabled={removingPlayer === player?._id} // Disable only the button of the player being removed
-                                                    >
-                                                        {removingPlayer === player?._id ? '...' : '✕'}
-                                                    </button>
+                                                    {isAuthenticated && userType === "admin" &&
+                                                        <button
+                                                            className="absolute text-sm font-bold top-2 right-2 text-gray-500 hover:text-red-500"
+                                                            onClick={() => handleRemovePlayer({ playerId: player?._id, squadId })}
+                                                            disabled={removingPlayer === player?._id} // Disable only the button of the player being removed
+                                                        >
+                                                            {removingPlayer === player?._id ? '...' : '✕'}
+                                                        </button>
+                                                    }
                                                 </div>
 
                                             ))

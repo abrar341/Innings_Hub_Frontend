@@ -174,7 +174,7 @@ const PlayerProfile = () => {
                     <table className="min-w-full table-auto divide-y divide-gray-200">
                         <thead className="bg-gray-100">
                             <tr>
-                                {['Matches', 'Inn', 'Runs', 'Wkts', 'BBI', '5W', '10W', 'Econ'].map((header) => (
+                                {['Matches', 'Inn', 'Runs', 'Wkts', 'BBI', '5W', '10W', 'Avg'].map((header) => (
                                     <th key={header} className="px-4 py-2 text-left">{header}</th>
                                 ))}
                             </tr>
@@ -190,7 +190,9 @@ const PlayerProfile = () => {
                                     <td className="px-4 py-2">{playerInfo?.stats.BB}</td>
                                     <td className="px-4 py-2">{playerInfo?.stats.FiveWickets}</td>
                                     <td className="px-4 py-2">{playerInfo?.stats.TenWickets}</td>
-                                    <td className="px-4 py-2">{career.economy}</td>
+                                    <td className="px-4 py-2">{playerInfo?.stats.wickets > 0
+                                        ? (playerInfo?.stats.runsConceded / playerInfo?.stats.wickets).toFixed(2)
+                                        : "0" /* or "0", or "∞" */}</td>
                                 </tr>
                             ))}
                         </tbody>

@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import RegisterTeamToTournament from '../../../ClubManager/RegisterTeamToTournament';
 
 const UsersTournamentCard = ({ tournament }) => {
+    console.log(tournament?.status);
+
     const { isAuthenticated, userType } = useSelector((state) => state.auth);
 
     const currentDate = new Date();
@@ -15,11 +17,13 @@ const UsersTournamentCard = ({ tournament }) => {
 
     // Determine tournament status based on current date
     let status = '';
-    if (currentDate < startDate) {
+    if (tournament?.status === 'Upcoming') {
         status = 'Upcoming';
-    } else if (currentDate >= startDate && currentDate <= endDate) {
+    }
+    if (tournament?.status === 'Started') {
         status = 'Ongoing';
-    } else if (currentDate > endDate) {
+    }
+    if (tournament?.winner) {
         status = 'Concluded';
     }
 

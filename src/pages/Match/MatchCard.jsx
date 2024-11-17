@@ -32,14 +32,14 @@ const MatchCard1 = ({ id, matchData }) => {
 
             socket.on('newBall', (ballData) => {
                 console.log(ballData);
-                if (ballData._id === id) {
+                if (ballData?._id === id) {
                     setMatchInfo(ballData);
                 }
             });
 
             socket.on('matchUpdate', (data) => {
-                if (data) {
-                    setMatchInfo(data);
+                if (data?.match?._id === id) {
+                    setMatchInfo(data?.match);
                 }
             });
             socket.on('newBowlerAssigned', (updatedMatchData) => {
