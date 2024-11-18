@@ -157,7 +157,7 @@ const PlayerList = () => {
                     </form>
                 </div>
 
-                {isAuthenticated && userType === 'club-manager' && (
+                {isAuthenticated && (
 
                     <CreatePlayerDialog />)}
 

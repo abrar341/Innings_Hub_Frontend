@@ -1,118 +1,118 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Slider from 'react-slick';
-import LiveMatchSlide from './LiveMatchSlide';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import { useGetFeaturedMatchesQuery } from '../../slices/match/matchApiSlice';
 import CompletedMatchSlide from './CompletedMatchSlide';
+import ScheduledMatchSlide from './ScheduleMatchSlide';
 import UpcomingTournamentSlide from './UpcomingTournamentSlide';
-import { io } from 'socket.io-client';
-
-const socket = io('http://localhost:8000');
 
 const ImageCarousel = () => {
     const sliderRef = useRef(null);
 
-    // State for matches
-    const [liveMatch, setLiveMatch] = useState(null);
-    const [completedMatch, setCompletedMatch] = useState(null);
-    const [upcomingTournaments, setUpcomingTournaments] = useState([]);
-
-    useEffect(() => {
-        // Listen for initial carousel data
-        socket.on('carouselData', (data) => {
-            console.log('Initial carousel data:', data);
-            setLiveMatch(data.liveMatch);
-            setCompletedMatch(data.completedMatch);
-            setUpcomingTournaments(data.upcomingTournaments || []);
-        });
-        // Listen for live match updates
-        socket.on('liveMatchUpdated', (updatedMatch) => {
-            console.log('Live match updated:', updatedMatch);
-            setLiveMatch(updatedMatch);
-        });
-
-        // Listen for completed match updates
-        socket.on('completedMatchUpdated', (updatedMatch) => {
-            console.log('Completed match updated:', updatedMatch);
-            setCompletedMatch(updatedMatch);
-        });
-
-        // Cleanup listeners on unmount
-        return () => {
-            socket.off('carouselData');
-            socket.off('liveMatchUpdated');
-            socket.off('completedMatchUpdated');
-        };
-    }, []);
+    const { data: featuredMatches, isLoading, error } = useGetFeaturedMatchesQuery();
 
     const settings = {
         dots: true,
         infinite: true,
-        speed: 1000, // Adjusted speed for smoother fade
+        speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
-        autoplay: false,
+        autoplay: true,
         autoplaySpeed: 5000,
-        pauseOnHover: true,
+        pauseOnHover: false,
         arrows: true,
         nextArrow: <NextArrow />,
         prevArrow: <PrevArrow />,
-        fade: true, // Enable fade effect
     };
 
-    // Function to handle click for manual slide navigation
+    if (isLoading) {
+        return (
+            <div className="relative w-full h-[80vh]">
+                {/* Background Image Placeholder */}
+                <div className="w-full h-full bg-gray-300 animate-pulse"></div>
+
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col md:flex-row justify-center items-center px-8">
+                    {/* Left Content */}
+                    <div className="p-4 rounded-lg shadow-md max-w-md mx-auto text-gray-300 space-y-4">
+                        {/* Date and Tournament Info */}
+                        <div className="flex justify-between items-center text-xs md:text-sm">
+                            <div className="w-1/2 h-4 bg-gray-300 rounded animate-pulse"></div>
+                            <div className="w-1/4 h-4 bg-gray-300 rounded animate-pulse"></div>
+                        </div>
+
+                        {/* Divider */}
+                        <div className="h-1 bg-gray-300 rounded animate-pulse my-2"></div>
+
+                        {/* Teams and Scores */}
+                        <div className="flex flex-col gap-4">
+                            {Array.from({ length: 2 }).map((_, index) => (
+                                <div key={index} className="flex items-center space-x-8">
+                                    {/* Team Info */}
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-24 h-24 bg-gray-300 rounded-full animate-pulse"></div>
+                                        <div className="w-24 h-6 bg-gray-300 rounded animate-pulse"></div>
+                                    </div>
+                                    {/* Scores */}
+                                    <div className="w-32 h-6 bg-gray-300 rounded animate-pulse"></div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Match Summary */}
+                        <div className="w-3/4 h-6 bg-gray-300 rounded animate-pulse mx-auto my-4"></div>
+
+                        {/* Match Centre Button */}
+                        <div className="w-full h-10 bg-gray-300 rounded-full animate-pulse"></div>
+                    </div>
+
+                    {/* Right Image Placeholder */}
+                    <div className="w-1/2 flex justify-end relative">
+                        <div className="h-[60%] w-full bg-gray-300 rounded animate-pulse shadow-lg"></div>
+                        {/* Dark Overlay */}
+                        <div className="absolute inset-0 bg-black opacity-40 rounded-lg"></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return <div>Error loading featured matches: {error.message}</div>;
+    }
+
+    if (!featuredMatches || featuredMatches.length === 0) {
+        return <div>No featured matches available</div>;
+    }
+
     const handleClick = (event) => {
         const { clientX, currentTarget } = event;
         const { offsetWidth, offsetLeft } = currentTarget;
-
-        // Calculate if click is on the left or right half
         if (clientX - offsetLeft < offsetWidth / 2) {
-            // Clicked on the left side - go to previous slide
             sliderRef.current.slickPrev();
         } else {
-            // Clicked on the right side - go to next slide
             sliderRef.current.slickNext();
         }
     };
 
     return (
         <div
-            className="relative w-full h-[80vh] overflow-hidden rounded-xl"
-            onClick={handleClick} // Attach click handler to the container
+            className="relative w-full h-[80vh] overflow-hidden"
+            onClick={handleClick}
         >
             <Slider ref={sliderRef} {...settings}>
-                {/* Slide 1 - Live Match */}
-                {liveMatch ? (
-                    <LiveMatchSlide match={liveMatch} />
-                ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500">
-                        No live matches currently
-                    </div>
-                )}
-
-                {/* Slide 2 - Completed Match */}
-                {completedMatch ? (
-                    <CompletedMatchSlide match={completedMatch} />
-                ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500">
-                        No completed matches
-                    </div>
-                )}
-
-                {/* Slide 3 - Upcoming Tournaments */}
-                {upcomingTournaments.length > 0 ? (
-                    upcomingTournaments.map((tournament, index) => (
-                        <UpcomingTournamentSlide key={index} tournament={tournament} />
-                    ))
-                ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500">
-                        No upcoming tournaments
-                    </div>
-                )}
+                {featuredMatches?.data.map((match, index) => (
+                    <CompletedMatchSlide key={index} matchInfo={match} />
+                ))}
+                {/* Add UpcomingTournamentSlide as the last slide */}
+                {/* <UpcomingTournamentSlide /> */}
             </Slider>
         </div>
     );
 };
 
-// Arrow components (optional if you want visible arrows)
+// Arrow components
 const NextArrow = ({ onClick }) => (
     <button
         className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-20 text-white p-3 rounded-full z-10"

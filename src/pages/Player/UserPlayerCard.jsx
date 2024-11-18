@@ -96,7 +96,7 @@ const UserPlayerCard = ({ player }) => {
                     <h3 className="text-lg font-bold">{player?.playerName}</h3>
                     <p className="text-sm">View player details</p>
 
-                    {!player?.associatedClub && <button
+                    {isAuthenticated && userType === 'club-manager' && !player?.associatedClub && <button
                         onClick={(e) => { e.stopPropagation(); handleReqAssignPlayer(player._id); }} disabled={isLoading}
                         className=" p-1 mt-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
                     >

@@ -48,6 +48,7 @@ const MatchCard1 = ({ id, matchData }) => {
             });
         }
     }, [matchInfo?._id, id]);
+    console.log(matchInfo);
 
     const getLastBallNumber = (inning) => {
         const lastOverIndex = inning?.overs?.length ? inning.overs.length - 1 : 0;

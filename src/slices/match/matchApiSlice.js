@@ -66,6 +66,14 @@ export const matchApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Match'], // Helps to re-fetch and update when matches are created/updated
         }),
+        getFeaturedMatches: builder.query({
+            query: () => ({
+                url: `${MATCHES_URL}/getFeaturedMatches`,
+                method: 'GET',
+            }),
+            providesTags: ['Match'], // Helps to re-fetch and update when matches are updated
+        }),
+
         getParticularMatches: builder.query({
             query: () => ({
                 url: `${MATCHES_URL}/getParticularMatches`,
@@ -119,5 +127,6 @@ export const {
     useGetSquadPlayersQuery,
     useStartMatchMutation,
     useUpdatePointsTableMutation,
-    useGetParticularMatchesQuery
+    useGetParticularMatchesQuery,
+    useGetFeaturedMatchesQuery
 } = matchApiSlice;

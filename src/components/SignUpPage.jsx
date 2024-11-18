@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import Input from "./Input";
-import { Loader, Lock, Mail, User } from "lucide-react";
+import { Loader, Lock, Mail, Phone, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
@@ -10,15 +10,27 @@ import { useRegisterMutation } from "../slices/auth/usersApiSlice";
 import { toast } from "react-hot-toast";
 import useDialog from "../hooks/useDialog";
 import EmailVerificationDialog from "./verifyDialog";
-
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css'; // Import the default styl
 // Validation schema
 const schema = yup.object().shape({
-    name: yup.string().required('Full name is required'),
-    email: yup.string().email('Invalid email format').required('Email is required'),
-    username: yup.string().required('Username is required'),
+    name: yup
+        .string()
+        .matches(/^[A-Za-z\s]+$/, 'Name can only contain letters and spaces') // Allows only alphabets and spaces
+        .required('Full name is required'), email: yup.string().email('Invalid email format').required('Email is required'),
+    username: yup
+        .string()
+        .matches(/[A-Za-z]{3,}/, 'Username must contain at least 3 letters') // At least 3 alphabetic characters
+        .required('Username is required'),
     password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
     confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm password is required'),
     clubManager: yup.boolean(),
+    phone: yup
+        .string()
+        .matches(/^\+?[0-9]\d{1,14}$/, 'Enter a valid phone number') // Must match international format
+        .min(11, 'Phone number must be at least 11 digits')
+        .max(14, 'Phone number must be at most 14 digits')
+        .required('Manager phone number is required'),
 });
 
 const SignUpPage = () => {
@@ -34,7 +46,7 @@ const SignUpPage = () => {
 
     const onSubmit = async (data) => {
         try {
-            const { name, email, username, password, confirmPassword, clubManager } = data;
+            const { name, email, username, password, confirmPassword, clubManager, phone } = data;
             const role = clubManager ? 'club-manager' : 'Regular-User';
 
             const requestData = {
@@ -44,9 +56,12 @@ const SignUpPage = () => {
                 password,
                 confirmPassword,
                 role,
+                phone
             };
 
             const res = await register(requestData).unwrap();
+            console.log(res);
+
             setEmail(requestData.email);
             openVerifyDialog();
             toast.dismiss();
@@ -85,21 +100,39 @@ const SignUpPage = () => {
                                 />
                             )}
                         />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                        <Controller
-                            name="email"
-                            control={control}
-                            render={({ field }) => (
-                                <Input
-                                    icon={Mail}
-                                    type="email"
-                                    placeholder="Email Address"
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    error={errors.email?.message}
-                                />
-                            )}
-                        />
+                            <Controller
+                                name="email"
+                                control={control}
+                                render={({ field }) => (
+                                    <Input
+                                        icon={Mail}
+                                        type="email"
+                                        placeholder="Email Address"
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        error={errors.email?.message}
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="phone"
+                                control={control}
+                                render={({ field }) => (
+                                    <Input
+                                        icon={Phone}
+                                        placeholder="Phone Number"
+                                        type="tel"
+                                        {...field}
+                                        error={errors.phone?.message}
+                                        onChange={field.onChange}
+                                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    />
+                                )}
+                            />
+                        </div>
 
                         <Controller
                             name="username"

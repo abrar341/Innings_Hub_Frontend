@@ -8,6 +8,7 @@ import { updateCredentials } from '../auth/authSlice';
 const initialState = {
     socket: null,
     notifications: [],
+    completedmatch: [],
     connected: false,
 };
 
@@ -50,10 +51,6 @@ const socketSlice = createSlice({
                 };
             }
         },
-
-
-
-
     },
 });
 

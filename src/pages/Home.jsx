@@ -13,7 +13,7 @@ const Home = () => {
 
     return (
         <>
-            {/* <ImageCarousel /> */}
+            <ImageCarousel />
             <ViewPostDialog />
             <Matches_Scroll />
             <PlayerScroll />

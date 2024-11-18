@@ -81,6 +81,7 @@ const ClubRegistrationForm = ({ reviewData }) => {
         if (userInfo) {
             setValue("managerName", userInfo?.name);
             setValue("managerEmail", userInfo?.email);
+            setValue("managerPhone", userInfo?.phone);
         }
     }, [userInfo, setValue]);
 
