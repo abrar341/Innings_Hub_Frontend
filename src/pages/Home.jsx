@@ -14,8 +14,8 @@ const Home = () => {
     return (
         <>
             <ImageCarousel />
-            <ViewPostDialog />
-            <Matches_Scroll />
+            {/* <Matches_Scroll /> */}
+
             <PlayerScroll />
         </>
     );

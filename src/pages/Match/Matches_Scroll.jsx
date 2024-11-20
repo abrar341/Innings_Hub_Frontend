@@ -76,7 +76,7 @@ const Matches_Scroll = () => {
         );
     }
     return (
-        <div className="relative max-w-full overflow-hidden">
+        <div className="relative max-w-full overflow-hidden ">
 
             {!atStart && (
                 <button

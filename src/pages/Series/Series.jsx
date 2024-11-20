@@ -5,8 +5,6 @@ import { useGetAllTournamentsQuery } from '../../slices/tournament/tournamentApi
 
 const Series = () => {
     const { data, isLoading, isError, error } = useGetAllTournamentsQuery();
-    console.log(data);
-
     const tournaments = data?.data || []; // Fallback to empty array
     const [filterType, setFilterType] = useState('all'); // 'all', 'ongoing', 'upcoming', 'concluded'
     const [searchQuery, setSearchQuery] = useState(''); // Search query state
@@ -39,7 +37,7 @@ const Series = () => {
 
             // Filter based on the search query (case-insensitive)
             const matchesSearchQuery =
-                tournament?.name.toLowerCase().includes(searchQuery.toLowerCase())
+                tournament?.name.toLowerCase().includes(searchQuery.toLowerCase());
 
             if (!matchesSearchQuery) return false;
 
@@ -63,33 +61,33 @@ const Series = () => {
     return (
         <>
             {/* Filter and Search Section */}
-            <div className="container bg-gray-100 mx-auto p-4 pb-0 bg-gray-50 grid-cols-1 md:grid grid-cols-2">
-                <div className="flex items-center mb-3 md:mb-2">
+            <div className="container bg-gray-100 dark:bg-gray-800 dark:text-gray-100 mx-auto p-4 pb-0 grid-cols-1 md:grid grid-cols-2">
+                <div className="flex items-center mb-3 gap-3 md:mb-2">
                     <button
                         onClick={() => setFilterType('all')}
-                        className={`${filterType === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-400'
-                            } text-sm font-medium py-2 px-4  rounded`}
+                        className={`${filterType === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-50 dark:bg-gray-700 text-gray-400'
+                            } text-sm font-medium py-2 px-4 rounded`}
                     >
                         All
                     </button>
-                    <button
+                    {/* <button
                         onClick={() => setFilterType('ongoing')}
-                        className={`${filterType === 'ongoing' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-400'
-                            } text-sm font-medium py-2 px-4  rounded`}
+                        className={`${filterType === 'ongoing' ? 'bg-blue-600 text-white' : 'bg-gray-50 dark:bg-gray-700 text-gray-400 '
+                            } text-sm font-medium py-2 px-4 rounded`}
                     >
                         Ongoing
                     </button>
                     <button
                         onClick={() => setFilterType('upcoming')}
-                        className={`${filterType === 'upcoming' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-400'
-                            } text-sm font-medium py-2 px-4  rounded`}
+                        className={`${filterType === 'upcoming' ? 'bg-blue-600 text-white' : 'bg-gray-50 dark:bg-gray-700 text-gray-400'
+                            } text-sm font-medium py-2 px-4 rounded`}
                     >
                         Upcoming
                     </button>
                     <button
                         onClick={() => setFilterType('concluded')}
-                        className={`${filterType === 'concluded' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-400'
-                            } text-sm font-medium py-2 px-4  rounded`}
+                        className={`${filterType === 'concluded' ? 'bg-blue-600 text-white' : 'bg-gray-50 dark:bg-gray-700 text-gray-400'
+                            } text-sm font-medium py-2 px-4 rounded`}
                     >
                         Concluded
                     </button>
@@ -98,11 +96,11 @@ const Series = () => {
                         disabled={filterType === 'all' && searchQuery === ''}
                         className={`ml-4 text-sm font-medium py-2 px-4 rounded ${filterType !== 'all' || searchQuery
                             ? 'bg-red-500 text-white hover:bg-red-600'
-                            : 'bg-gray-200 text-gray-600 cursor-not-allowed'
+                            : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed'
                             }`}
                     >
                         Reset
-                    </button>
+                    </button> */}
                 </div>
 
                 {/* Search Form */}
@@ -110,7 +108,7 @@ const Series = () => {
                     <div className="relative w-full">
                         <input
                             type="search"
-                            className="focus:outline-none block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border border-gray-300 rounded-s-lg"
+                            className="focus:outline-none block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 dark:text-gray-100 dark:bg-gray-700 rounded-e-lg border border-gray-300 dark:border-gray-600 rounded-s-lg"
                             placeholder="Search teams, tournament name..."
                             value={searchQuery}
                             onChange={handleSearch}
@@ -141,17 +139,19 @@ const Series = () => {
             </div>
 
             {/* Tournament Cards Section */}
-            <div className="bg-gray-100 mx-auto p-4 bg-gray-50">
-                <h2 className="text-xl text-gray-600 font-bold mb-4 capitalize">
+            <div className="bg-gray-100 dark:bg-gray-800 mx-auto p-4">
+                <h2 className="text-xl text-gray-600 dark:text-gray-300 font-bold mb-4 capitalize">
                     {filterType === 'all' ? 'All' : filterType} Tournaments
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {isLoading ? (
-                        <p>Loading tournaments...</p>
+                        <p className="text-gray-600 dark:text-gray-300">Loading tournaments...</p>
                     ) : isError ? (
-                        <p>Error loading tournaments: {error.message}</p>
+                        <p className="text-red-500">Error loading tournaments: {error.message}</p>
                     ) : filteredTournaments.length === 0 ? (
-                        <p className='px-1 text-base font-semibold text-gray-500'>No tournaments found</p>
+                        <p className="px-1 text-base font-semibold text-gray-500 dark:text-gray-300">
+                            No tournaments found
+                        </p>
                     ) : (
                         filteredTournaments.map((tournament, index) => (
                             <UsersTournamentCard key={index} tournament={tournament} />

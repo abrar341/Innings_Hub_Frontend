@@ -9,6 +9,7 @@ import AsideMenu from "./asideMenu/AsideMenu";
 import { ThemeContext } from "./ThemeContext";
 import ImageCarousel from "./Crousal/ImageCrousal";
 import { disconnectSocket, initializeSocket } from "../slices/socket/socketSlice";
+import Matches_Scroll from "../pages/Match/Matches_Scroll";
 
 const Layout = () => {
     const [isMobileExpanded, setIsMobileExpanded] = useState(false);
@@ -55,6 +56,8 @@ const Layout = () => {
     return (
         <div className={`${theme === 'dark' ? 'dark' : ''} min-h-screen`}>
             <div className="bg-white min-h-screen dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+                {currentPath === '/' && <Matches_Scroll />}
+
                 {!shouldHideNavbar && <Header />}
                 <Outlet />
                 <Toaster

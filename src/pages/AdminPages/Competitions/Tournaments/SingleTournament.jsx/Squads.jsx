@@ -98,7 +98,7 @@ const Squads = () => {
     }
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
+        <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
             {/* Header with Add Team button */}
             {isAuthenticated && userType === "admin" && (<div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold text-gray-800">Squads</h1>
@@ -131,7 +131,7 @@ const Squads = () => {
 
             {/* Squads list */}
             {filteredSquads?.length === 0 ? (
-                <div className="p-4 text-lg text-gray-600">No squads available at the moment.</div>
+                <div className="p-4 text-lg dark:bg-gray-700 text-gray-600">No squads available at the moment.</div>
             ) : (
                 filteredSquads?.map((squad, index) => {
                     const { name, players, team, _id: squadId } = squad;
@@ -140,7 +140,7 @@ const Squads = () => {
                     return (
                         <div
                             key={squad?._id}
-                            className={`card bg-white p-4 border rounded-lg mb-4 shadow-lg transition-transform duration-300 transform`}
+                            className={`card bg-white p-4 dark:bg-gray-800 dark:text-gray-100 border rounded-lg mb-4 shadow-lg transition-transform duration-300 transform`}
                         >
                             {/* Squad Header */}
                             <div
@@ -156,13 +156,13 @@ const Squads = () => {
                                         alt={team?.teamName}
                                     />
                                     <div className="text-left">
-                                        <h2 className="text-lg font-semibold text-gray-800">{team?.teamName}</h2>
+                                        <h2 className="text-lg font-bold ">{team?.teamName}</h2>
                                     </div>
                                 </div>
 
                                 {/* Arrow icon changes based on open/close state */}
                                 <div className="flex" onClick={() => toggleSquad(index)}>
-                                    <span className="text-gray-500 mr-2 text-sm">Players: {players.length}</span>
+                                    <span className="text-gray-500 dark:text-gray-100  mr-2 text-sm">Players: {players.length}</span>
                                     {!isOpen ? (
                                         <IoIosArrowDown className="cursor-pointer text-xl" />
                                     ) : (
@@ -202,12 +202,12 @@ const Squads = () => {
                                     }
                                     <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                                         {players.length === 0 ? (
-                                            <div className="col-span-full text-base text-gray-500">No Players Added Yet</div>
+                                            <div className="col-span-full text-base text-gray-500 dark:text-gray-100">No Players Added Yet</div>
                                         ) : (
                                             players.map((player) => (
                                                 <div
                                                     key={player?._id}
-                                                    className="relative p-4 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300 shadow-sm"
+                                                    className="relative p-4 border rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:text-gray-100 transition-colors duration-300 shadow-sm"
                                                 >
                                                     <div className="flex items-center">
                                                         <img
@@ -216,10 +216,10 @@ const Squads = () => {
                                                             alt={player.playerName}
                                                         />
                                                         <div>
-                                                            <h5 className="text-sm font-semibold text-gray-800">
+                                                            <h5 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
                                                                 {player.playerName}
                                                             </h5>
-                                                            <p className="text-sm text-gray-500">{player.role}</p>
+                                                            <p className="text-sm text-gray-500 dark:text-gray-100">{player.role}</p>
                                                         </div>
                                                     </div>
 

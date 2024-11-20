@@ -45,7 +45,7 @@ const EmailVerificationDialog = ({ email, setEmail }) => {
         try {
             const res = await verifyEmail({ email, code: verificationCode }).unwrap();
             toast.dismiss();
-            toast.success("Email verified successfully!");
+            toast.success("Account verified successfully!");
             setEmail("");
             setCode(["", "", "", "", "", ""]);
             navigate('/account/login');

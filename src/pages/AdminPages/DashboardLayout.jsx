@@ -60,7 +60,7 @@ const DashboardLayout = () => {
 
 
                     <div className="mr-2 flex justif-center items-center gap-4">
-                        {isAuthenticated && <NotificationBell />}
+                        {isAuthenticated && <NotificationBell textColor={'dark:text-white'} />}
                         <UserDropdown />
                     </div>
                 </div>

@@ -13,7 +13,7 @@ const ImageCarousel = () => {
     const { data: featuredMatches, isLoading, error } = useGetFeaturedMatchesQuery();
 
     const settings = {
-        dots: true,
+        // dots: true,
         infinite: true,
         speed: 1000,
         slidesToShow: 1,

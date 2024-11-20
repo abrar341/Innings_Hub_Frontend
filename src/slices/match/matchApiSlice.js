@@ -111,6 +111,12 @@ export const matchApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['PointsTable'], // Invalidate the points table to refresh data after updating
         }),
+        getPaginatedPosts: builder.query({
+            query: ({ skip, limit }) => `${MATCHES_URL}/getPaginatedPosts?skip=${skip}&limit=${limit}`,
+            providesTags: ['Posts'], // optional, useful for invalidation
+        }),
+
+
 
 
 
@@ -128,5 +134,5 @@ export const {
     useStartMatchMutation,
     useUpdatePointsTableMutation,
     useGetParticularMatchesQuery,
-    useGetFeaturedMatchesQuery
-} = matchApiSlice;
+    useGetFeaturedMatchesQuery,
+    useGetPaginatedPostsQuery } = matchApiSlice;

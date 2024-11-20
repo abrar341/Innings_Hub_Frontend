@@ -1,16 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UserDropdown from './userDropdown';
 import { ThemeContext } from './ThemeContext';
-import { FaBell } from 'react-icons/fa6';
 import NotificationBell from './Notification/NotificationBell';
 
 const MainNavbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { isAuthenticated } = useSelector((state) => state.auth);
     const { theme, toggleTheme } = useContext(ThemeContext);
-    const navigate = useNavigate();
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const notifications = useSelector((state) => state.socket.notifications);
@@ -26,16 +24,16 @@ const MainNavbar = () => {
     }, [isMenuOpen]);
 
     const navLinkClass = ({ isActive }) =>
-        `flex items-center font-semibold text-xs px-3 py-1 transition-all duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md ${isActive ? 'bg-gray-300 dark:bg-gray-600' : ''
-        }`;
+        `flex items-center font-semibold text-xs px-3 py-1 transition-all duration-300 ease-in-out rounded-md 
+        ${isActive ? 'bg-blue-700 text-white dark:bg-blue-500' : 'text-white dark:text-gray-300 hover:bg-blue-600 dark:hover:bg-blue-700'}`;
 
     const links = [
-        { to: '/', label: 'HOME' },
-        { to: '/all-matches', label: 'LIVE' },
-        { to: '/team', label: 'TEAMS' },
-        { to: '/series', label: 'COMPETITIONS' },
-        { to: '/players', label: 'PLAYERS' },
-        { to: '/gallery', label: 'GALLERY' },
+        // { to: '/', label: 'Home' },
+        { to: '/all-matches', label: 'Live' },
+        { to: '/team', label: 'Teams' },
+        { to: '/series', label: 'Competitions' },
+        { to: '/players', label: 'Players' },
+        { to: '/gallery', label: 'Gallery' },
     ];
 
     const renderNavLinks = (isMobile = false) =>
@@ -51,12 +49,12 @@ const MainNavbar = () => {
         ));
 
     return (
-        <nav className="bg-gray-50 dark:bg-gray-800 px-4 py-2 sticky top-0 z-10 shadow-md transition-shadow duration-300 ease-in-out">
-            <div className="container mx-auto order-1 md:order:0 flex justify-between items-center">
+        <nav className="bg-blue-500 px-4 py-2 sticky top-0 z-30 shadow-md transition-shadow duration-300 dark:bg-gray-900 dark:border-t border-gray-500">
+            <div className="container mx-auto flex justify-between items-center">
                 {/* Logo */}
                 <Link
                     to="/"
-                    className="text-2xl  font-extrabold px-2 py-1 rounded-lg tracking-wide transition-transform transform hover:scale-110 dark:bg-blue-600 text-gray-800 dark:text-gray-200"
+                    className="text-2xl font-extrabold px-2 py-1 tracking-wide text-white dark:text-gray-200"
                 >
                     Innings_Hub
                 </Link>
@@ -68,15 +66,14 @@ const MainNavbar = () => {
                 <div className="flex items-center space-x-4">
                     {isAuthenticated && (
                         <div className="relative">
-                            <NotificationBell onClose={() => setIsMenuOpen(false)} />
-
+                            <NotificationBell textColor={'text-white'} onClose={() => setIsMenuOpen(false)} />
                         </div>
                     )}
 
                     {/* Theme Toggle */}
                     <button
                         onClick={toggleTheme}
-                        className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"
+                        className="p-2 rounded-full hover:bg-blue-600 focus:outline-none text-white dark:text-gray-300"
                         aria-label="Toggle theme"
                     >
                         {theme === 'dark' ? (
@@ -114,7 +111,7 @@ const MainNavbar = () => {
                     ) : (
                         <Link
                             to="/account/login"
-                            className="border border-gray-600 px-3 py-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+                            className="border border-white px-3 py-1 rounded-md text-white hover:bg-blue-600 dark:border-gray-400 dark:hover:bg-blue-700"
                         >
                             Login
                         </Link>
@@ -124,7 +121,7 @@ const MainNavbar = () => {
                 {/* Mobile Menu Toggle */}
                 <button
                     onClick={toggleMenu}
-                    className="md:hidden text-black dark:text-white focus:outline-none"
+                    className="md:hidden text-white dark:text-gray-300 focus:outline-none"
                 >
                     {isMenuOpen ? (
                         <svg
@@ -162,7 +159,7 @@ const MainNavbar = () => {
 
             {/* Mobile Menu */}
             {isMenuOpen && (
-                <div className="md:hidden mt-4 p-4 bg-gray-100 dark:bg-gray-900 rounded-md shadow-lg">
+                <div className="md:hidden mt-4 p-4 bg-blue-600 rounded-md shadow-lg dark:bg-gray-800">
                     {renderNavLinks(true)}
                 </div>
             )}

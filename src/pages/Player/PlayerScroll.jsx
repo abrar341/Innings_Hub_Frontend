@@ -84,8 +84,8 @@ const PlayerScroll = () => {
     }
 
     return (
-        <div className="relative max-w-full overflow-hidden p-4 ">
-            <div className='flex items-center justify-between'>
+        <div className="relative max-w-full overflow-hidden px-4 py-2 dark:border-t border-gray-500 ">
+            <div className='flex items-center justify-between mb-4'>
                 <h1 className='text-3xl font-extrabold'>
                     Players
                 </h1>
@@ -111,15 +111,18 @@ const PlayerScroll = () => {
             )}
             <div
                 ref={scrollContainerRef}
-                className="flex gap-4 overflow-x-scroll hide-scrollbar my-3 "
+                className="flex gap-4 overflow-x-scroll overflow-y-hidden hide-scrollbar  relative"
             >
                 {players?.map((playerData) => (
                     <UserPlayerCard
                         key={playerData?._id}
                         player={playerData}
+                        className="hover:scale-105 transition-transform duration-300"
                     />
                 ))}
             </div>
+
+
             {!atEnd && (
                 <button
                     onClick={scrollRight}

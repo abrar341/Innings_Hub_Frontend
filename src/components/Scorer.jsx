@@ -137,6 +137,7 @@ const Scorer = () => {
         setLoading(false);
 
     });
+
     socket.on('newBowlerAssigned', (updatedMatchData) => {
         console.log("Updated match data received:", updatedMatchData);
         if (updatedMatchData) {
@@ -146,6 +147,18 @@ const Scorer = () => {
 
         }
     });
+    socket.on('undoAction', (updatedMatchData) => {
+        console.log("Updated match data after undo:", updatedMatchData);
+
+        if (updatedMatchData) {
+            // Update the match information
+            setMatchInfo(updatedMatchData);
+
+            // Update the current inning based on the restored state
+            setCurrentInning(updatedMatchData?.innings?.[updatedMatchData?.currentInning - 1]);
+        }
+    });
+
     socket.on('newBatsmanAssigned', (updatedMatchData) => {
         console.log("Updated match data received:", updatedMatchData);
         if (updatedMatchData) {
@@ -162,6 +175,15 @@ const Scorer = () => {
         }
         // setCurrentInning(updatedMatchData?.innings?.[updatedMatchData?.currentInning - 1]);
     });
+    const handleUndo = () => {
+        if (matchInfo?._id) {
+            console.log("Requesting undo action for match:", matchInfo._id);
+            socket.emit('undoBall', { matchId: matchInfo._id });
+        } else {
+            console.error("Match ID is not available for undo action");
+        }
+    };
+
     socket.on('NewInningsStarted', (match) => {
         console.log("Updated match data received:", match);
         if (match) {
@@ -223,11 +245,13 @@ const Scorer = () => {
                 // ScoreDisplay({ runs, wickets, totalBalls, runRate, curTeam })
                 <div className="mb-2">
                     <div className='grid grid-cols-2 gap-2'>
+
                         {matchInfo?.innings?.map((inning, index) => (
                             <>
                                 <ScoreDisplay key={index} totalOves={totalOves} inning={inning} inningNumber={index + 1} />
 
                                 <MatchClickDialog matchId={matchInfo?._id} />
+
                             </>
                         ))}
 
@@ -243,6 +267,16 @@ const Scorer = () => {
                             <p className='w-full text-center font-semibold text-sm py-2 border-b '>Bowlers</p>
                         </div>
                         <CurrentStriker matchInfo={matchInfo} />
+                        <div className="relative">
+                            <button
+                                onClick={() => handleUndo()}
+                                className="m-1 top-4 left-0 px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition"
+                            >
+                                Revert
+                            </button>
+                        </div>
+
+
                     </div>}
 
                 </div>

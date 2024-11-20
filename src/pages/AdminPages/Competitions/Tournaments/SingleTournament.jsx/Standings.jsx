@@ -18,29 +18,32 @@ const Standings = () => {
         }
     }, [roundData]);
 
-    if (gettingRounds) return <div className="flex justify-center items-center h-40">
-        <FaSpinner className="animate-spin text-3xl text-gray-500" />
-    </div>;
-    if (getRoundsError) return <div>Error loading rounds: {getRoundsError.message}</div>;
+    if (gettingRounds)
+        return (
+            <div className="flex justify-center items-center h-40">
+                <FaSpinner className="animate-spin text-3xl text-gray-500 dark:text-gray-300" />
+            </div>
+        );
+
+    if (getRoundsError)
+        return <div className="text-red-500 dark:text-red-400">Error loading rounds: {getRoundsError.message}</div>;
 
     return (
-        <div className="space-y-8 p-4">
-            {rounds?.filter(round => round.scheduleType === "round-robin").length > 0 ? (
-                rounds.filter(round => round.scheduleType === "round-robin").map((round) => (
+        <div className="space-y-8 p-4 text-gray-800 dark:text-gray-100">
+            {rounds?.filter((round) => round.scheduleType === 'round-robin').length > 0 ? (
+                rounds.filter((round) => round.scheduleType === 'round-robin').map((round) => (
                     <div key={round._id} className="space-y-4">
-                        <h2 className="text-3xl font-extrabold text-center text-gray-800 border-b border-gray-400 pb-4">
+                        <h2 className="text-3xl font-extrabold text-center border-b border-gray-400 dark:border-gray-700 pb-4">
                             {round.roundName}
                         </h2>
-                        <div className=''>
+                        <div>
                             {round.groups?.length > 0 ? (
                                 round.groups.map((group) => (
                                     <div key={group._id} className="space-y-4 mb-3">
-                                        <h3 className="text-2xl font-bold text-left text-gray-700">
-                                            {group.groupName}
-                                        </h3>
-                                        <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-300">
-                                            <table className="min-w-full bg-white rounded-lg overflow-hidden">
-                                                <thead className="bg-gradient-to-r from-blue-500 to-blue-700 text-white text-sm leading-normal">
+                                        <h3 className="text-2xl font-bold text-left">{group.groupName}</h3>
+                                        <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-300 dark:border-gray-700">
+                                            <table className="min-w-full rounded-lg overflow-hidden">
+                                                <thead className="bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-700 dark:to-blue-900 text-sm leading-normal">
                                                     <tr>
                                                         <th className="py-4 px-6 text-left font-semibold w-1/4">Team</th>
                                                         <th className="py-4 px-6 text-center font-semibold">Played</th>
@@ -51,9 +54,13 @@ const Standings = () => {
                                                         <th className="py-4 px-6 text-center font-semibold">Net Run Rate</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody className="text-gray-700 text-sm font-light">
+                                                <tbody className="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-100 text-sm font-light">
                                                     {group.standings?.map((standing, index) => (
-                                                        <tr key={standing._id} className={`border-b border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out ${index % 2 === 0 ? 'bg-gray-50' : ''}`}>
+                                                        <tr
+                                                            key={standing._id}
+                                                            className={`border-b border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300 ease-in-out ${index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-900' : ''
+                                                                }`}
+                                                        >
                                                             <td className="py-3 px-6 text-left max-w-xs truncate whitespace-nowrap">
                                                                 <span className="font-semibold">{standing?.team?.teamName}</span>
                                                             </td>
@@ -61,9 +68,16 @@ const Standings = () => {
                                                             <td className="py-3 px-6 text-center">{standing.won}</td>
                                                             <td className="py-3 px-6 text-center">{standing.lost}</td>
                                                             <td className="py-3 px-6 text-center">{standing.tied}</td>
-                                                            <td className="py-3 px-6 text-center font-bold text-green-600">{standing.points}</td>
+                                                            <td className="py-3 px-6 text-center font-bold text-green-600 dark:text-green-400">
+                                                                {standing.points}
+                                                            </td>
                                                             <td className="py-3 px-6 text-center">
-                                                                <span className={`py-1 px-2 rounded-lg ${standing.netRunRate >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                                <span
+                                                                    className={`py-1 px-2 rounded-lg ${standing.netRunRate >= 0
+                                                                            ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-400'
+                                                                            : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-400'
+                                                                        }`}
+                                                                >
                                                                     {standing.netRunRate.toFixed(2)}
                                                                 </span>
                                                             </td>
@@ -75,13 +89,13 @@ const Standings = () => {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-gray-600">No point table available.</p>
+                                <p className="text-gray-600 dark:text-gray-400">No point table available.</p>
                             )}
                         </div>
                     </div>
                 ))
             ) : (
-                <p className="text-gray-600">No point table available.</p>
+                <p className="text-gray-600 dark:text-gray-400">No point table available.</p>
             )}
         </div>
     );

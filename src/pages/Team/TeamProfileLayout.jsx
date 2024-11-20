@@ -25,7 +25,7 @@ const TeamProfileLayout = () => {
             <div className="relative overflow-hidden flex justify-between items-center border-gray-300 bg-white dark:bg-gray-800 px-6 py-4 shadow-md">
                 {/* Team Name with subtle animation */}
                 <div
-                    className="text-4xl sm:text-5xl text-gray-800 dark:text-gray-200 font-extrabold cursor-pointer transition-transform duration-300 hover:scale-105 hover:text-blue-600"
+                    className="text-3xl sm:text-4xl text-gray-800 dark:text-gray-200 font-extrabold cursor-pointer transition-transform duration-300 hover:scale-105 hover:text-blue-600"
                     title="Team Name"
                 >
                     {team?.teamName}
@@ -62,7 +62,7 @@ const TeamProfileLayout = () => {
                             to={to}
                             className={({ isActive }) =>
                                 `flex justify-center pb-1 text-sm font-bold text-base transition-colors duration-300 ease-in-out justify-end ${isActive
-                                    ? 'text-gray-700 dark:text-gray-300 border-b-2 border-customDarkBlue'
+                                    ? 'text-gray-700 dark:text-gray-300 border-b-2 border-customDarkBlue dark:border-white'
                                     : 'text-gray-700 dark:text-gray-400 border-b-2 border-transparent'
                                 }`
                             }

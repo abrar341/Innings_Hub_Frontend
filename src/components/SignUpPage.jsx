@@ -27,7 +27,9 @@ const schema = yup.object().shape({
     clubManager: yup.boolean(),
     phone: yup
         .string()
-        .matches(/^\+?[0-9]\d{1,14}$/, 'Enter a valid phone number') // Must match international format
+        // .matches(/^\+?[0-9]\d{1,14}$/, 'Enter a valid phone number') // Must match international format
+        .matches(/^\+[0-9]{11,14}$/, 'Enter a valid phone number starting with +') // Must start with +
+
         .min(11, 'Phone number must be at least 11 digits')
         .max(14, 'Phone number must be at most 14 digits')
         .required('Manager phone number is required'),

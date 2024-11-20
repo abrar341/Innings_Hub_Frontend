@@ -10,7 +10,6 @@ import TeamProfileLayout from './pages/Team/TeamProfileLayout';
 import TeamStats from './pages/Team/pages/TeamStats';
 import TeamSqaud from './pages/Team/pages/TeamSquad';
 import SeriesPageLayout from './pages/Series/SeriesProfileLayout';
-import PointTable from './pages/Series/pages/PointTable';
 import Home from './pages/Home';
 import MatchesLayout from './pages/LiveScore/MatchesLayout';
 import LiveScores from './pages/LiveScore/pages/LiveScores';
@@ -67,12 +66,14 @@ import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ProfileInfo from './pages/Profile/ProfileInfo';
 import ChangePassword from './pages/Profile/ChangePassword';
 import { Notification } from './components/Notification';
+import Posts from './components/Posts';
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
         <Route path='/notifications' element={<Notification />} />
+        <Route path='/gallery' element={<Posts />} />
         <Route path='/regular-user/profile' element={<UpdateProfile />} >
           <Route path="profile" element={<ProfileInfo />} />
           <Route path="password" element={<ChangePassword />} />

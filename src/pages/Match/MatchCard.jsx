@@ -60,7 +60,7 @@ const MatchCard1 = ({ id, matchData }) => {
 
     return (
         <div
-            className="min-w-[380px] bg-gradient-to-r from-white to-gray-100 dark:from-gray-800 dark:to-gray-900  dark:border-gray-700  shadow-2xl border border-gray-200 transform transition-transform duration-300"
+            className="min-w-[380px] bg-gradient-to-r from-white to-gray-200 dark:from-gray-800 dark:to-gray-900  dark:border-gray-700  shadow-xl border border-gray-300 transform transition-transform duration-300 rounded-xl"
             whileHover={{ scale: 1.05 }}
         >
             <div className="px-4 py-1">
@@ -71,7 +71,7 @@ const MatchCard1 = ({ id, matchData }) => {
             whileHover={{ scale: 1.05 }}
         >
             <div className="px-4 py-1"> */}
-                <div className="bg-gray-50 dark:bg-gray-800 py-1 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <div className=" py-1 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                     <div className="text-gray-600 dark:text-gray-400 text-xs truncate">
                         {formatDateToYMD(matchInfo.date)}
                     </div>
@@ -83,7 +83,7 @@ const MatchCard1 = ({ id, matchData }) => {
                         </p>
                     </div>
                     <div className={clsx(
-                        'px-2 py-1 rounded text-xs',
+                        'px-2 py-1 rounded-full text-xs',
                         statusStyles[matchInfo?.status] || 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200'
                     )}>
                         {matchInfo?.status === 'live' ? 'Live' : matchInfo?.status === 'scheduled' ? 'Scheduled' : 'Completed'}
@@ -97,7 +97,7 @@ const MatchCard1 = ({ id, matchData }) => {
                             return (
                                 <div
                                     key={index}
-                                    className="min-h-[60px] flex items-center space-x-3"
+                                    className="min-h-[50px] flex items-center space-x-3"
                                     whileHover={{ scale: 1.02 }}
                                 >
                                     <img
@@ -156,7 +156,7 @@ const MatchCard1 = ({ id, matchData }) => {
                                         className="text-sm font-semibold text-gray-800 dark:text-gray-100 cursor-pointer"
                                         onClick={() => handleTeamClick(team?._id)}
                                     >
-                                        {team.shortName}
+                                        {team?.shortName}
                                     </span>
                                 </div>
                             </motion.div>
@@ -178,7 +178,7 @@ const MatchCard1 = ({ id, matchData }) => {
                 }
             </div>
 
-            <div className="flex flex-col gap-3 justify-center bottom-0 bg-gray-100 dark:bg-gray-800 p-2 items-center border-t border-gray-300 dark:border-gray-700">
+            <div className="flex justify-center py-1">
                 <button
                     onClick={() => handleButtonClick(matchInfo)}
                     className="text-xs font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded px-3 py-1 inline-flex items-center space-x-1 transition-colors hover:bg-gray-200 dark:hover:bg-gray-600"
