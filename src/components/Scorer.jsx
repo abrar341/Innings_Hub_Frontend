@@ -14,6 +14,7 @@ import ScoreDisplay from './scorer/ScoreDisplay';
 import CurrentStriker from '../pages/Match/ScoreCard/CurrentStriker';
 import { TypographyH2 } from './ui/typography';
 import MatchClickDialog from './MathcClickDialog';
+import PlayerRetiredDialog from './Dialogs/PlayerRetiredDialog';
 
 // Connect to the backend socket server
 
@@ -27,6 +28,7 @@ const Scorer = () => {
 
     // const [result, setResult] = useState(null);
     const [fielderInvolved, setFielderInvolved] = useState(false); // State to open/close dialog
+    const [playerRetired, setPlayerRetired] = useState(false); // State to open/close dialog
     console.log(matchInfo);
 
     const [currentInning, setCurrentInning] = useState(null); // Track current inning
@@ -101,7 +103,6 @@ const Scorer = () => {
 
     }
     function handleWicket(e) {
-
         const event = e.currentTarget.value;
         console.log(event);
         const wicket = JSON.parse(event);
@@ -109,8 +110,12 @@ const Scorer = () => {
         console.log(wicketType);
         setWicketType(wicketType)
         {
+
             wicketType === 'Caught' || wicketType === 'Run Out' || wicketType === 'Stumped' ? (
-                setFielderInvolved(true)) : null
+                setFielderInvolved(true)
+            )
+                : wicketType === 'Rt-Hurt' || wicketType === 'Rt-Out' ?
+                    (setPlayerRetired(true)) : null
         }
         const dataToEmit = {
             matchId,
@@ -124,10 +129,9 @@ const Scorer = () => {
         if (wicketType === 'Caught' || wicketType === 'Run Out' || wicketType === 'Stumped') {
             console.log("ball send from dialog");
         }
-        else {
+        else if (wicketType === 'Bowled' || wicketType === 'LBW' || wicketType === 'Stumped') {
             console.log(dataToEmit)
             socket.emit('ballUpdate', dataToEmit);
-
         }
     }
     socket.on('newBall', (updatedMatch) => {
@@ -238,6 +242,9 @@ const Scorer = () => {
     if (fielderInvolved) {
         return <FielderInvolvementDialog matchId={matchId} matchInfo={matchInfo} fielders={bowlingTeam} wicketType={wicketType} setFielderInvolved={setFielderInvolved} />;
     }
+    if (playerRetired) {
+        return <PlayerRetiredDialog matchId={matchId} open={playerRetired} matchInfo={matchInfo} fielders={bowlingTeam} wicketType={wicketType} setPlayerRetired={setPlayerRetired} />;
+    }
     return (
         <div className="mx-auto max-w-2xl w-full bg-white rounded shadow-md p-6 border border-gray-600">
             {/* <h2 className="text-2xl font-bold mb-4 text-center">Live Scorer</h2> */}
@@ -267,14 +274,17 @@ const Scorer = () => {
                             <p className='w-full text-center font-semibold text-sm py-2 border-b '>Bowlers</p>
                         </div>
                         <CurrentStriker matchInfo={matchInfo} />
-                        <div className="relative">
-                            <button
-                                onClick={() => handleUndo()}
-                                className="m-1 top-4 left-0 px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition"
-                            >
-                                Revert
-                            </button>
-                        </div>
+                        {
+                            matchInfo?.status !== "completed" &&
+                            <div className="relative">
+                                <button
+                                    onClick={() => handleUndo()}
+                                    className="m-1 top-4 left-0 px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition"
+                                >
+                                    Revert
+                                </button>
+                            </div>
+                        }
 
 
                     </div>}
@@ -308,7 +318,7 @@ const Scorer = () => {
                                     (currentInning?.fallOfWickets?.length === 10 || currentInning?.fallOfWickets?.length >= 10 || lastOver?.overNumber === matchInfo?.overs + 1 || matchInfo?.status === 'completed') ? <InningsEndedDialog matchInfo={matchInfo} remainingWickets={remainingWickets} remainRuns={remainRuns} winingTeam={winingTeam} result={result} matchId={matchId} /> :
                                         (!currentInning?.currentStriker && !currentInning?.nonStriker && !currentInning?.currentBowler)
                                             ? <InitializePlayersDialog matchInfo={matchInfo} setMatchInfo={setMatchInfo} setCurrentInning={setCurrentInning} matchId={matchId} playing11={matchInfo?.playing11} />
-                                            : (!currentInning?.currentStriker) ? <NewBatsmanDialog matchInfo={matchInfo} matchId={matchId} playing11={matchInfo?.playing11} />
+                                            : (!currentInning?.currentStriker || !currentInning?.nonStriker) ? <NewBatsmanDialog matchInfo={matchInfo} matchId={matchId} playing11={matchInfo?.playing11} />
                                                 : (!currentInning?.currentBowler) ?
                                                     <NewBowlerDialog matchInfo={matchInfo} onSubmit={onSubmit} matchId={matchId} playing11={matchInfo?.playing11?.[0]} />
                                                     : <ScoreButtons handleScore={handleScore} handleWicket={handleWicket} />

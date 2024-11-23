@@ -19,11 +19,26 @@ const NewBatsmanDialog = ({ matchId, matchInfo }) => {
     const battingTeam = matchInfo?.playing11?.find((team) => team?.team?._id === battingTeamId);
     const playing11 = battingTeam?.players;
 
-    const alreadyBattedPlayerIds = battingPerformances.map((performance) => performance.player);
-    console.log(battingPerformances);
+    // Filter performances to only include players who are out
+    const alreadyBattedPlayerIds = battingPerformances
+        .filter((performance) => performance.isOut) // Only players with isOut as true
+        .map((performance) => performance.player);
 
+    console.log(alreadyBattedPlayerIds);
+
+    // Convert the player IDs to strings
     const alreadyBattedIds = alreadyBattedPlayerIds.map((player) => player._id.toString());
+
+    // Find players yet to bat
     const playersYetToBat = playing11.filter((player) => !alreadyBattedIds.includes(player._id.toString()));
+    console.log(playersYetToBat);
+    const nonStrikerId = currentInning?.nonStriker?._id.toString();
+    const strikerId = currentInning?.currentStriker?._id.toString();
+    console.log(nonStrikerId, strikerId);
+
+    const filteredPlayersYetToBat = playersYetToBat.filter(
+        (player) => player._id.toString() !== nonStrikerId && player._id.toString() !== strikerId
+    );
 
     const onSubmit = (data) => {
         socket.emit('joinMatch', matchId);
@@ -56,7 +71,7 @@ const NewBatsmanDialog = ({ matchId, matchInfo }) => {
                         rules={{ required: "Please select a batsman" }}
                         render={({ field }) => (
                             <div className="grid grid-cols-3 gap-6">
-                                {playersYetToBat.map((player) => (
+                                {filteredPlayersYetToBat?.map((player) => (
                                     <label
                                         key={player._id}
                                         className={`flex items-center justify-center p-4 rounded-lg cursor-pointer transition-colors duration-200 ${field.value === player._id

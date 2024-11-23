@@ -33,6 +33,18 @@ export const wicketTypes = [
         shortName: "st.",
         isOtherPlayerInvolved: true,
     },
+    {
+        id: 6,
+        type: "Rt-Hurt",
+        shortName: "R-H.",
+        isOtherPlayerInvolved: true,
+    },
+    {
+        id: 7,
+        type: "Rt-Out",
+        shortName: "R-OUT.",
+        isOtherPlayerInvolved: true,
+    },
     // {
     //     id: 8,
     //     type: "Retired Hurt",
