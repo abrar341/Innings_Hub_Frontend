@@ -82,7 +82,6 @@ const PlayerScroll = () => {
             </div>
         );
     }
-
     return (
         <div className="relative max-w-full overflow-hidden px-4 py-2 dark:border-t border-gray-500 ">
             <div className='flex items-center justify-between mb-4'>

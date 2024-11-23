@@ -26,7 +26,7 @@ const authSlice = createSlice({
     updateCredentials: (state, action) => {
       console.log("Payload received:", action.payload);
 
-      const { club, ...rest } = action.payload;
+      const { club, profilePicture, ...rest } = action.payload;
 
 
       // Update specific fields in userInfo
@@ -34,6 +34,13 @@ const authSlice = createSlice({
         ...state.userInfo,
         ...rest, // Merge additional fields from payload
       };
+      console.log(profilePicture);
+
+      if (profilePicture) {
+        console.log("Updating profilePicture:", profilePicture);
+        state.userInfo.profilePicture = profilePicture;
+      }
+
       console.log(state.userInfo.club);
 
       // Replace userInfo.club entirely if club is valid

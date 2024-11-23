@@ -10,6 +10,7 @@ import { updateNotification } from "../slices/socket/socketSlice";
 export function Notification() {
     const dispatch = useDispatch();
     const notifications = useSelector((state) => state.socket.notifications);
+    console.log(notifications);
 
     // Sort notifications by timestamp (newest first)
     const sortedNotifications = [...notifications].sort(
@@ -55,18 +56,18 @@ export function Notification() {
     };
 
     return (
-        <div className="notifications-list p-6 bg-gray-50 rounded-lg shadow-sm">
+        <div className="notifications-list p-6 bg-gray-50 rounded-lg shadow-sm dark:bg-gray-800">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium text-gray-800">
+                <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200">
                     {showUnread ? (
                         <>
-                            Unread Notifications <span className="text-gray-500">({unreadCount})</span>
+                            Unread Notifications <span className="text-gray-500 dark:text-gray-400">({unreadCount})</span>
                         </>
                     ) : (
                         <>
                             Notifications{" "}
-                            <span className="text-gray-500">({sortedNotifications.length})</span>
+                            <span className="text-gray-500 dark:text-gray-400">({sortedNotifications.length})</span>
                         </>
                     )}
                 </h2>
@@ -74,8 +75,8 @@ export function Notification() {
                     className={clsx(
                         "px-4 py-2 rounded-md text-sm font-medium focus:outline-none transition",
                         showUnread
-                            ? "bg-gray-800 text-white hover:bg-gray-900"
-                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            ? "bg-gray-800 text-white hover:bg-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500"
                     )}
                     onClick={() => setShowUnread((prev) => !prev)}
                 >
@@ -92,8 +93,8 @@ export function Notification() {
                             className={clsx(
                                 "p-4 rounded-md border transition cursor-pointer",
                                 notif.isRead
-                                    ? "bg-white border-gray-200"
-                                    : "bg-gray-200 border-gray-200"
+                                    ? "bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-600"
+                                    : "bg-gray-200 border-gray-200 dark:bg-gray-600 dark:border-gray-500"
                             )}
                             onClick={() => handleNotificationClick(notif)}
                         >
@@ -101,19 +102,19 @@ export function Notification() {
                                 {/* Sender Image */}
                                 <img
                                     src={
-                                        notif.senderImage ||
+                                        notif?.senderId?.profilePicture ||
                                         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                                     }
                                     alt={`Profile of ${notif.senderName || "Unknown Sender"}`}
-                                    className="w-10 h-10 rounded-full border border-gray-200"
+                                    className="w-10 h-10 rounded-full border object-cover border-gray-200 dark:border-gray-500"
                                 />
 
                                 {/* Notification Details */}
                                 <div className="flex flex-col w-full">
-                                    <p className="text-sm text-gray-800">
+                                    <p className="text-sm text-gray-800 dark:text-gray-200">
                                         {notif.message || "No message available."}
                                     </p>
-                                    <span className="text-xs text-gray-500 mt-2">
+                                    <span className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                                         {new Date(notif.timestamp).toLocaleDateString([], {
                                             year: "numeric",
                                             month: "short",
@@ -131,7 +132,7 @@ export function Notification() {
                     ))}
                 </div>
             ) : (
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
                     {showUnread
                         ? "No unread notifications available."
                         : "No notifications available."}

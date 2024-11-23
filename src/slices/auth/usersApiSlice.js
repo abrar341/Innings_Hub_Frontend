@@ -31,6 +31,29 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    updateProfilePicture: builder.mutation({
+      query: ({ userId, profilePicture }) => {
+        console.log(userId, profilePicture);
+
+        const formData = new FormData();
+
+        // Ensure a profile picture is provided
+        if (!profilePicture) {
+          throw new Error("Profile picture is required.");
+        }
+
+        // Append profile picture to the FormData
+        formData.append("profilePicture", profilePicture);
+
+        return {
+          url: `${USERS_URL}/updateProfilePicture/${userId}/profile-picture`, // Update the endpoint to match your API
+          method: "PATCH",
+          body: formData,
+        };
+      },
+      invalidatesTags: ['User'], // Invalidate the cache when the user's profile picture is updated
+    }),
+
 
     forgotPassword: builder.mutation({
       query: (data) => ({
@@ -94,5 +117,6 @@ export const {
   useGetAllScorersQuery,
   useDeleteUserMutation,
   useForgotPasswordMutation,
-  useChangePasswordMutation
+  useChangePasswordMutation,
+  useUpdateProfilePictureMutation
 } = userApiSlice;

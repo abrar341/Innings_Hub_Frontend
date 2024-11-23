@@ -24,7 +24,7 @@ const MainNavbar = () => {
     }, [isMenuOpen]);
 
     const navLinkClass = ({ isActive }) =>
-        `flex items-center font-semibold text-xs px-3 py-1 transition-all duration-300 ease-in-out rounded-md 
+        `flex items-center font-semibold text-xs tracking-wide px-3 py-1 transition-all duration-300 ease-in-out rounded-md 
         ${isActive ? 'bg-blue-700 text-white dark:bg-blue-500' : 'text-white dark:text-gray-300 hover:bg-blue-600 dark:hover:bg-blue-700'}`;
 
     const links = [

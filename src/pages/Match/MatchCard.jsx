@@ -4,10 +4,13 @@ import clsx from 'clsx';
 import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
 
 const socket = io('http://localhost:8000');
 
 const MatchCard1 = ({ id, matchData }) => {
+    const { isAuthenticated, userType } = useSelector((state) => state.auth);
+
     const navigate = useNavigate();
     const [matchInfo, setMatchInfo] = useState(matchData);
     console.log(matchInfo?.round);
@@ -18,6 +21,11 @@ const MatchCard1 = ({ id, matchData }) => {
 
     const handleTeamClick = (teamId) => {
         navigate(`/team/${teamId}`);
+    };
+
+    const handleButtonClickScorer = (matchData) => {
+        // Navigate to the desired route with matchId as a param
+        navigate(`/runner/${matchData?._id}`);
     };
 
     const statusStyles = {
@@ -178,7 +186,7 @@ const MatchCard1 = ({ id, matchData }) => {
                 }
             </div>
 
-            <div className="flex justify-center py-1">
+            <div className="flex justify-center gap-4 py-1">
                 <button
                     onClick={() => handleButtonClick(matchInfo)}
                     className="text-xs font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded px-3 py-1 inline-flex items-center space-x-1 transition-colors hover:bg-gray-200 dark:hover:bg-gray-600"
@@ -196,6 +204,15 @@ const MatchCard1 = ({ id, matchData }) => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </button>
+                {isAuthenticated && userType === 'scorer' &&
+                    <button
+                        onClick={() => { handleButtonClickScorer(matchInfo) }}
+                        className="text-xs font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded px-3 py-1 inline-flex items-center space-x-1 transition-colors hover:bg-gray-200 dark:hover:bg-gray-600"
+                    >
+                        {
+                            matchInfo?.status === 'completed' ? "See Match Details" : matchInfo?.status === 'live' ? "Resume Live Scoring" : "Start Live Scoring"
+                        }
+                    </button>}
             </div>
         </div>
     );

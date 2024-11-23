@@ -4,9 +4,11 @@ import { ArrowLeft } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Input from "../../components/Input"; // Ensure to adjust the path to your Input component
+import Input from "../../components/Input"; // Adjust path as needed
 import { toast } from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useUpdateProfilePictureMutation } from "../../slices/auth/usersApiSlice";
+import { updateCredentials } from "../../slices/auth/authSlice";
 
 // Validation schema
 const schema = yup.object().shape({
@@ -25,24 +27,53 @@ const UpdateProfile = () => {
             username: userInfo?.username || '',
         },
     });
-
-    const [imagePreview, setImagePreview] = useState(userInfo?.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"); // Placeholder URL
-    const [imageSelected, setImageSelected] = useState(false);
+    const dispatch = useDispatch();
+    const [imagePreview, setImagePreview] = useState(userInfo?.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+    const [imageFile, setImageFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    // Mutation for updating profile picture
+    const [updateProfilePicture, { isLoading: isUploading }] = useUpdateProfilePictureMutation();
+
     const navigate = useNavigate();
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             setImagePreview(URL.createObjectURL(file));
-            setImageSelected(true);
+            setImageFile(file);
         }
     };
+
+    const handleUpload = async () => {
+        if (!imageFile) {
+            toast.error("Please select an image to upload.");
+            return;
+        }
+
+        try {
+            const response = await updateProfilePicture({
+                userId: userInfo?._id, // Assuming `userInfo` contains the current user's ID
+                profilePicture: imageFile,
+            }).unwrap();
+            console.log(response);
+            dispatch(updateCredentials({ profilePicture: response?.data?.profilePicture }));
+
+
+            toast.success("Profile picture updated successfully!");
+            setImageFile(null); // Reset the selected image
+            setImagePreview(response?.profilePicture || imagePreview); // Update with the new URL
+        } catch (error) {
+            console.error("Error updating profile picture:", error);
+            toast.error(error?.data?.message || "Failed to update profile picture.");
+        }
+    };
+
 
     const onSubmit = async (data) => {
         setIsLoading(true);
         try {
-            const updatedData = { ...data, profilePicture: imageSelected ? imagePreview : userInfo?.profilePicture };
+            const updatedData = { ...data, profilePicture: imagePreview };
             console.log('Profile Data:', updatedData);
             toast.success("Profile updated successfully!");
         } catch (err) {
@@ -51,21 +82,20 @@ const UpdateProfile = () => {
             setIsLoading(false);
         }
     };
-    const location = useLocation();
 
-    // Get the current path and remove the last segment
+    const location = useLocation();
     const parentPath = location.pathname.split('/').slice(0, -1).join('/') || '/';
+
     const handleGoBack = () => {
         if (parentPath === '/club-manager') {
             navigate('/club-manager/dashboard');
-        }
-        else if (parentPath === '/regular-user') {
+        } else if (parentPath === '/regular-user') {
             navigate('/');
-        }
-        else {
+        } else {
             navigate(parentPath);
         }
     };
+
     return (
         <div className="flex justify-center items-center bg-gray-100 dark:bg-gray-900 min-h-screen py-2">
             <div className="max-w-2xl w-full bg-white dark:bg-gray-700 rounded-2xl shadow-xl border border-gray-300 dark:border-gray-600">
@@ -104,9 +134,21 @@ const UpdateProfile = () => {
                             </label>
                             <p className="text-xl font-semibold mt-2 text-gray-700 dark:text-gray-200">{userInfo.username}</p>
 
+                            {/* Upload Button */}
+                            {imageFile && (
+                                <button
+                                    type="button"
+                                    onClick={handleUpload}
+                                    disabled={isUploading}
+                                    className={`mt-4 px-4 py-2 text-white font-semibold rounded-lg transition ${isUploading
+                                        ? "bg-gray-400 cursor-not-allowed"
+                                        : "bg-green-500 hover:bg-green-600"
+                                        }`}
+                                >
+                                    {isUploading ? "Uploading..." : "Upload"}
+                                </button>
+                            )}
                         </div>
-
-
                     </form>
 
                     {/* Navigation Tabs */}
@@ -114,7 +156,7 @@ const UpdateProfile = () => {
                         <NavLink
                             to="profile"
                             className={({ isActive }) =>
-                                isActive ? "text-green-600 font-bold" : "text-gray-600 hover:text-green-500"
+                                isActive ? "text-green-600 font-bold" : "dark:text-gray-300 font-semibold hover:text-green-500"
                             }
                         >
                             Profile Information
@@ -123,7 +165,7 @@ const UpdateProfile = () => {
                         <NavLink
                             to="password"
                             className={({ isActive }) =>
-                                isActive ? "text-green-600 font-bold" : "text-gray-600 hover:text-green-500"
+                                isActive ? "text-green-600 font-bold" : "dark:text-gray-300 font-semibold hover:text-green-500"
                             }
                         >
                             Change Password

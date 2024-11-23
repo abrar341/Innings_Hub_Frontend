@@ -27,7 +27,7 @@ const CurrentStriker = ({ matchInfo }) => {
                                         <span className='text-xl w-4  font-bold '>*</span>
                                     ) : <span className=' font-bold w-4 '></span>
                                     }
-                                    <h5 className={`px-4 py-2 font-bold text-gray-700`}>
+                                    <h5 className={`px-4 py-1 font-semibold text-gray-700`}>
                                         {batsman?.player?.playerName}
                                     </h5>
                                 </div>
@@ -41,12 +41,12 @@ const CurrentStriker = ({ matchInfo }) => {
                             bowler?.player?._id === currentInning?.currentBowler?._id
                         ).map((bowler, index) => (
                             <div key={index} className="flex justify-center flex-wrap items-center">
-                                <div className="py-2 px-4 flex items-center">
+                                <div className="py-1 px-4 flex items-center">
                                     {/* {bowler?.player?._id === currentInning?.currentStriker?._id ? (
                                     <span className='text-xl w-4  font-bold '>*</span>
                                 ) : <span className=' font-bold w-4 '></span>
                                 } */}
-                                    <h5 className={`px-4 font-bold text-gray-700`}>
+                                    <h5 className={` px-4 font-semibold text-gray-700`}>
                                         {bowler?.player?.playerName}
                                     </h5>
                                 </div>

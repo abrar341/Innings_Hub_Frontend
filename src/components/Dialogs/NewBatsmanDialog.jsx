@@ -20,6 +20,8 @@ const NewBatsmanDialog = ({ matchId, matchInfo }) => {
     const playing11 = battingTeam?.players;
 
     const alreadyBattedPlayerIds = battingPerformances.map((performance) => performance.player);
+    console.log(battingPerformances);
+
     const alreadyBattedIds = alreadyBattedPlayerIds.map((player) => player._id.toString());
     const playersYetToBat = playing11.filter((player) => !alreadyBattedIds.includes(player._id.toString()));
 
