@@ -66,19 +66,18 @@ const ActionButtons = ({ player }) => {
                     />
                 </button>
                 <button
-                    className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                    className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none dark:bg-gray-800 dark:hover:bg-gray-700"
                     onClick={handleDeleteClick}
                 >
-                    <FaTrashAlt className="text-gray-600" />
+                    <FaTrashAlt className="text-gray-600 dark:text-gray-300" />
                 </button>
 
                 {/* Release Player Button */}
                 {isAuthenticated && userType === 'club-manager' && (
                     <button
-                        className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
-                        onClick={handleReleaseClick} // Handle release click
+                        className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none dark:bg-gray-800 dark:hover:bg-gray-700" onClick={handleReleaseClick} // Handle release click
                     >
-                        <IoArrowRedoSharp className="text-gray-600" />
+                        <IoArrowRedoSharp className="text-gray-600 dark:text-gray-300" />
                     </button>
                 )}
 

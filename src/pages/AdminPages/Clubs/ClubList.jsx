@@ -91,14 +91,14 @@ const ClubList = () => {
     };
 
     return (
-        <div className="w-full h-screen mt-0 rounded-lg shadow-xs px-4">
+        <div className="w-full min-h-screen mt-0 rounded-lg shadow-xs px-4 dark:bg-gray-900 dark:text-gray-200">
             {/* Filter and search section */}
-            <div className="py-2 border-b grid grid-cols-3 md:grid-cols-5 gap-2 mb-1 items-end sticky top-0 bg-white z-10">
+            <div className="py-2 border-b grid grid-cols-3 md:grid-cols-5 gap-2 mb-1 items-end sticky top-0 bg-white z-10 dark:bg-gray-800 dark:border-gray-700">
                 <select
                     id="registrationStatusFilter"
                     value={registrationStatus}
                     onChange={(e) => setRegistrationStatus(e.target.value)}
-                    className="block col-span-2 md:col-span-1 px-3 w-full h-full py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-100 focus:border-blue-500 sm:text-sm"
+                    className="block col-span-2 md:col-span-1 px-3 w-full h-full py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-100 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-blue-500 dark:focus:border-blue-400"
                 >
                     <option value="all">All Clubs</option>
                     <option value="pending">Pending</option>
@@ -115,13 +115,13 @@ const ClubList = () => {
                             value={searchQuery}
                             placeholder="Search clubs by name..."
                             required
-                            className="focus:outline-none w-full block p-2.5 z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
+                            className="focus:outline-none w-full block p-2.5 z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
                         />
                         {searchQuery && (
                             <button
                                 type="button"
                                 onClick={() => setSearchQuery('')}
-                                className="absolute right-3 top-2 font-bold text-gray-500 hover:text-gray-700 focus:outline-none"
+                                className="absolute right-3 top-2 font-bold text-gray-500 hover:text-gray-700 focus:outline-none dark:text-gray-400 dark:hover:text-gray-300"
                             >
                                 &times;
                             </button>
@@ -132,7 +132,7 @@ const ClubList = () => {
                 {/* Reset button */}
                 <button
                     onClick={handleResetFilters}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
                 >
                     Reset
                 </button>
@@ -140,17 +140,22 @@ const ClubList = () => {
 
             {/* Display the club table */}
             {filteredClubs?.length === 0 ? (
-                <div className="text-center py-4 text-gray-500">
+                <div className="text-center py-4 text-gray-500 dark:text-gray-400">
                     No clubs found.
                 </div>
             ) : isLoading ? (
-                <div className="bg-red-200 h-screen flex justify-center items-center">Loading...</div>
+                <div className="bg-red-200 h-screen flex justify-center items-center dark:bg-red-900">
+                    Loading...
+                </div>
             ) : (
                 <div className="w-full overflow-x-auto">
                     <table className="w-full whitespace-no-wrap">
                         <thead>
                             {table.getHeaderGroups().map(headerGroup => (
-                                <tr key={headerGroup.id} className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50">
+                                <tr
+                                    key={headerGroup.id}
+                                    className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
+                                >
                                     {headerGroup.headers.map(header => (
                                         <th key={header.id} className="px-4 py-3">
                                             {flexRender(
@@ -162,9 +167,12 @@ const ClubList = () => {
                                 </tr>
                             ))}
                         </thead>
-                        <tbody className="bg-white divide-y">
+                        <tbody className="bg-white divide-y dark:bg-gray-900 dark:divide-gray-700">
                             {table.getRowModel()?.rows.map(row => (
-                                <tr key={row.id} className="text-gray-700">
+                                <tr
+                                    key={row.id}
+                                    className="text-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                                >
                                     {row.getVisibleCells().map(cell => (
                                         <td key={cell.id} className="px-4 py-3">
                                             {flexRender(
@@ -181,6 +189,7 @@ const ClubList = () => {
             )}
         </div>
     );
+
 };
 
 export default ClubList;

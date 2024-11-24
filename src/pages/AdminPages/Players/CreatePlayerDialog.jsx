@@ -115,9 +115,9 @@ const CreatePlayerDialog = ({ open, action, playerData }) => {
                     {isEditing ? (
                         <button
                             onClick={() => setIsOpen(true)}
-                            className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none"
+                            className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none dark:bg-gray-800 dark:hover:bg-gray-700"
                         >
-                            <FaEdit className="text-gray-600" />
+                            <FaEdit className="text-gray-600 dark:text-gray-300" />
                         </button>
                     ) : (
                         <button

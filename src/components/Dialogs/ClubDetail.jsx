@@ -11,7 +11,7 @@ const ClubDetailsPage = () => {
     const clubInfo = state?.clubInfo;
     const { userType, isAuthenticated } = useSelector((state) => state.auth);
 
-    console.log(clubInfo);
+    console.log(clubInfo?.socialLink);
 
     return (
         <div className="container mx-auto p-8 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-300 min-h-screen">
@@ -78,15 +78,13 @@ const ClubDetailsPage = () => {
                     transition={{ duration: 0.3, delay: 0.1 }}
                 >
                     <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Social Links</h3>
-                    {clubInfo?.socialLinks?.length ? (
+                    {clubInfo?.socialLink ? (
                         <ul className="space-y-2">
-                            {clubInfo.socialLinks.map((link, index) => (
-                                <li key={index} className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition">
-                                    <a href={link} target="_blank" rel="noopener noreferrer">
-                                        {link}
-                                    </a>
-                                </li>
-                            ))}
+                            <li className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition">
+                                <a target="_blank" rel="noopener noreferrer">
+                                    {clubInfo?.socialLink}
+                                </a>
+                            </li>
                         </ul>
                     ) : (
                         <p className="text-gray-500 dark:text-gray-400">No social links available</p>

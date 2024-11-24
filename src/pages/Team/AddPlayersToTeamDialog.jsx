@@ -53,6 +53,13 @@ const AddPlayersToTeamDialog = ({ clubId, teamId }) => {
             toast.error(err?.data?.message || "Error occurred");
         }
     };
+    const handleSelectAll = () => {
+        if (selectedPlayers.length === players.length) {
+            setSelectedPlayers([]);
+        } else {
+            setSelectedPlayers(players.map((player) => player._id));
+        }
+    };
 
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -70,10 +77,20 @@ const AddPlayersToTeamDialog = ({ clubId, teamId }) => {
                 <p className="text-center text-gray-300 mb-6">
                     Select the player(s) to add to the team.
                 </p>
+
                 {
                     playerLoading ? <div>Loading...</div> :
 
                         <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="flex justify-end mb-4">
+                                <button
+                                    type="button"
+                                    onClick={handleSelectAll}
+                                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors duration-200"
+                                >
+                                    {selectedPlayers.length === players.length ? "Deselect All" : "Select All"}
+                                </button>
+                            </div>
                             <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                                 {players?.length === 0 ? (
                                     <div className="col-span-full text-base text-gray-500">No Players</div>

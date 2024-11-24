@@ -4,6 +4,8 @@ import { useAddPlayerToClubReqMutation } from '../../slices/player/playerApiSlic
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { FaPlus } from 'react-icons/fa';
+import placeholderImage from '../../assets/club.png';
+
 
 const UserPlayerCard = ({ player }) => {
     const { isAuthenticated, userType, userInfo } = useSelector((state) => state.auth);
@@ -45,7 +47,7 @@ const UserPlayerCard = ({ player }) => {
             <div className="flex justify-between items-center mb-4">
                 <img
                     className="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600"
-                    src={player?.currentTeam?.teamLogo || player?.associatedClub?.clubLogo || 'https://via.placeholder.com/40'}
+                    src={player?.currentTeam?.teamLogo || player?.associatedClub?.clubLogo || placeholderImage}
                     alt="Team Logo"
                 />
                 <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate">
@@ -70,7 +72,7 @@ const UserPlayerCard = ({ player }) => {
             <div className="flex flex-col items-center">
                 <img
                     className="h-24 w-24 md:h-28 md:w-28 rounded-full border-2 border-blue-500 dark:border-blue-400 object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
-                    src={player?.profilePicture || 'https://via.placeholder.com/80'}
+                    src={player?.profilePicture || 'http://res.cloudinary.com/dm01cdawj/image/upload/v1731596356/jqtqcjuezidhg3ij5mw4.png'}
                     alt={player?.playerName}
                 />
                 <div className="mt-3 flex items-center space-x-2">
@@ -87,7 +89,7 @@ const UserPlayerCard = ({ player }) => {
             <div className="absolute inset-0 bg-black bg-opacity-50 group-hover:bg-opacity-70 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out rounded-xl backdrop-blur-sm">
                 <img
                     className="h-20 w-20 md:h-24 md:w-24 rounded-full mx-auto border-2 border-white dark:border-gray-800 object-cover mb-3"
-                    src={player?.profilePicture || 'https://via.placeholder.com/80'}
+                    src={player?.profilePicture || 'http://res.cloudinary.com/dm01cdawj/image/upload/v1731596356/jqtqcjuezidhg3ij5mw4.png'}
                     alt={player?.playerName}
                 />
                 <h3 className="text-lg font-semibold text-white dark:text-gray-300">{player?.playerName}</h3>

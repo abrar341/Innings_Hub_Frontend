@@ -93,7 +93,7 @@ const PlayerList = () => {
                     <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
                         <img
                             className="object-cover w-full h-full rounded-full"
-                            src={row.original.profilePicture}
+                            src={row.original.profilePicture || "http://res.cloudinary.com/dm01cdawj/image/upload/v1731596356/jqtqcjuezidhg3ij5mw4.png"}
                             alt={row.original.playerName}
                             loading="lazy"
                         />
