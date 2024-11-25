@@ -219,8 +219,8 @@ const Team = () => {
 
                                                     <div className="flex flex-col items-center">
                                                         <img
-                                                            className="w-12 h-12 mb-2 rounded-full"
-                                                            src={player?.profilePicture || 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-photo-placeholder-icon-grey-profile-picture-businessman-no-face-free-vector.jpg'}
+                                                            className="w-12 h-12 mb-2 rounded-full object-cover"
+                                                            src={player?.profilePicture || 'http://res.cloudinary.com/dm01cdawj/image/upload/v1731596356/jqtqcjuezidhg3ij5mw4.png'}
                                                             alt={player.name}
                                                         />
                                                         <p className="font-semibold text-center dark:text-gray-300">{player?.playerName}</p>

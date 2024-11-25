@@ -146,11 +146,11 @@ const MatchCard1 = ({ id, matchData }) => {
                         matchInfo?.teams?.map((team, index) => (
                             <motion.div
                                 key={index}
-                                className="min-h-[60px] flex items-center space-x-3"
+                                className="min-h-[50px] flex items-center space-x-3"
                                 whileHover={{ scale: 1.02 }}
                             >
                                 <img
-                                    className="w-10 cursor-pointer"
+                                    className="w-10 rounded cursor-pointer"
                                     src={team.teamLogo}
                                     alt={team.teamName}
                                     onClick={() => handleTeamClick(team?._id)}

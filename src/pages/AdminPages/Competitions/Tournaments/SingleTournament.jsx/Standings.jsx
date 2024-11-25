@@ -45,13 +45,13 @@ const Standings = () => {
                                             <table className="min-w-full rounded-lg overflow-hidden">
                                                 <thead className="bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-700 dark:to-blue-900 text-sm leading-normal">
                                                     <tr>
-                                                        <th className="py-4 px-6 text-left font-semibold w-1/4">Team</th>
-                                                        <th className="py-4 px-6 text-center font-semibold">Played</th>
-                                                        <th className="py-4 px-6 text-center font-semibold">Won</th>
-                                                        <th className="py-4 px-6 text-center font-semibold">Lost</th>
-                                                        <th className="py-4 px-6 text-center font-semibold">Tied</th>
-                                                        <th className="py-4 px-6 text-center font-semibold">Points</th>
-                                                        <th className="py-4 px-6 text-center font-semibold">Net Run Rate</th>
+                                                        <th className="py-4 text-gray-100 dark:text-gray-100 px-6 text-left font-semibold w-1/4">Team</th>
+                                                        <th className="py-4 text-gray-100 dark:text-gray-100 px-6 text-center font-semibold">Played</th>
+                                                        <th className="py-4 text-gray-100 dark:text-gray-100 px-6 text-center font-semibold">Won</th>
+                                                        <th className="py-4 text-gray-100 dark:text-gray-100 px-6 text-center font-semibold">Lost</th>
+                                                        <th className="py-4 text-gray-100 dark:text-gray-100 px-6 text-center font-semibold">Tied</th>
+                                                        <th className="py-4 text-gray-100 dark:text-gray-100 px-6 text-center font-semibold">Points</th>
+                                                        <th className="py-4 text-gray-100 dark:text-gray-100 px-6 text-center font-semibold">Net Run Rate</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-100 text-sm font-light">
@@ -74,8 +74,8 @@ const Standings = () => {
                                                             <td className="py-3 px-6 text-center">
                                                                 <span
                                                                     className={`py-1 px-2 rounded-lg ${standing.netRunRate >= 0
-                                                                            ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-400'
-                                                                            : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-400'
+                                                                        ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-400'
+                                                                        : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-400'
                                                                         }`}
                                                                 >
                                                                     {standing.netRunRate.toFixed(2)}

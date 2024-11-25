@@ -211,8 +211,8 @@ const Squads = () => {
                                                 >
                                                     <div className="flex items-center">
                                                         <img
-                                                            className="mr-3 h-10 w-10 rounded-full"
-                                                            src={player.profilePicture || 'https://static.vecteezy.com/system/resources/thumbnails/005/720/408/small_2x/crossed-image-icon-picture-not-available-delete-picture-symbol-free-vector.jpg'} // Default avatar if none
+                                                            className="mr-3 h-10 w-10 rounded-full object-cover"
+                                                            src={player.profilePicture || 'http://res.cloudinary.com/dm01cdawj/image/upload/v1731596356/jqtqcjuezidhg3ij5mw4.png'} // Default avatar if none
                                                             alt={player.playerName}
                                                         />
                                                         <div>

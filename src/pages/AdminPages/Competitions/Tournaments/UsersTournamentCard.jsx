@@ -78,7 +78,7 @@ const UsersTournamentCard = ({ tournament }) => {
                 </div>
 
                 {/* Conditionally render "RegisterTeamToTournament" if registration is still open */}
-                {isAuthenticated && userType === 'club-manager' && currentDate < registrationDeadline && (
+                {isAuthenticated && userType === 'club-manager' && tournament?.status === 'Upcoming' && (
                     <RegisterTeamToTournament tournamentId={tournament?._id} />
                 )}
             </div>

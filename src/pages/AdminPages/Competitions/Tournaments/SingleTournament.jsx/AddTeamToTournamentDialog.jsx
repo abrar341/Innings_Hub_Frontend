@@ -35,14 +35,14 @@ const AddTeamToTournamentDialog = ({ tournamentId }) => {
 
     const navigate = useNavigate();
 
-    const handleSelectTeam = (teamId) => {
-        setSelectedTeams((prevSelected) => {
-            if (prevSelected.includes(teamId)) {
-                return prevSelected.filter((id) => id !== teamId);
-            }
-            return [...prevSelected, teamId];
-        });
-    };
+    // const handleSelectTeam = (teamId) => {
+    //     setSelectedTeams((prevSelected) => {
+    //         if (prevSelected.includes(teamId)) {
+    //             return prevSelected.filter((id) => id !== teamId);
+    //         }
+    //         return [...prevSelected, teamId];
+    //     });
+    // };
     const handleSubmit = async (e) => {
         console.log(selectedTeams);
         e.preventDefault();
@@ -59,6 +59,22 @@ const AddTeamToTournamentDialog = ({ tournamentId }) => {
         } catch (err) {
             toast.dismiss();
             toast.error(err?.data?.message || "Error occurred");
+        }
+    };
+    const handleSelectTeam = (teamId) => {
+        setSelectedTeams((prev) => {
+            if (prev.includes(teamId)) {
+                return prev.filter((id) => id !== teamId); // Deselect if already selected
+            }
+            return [...prev, teamId]; // Add to selection
+        });
+    };
+
+    const handleSelectAll = () => {
+        if (selectedTeams.length === teams.length) {
+            setSelectedTeams([]); // Deselect all
+        } else {
+            setSelectedTeams(teams.map((team) => team._id)); // Select all
         }
     };
 
@@ -80,20 +96,28 @@ const AddTeamToTournamentDialog = ({ tournamentId }) => {
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Select All Button */}
+                    <div className="flex justify-end mb-4">
+                        <button
+                            type="button"
+                            onClick={handleSelectAll}
+                            className="text-sm bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
+                        >
+                            {selectedTeams?.length === teams?.length ? "Deselect All" : "Select All"}
+                        </button>
+                    </div>
+
                     <div className="max-h-60 overflow-y-auto grid grid-cols-1 gap-4">
                         {teams.map((team) => (
-                            <div key={team._id} className="flex items-center space-x-4">
-                                <input
-                                    type="checkbox"
-                                    id={`team-${team.id}`}
-                                    value={team.id}
-                                    checked={selectedTeams.includes(team._id)}
-                                    onChange={() => handleSelectTeam(team._id)}
-                                    className="h-5 w-5 text-green-600 bg-gray-700 border-gray-600 rounded-lg focus:ring-green-500"
-                                />
-                                <label htmlFor={`team-${team.id}`} className="text-gray-300 font-medium">
-                                    {team.teamName}
-                                </label>
+                            <div
+                                key={team._id}
+                                className={`flex items-center space-x-4 p-2 rounded-lg cursor-pointer transition-colors duration-200 ${selectedTeams.includes(team._id)
+                                    ? 'bg-green-600 text-white'
+                                    : 'bg-gray-700 text-gray-300'
+                                    }`}
+                                onClick={() => handleSelectTeam(team._id)} // Toggle selection on click
+                            >
+                                <span className="font-medium">{team.teamName}</span>
                             </div>
                         ))}
                     </div>
@@ -109,9 +133,10 @@ const AddTeamToTournamentDialog = ({ tournamentId }) => {
                     </motion.button>
                 </form>
 
-                <DialogClose asChild>
-                </DialogClose>
+                <DialogClose asChild />
             </DialogContent>
+
+
         </Dialog>
     );
 };

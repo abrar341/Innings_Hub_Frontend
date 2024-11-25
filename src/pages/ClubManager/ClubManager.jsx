@@ -67,42 +67,77 @@ const ClubManager = () => {
     }
 
     // Handle pending club registration status
+    // Handle pending club registration status
     if (userInfo?.club.registrationStatus === 'pending' || !userInfo?.club.registrationStatus) {
         return (
             <>
                 {sharedHeader}
                 <div className="flex flex-col items-center justify-center h-[300px]">
-                    <h2 className="text-2xl font-bold text-yellow-500 mb-4">
-                        Your club registration status is Pending.
-                    </h2>
-                    <p className="text-gray-600">
-                        Please wait for approval from the association before accessing the control panel.
-                    </p>
+                    <div className="bg-yellow-50 dark:bg-gray-800 shadow-lg border border-yellow-200 dark:border-gray-700 rounded-lg p-6 max-w-lg text-center">
+                        <h2 className="text-2xl font-bold text-yellow-500 dark:text-yellow-400 mb-4">
+                            Your club registration status is Pending.
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                            Please wait for approval from the association before accessing the control panel.
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Need assistance? Contact support for further information.
+                        </p>
+                    </div>
                 </div>
             </>
         );
     }
 
+
+
+    // Handle rejected club registration status
+    // Handle rejected club registration status
     // Handle rejected club registration status
     if (userInfo?.club.registrationStatus === 'rejected') {
         return (
             <>
                 {sharedHeader}
-                <div className="flex flex-col items-center justify-center h-[300px]">
-                    <h2 className="text-2xl font-bold text-yellow-500 mb-4">
-                        Your club registration application is rejected.
-                    </h2>
-                    <p className="text-gray-600">
-                        Please review your application and submit again.
-                    </p>
-                    <p className="text-gray-600">
-                        Check the {userInfo?.club?.rejectionReason}
-                    </p>
-                    <button onClick={handleReviewClick} className='px-4 py-2 mt-4 border border-gray-400 rounded'>Review Form</button>
+                <div className="flex flex-col items-center justify-center h-[300px] mt-4">
+                    <div className="bg-red-50 dark:bg-gray-800 shadow-md border border-red-300 dark:border-gray-700 rounded-lg p-8 max-w-lg text-center">
+                        <div className="flex items-center justify-center mb-4">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-10 w-10 text-red-500 dark:text-red-400"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="15" y1="9" x2="9" y2="15" />
+                                <line x1="9" y1="9" x2="15" y2="15" />
+                            </svg>
+                        </div>
+                        <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">
+                            Application Rejected
+                        </h2>
+                        <p className="text-gray-700 dark:text-gray-300 mb-4">
+                            Unfortunately, your club registration application was rejected.
+                        </p>
+                        <p className="text-gray-600 dark:text-gray-400 mb-6 italic">
+                            Reason: <span className="font-medium">{userInfo?.club?.rejectionReason}</span>
+                        </p>
+                        <button
+                            onClick={handleReviewClick}
+                            className="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 dark:hover:bg-red-700 transition"
+                        >
+                            Review and Resubmit
+                        </button>
+                    </div>
                 </div>
             </>
         );
     }
+
+
 
     // else {
     //     navigate('/dashboard');

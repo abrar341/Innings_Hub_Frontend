@@ -110,6 +110,20 @@ const RegisterTeamToTournament = ({ tournamentId }) => {
             }
         });
     };
+    const handleSelectAll = () => {
+        const playerIds = currentTeam?.players.map((player) => player._id);
+        setSelectedPlayersForTeams((prev) => ({
+            ...prev,
+            [currentTeam._id]: playerIds,
+        }));
+    };
+
+    const handleDeselectAll = () => {
+        setSelectedPlayersForTeams((prev) => ({
+            ...prev,
+            [currentTeam._id]: [],
+        }));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -240,11 +254,39 @@ const RegisterTeamToTournament = ({ tournamentId }) => {
                     <p className="text-center text-gray-300 mb-6">
                         Select players for the team (minimum 11, maximum 15).
                     </p>
+
+                    {/* Select All Button */}
+                    <div className="flex justify-between items-center mb-4">
+                        <button
+                            className="text-sm font-medium px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-200"
+                            onClick={() => {
+                                if (
+                                    selectedPlayersForTeams[currentTeam?._id]?.length ===
+                                    currentTeam?.players.length
+                                ) {
+                                    // Deselect all if all are already selected
+                                    handleDeselectAll();
+                                } else {
+                                    // Select all
+                                    handleSelectAll();
+                                }
+                            }}
+                        >
+                            {selectedPlayersForTeams[currentTeam?._id]?.length ===
+                                currentTeam?.players.length
+                                ? "Deselect All"
+                                : "Select All"}
+                        </button>
+                    </div>
+
+                    {/* Player List */}
                     <div className="max-h-60 overflow-y-auto custom-scrollbar grid grid-cols-3 gap-4">
                         {currentTeam?.players.map((player) => (
                             <div
                                 key={player._id}
-                                className={`p-4 rounded-lg cursor-pointer transition-all duration-200 ${selectedPlayersForTeams[currentTeam._id]?.includes(player._id) ? 'bg-green-500 text-white' : 'bg-gray-700 text-gray-300'
+                                className={`p-4 rounded-lg cursor-pointer transition-all duration-200 ${selectedPlayersForTeams[currentTeam._id]?.includes(player._id)
+                                    ? "bg-green-500 text-white"
+                                    : "bg-gray-700 text-gray-300"
                                     }`}
                                 onClick={() => handlePlayerSelect(player._id)} // Use the actual player ID
                             >
@@ -266,6 +308,7 @@ const RegisterTeamToTournament = ({ tournamentId }) => {
                     <DialogClose asChild />
                 </DialogContent>
             </Dialog>
+
         </>
     );
 };

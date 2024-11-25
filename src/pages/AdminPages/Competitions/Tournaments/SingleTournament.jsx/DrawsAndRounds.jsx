@@ -66,7 +66,9 @@ const DrawsAndRounds = () => {
 
         } catch (error) {
             console.error('Failed to delete the round:', error);
-            toast.error('Failed to delete the round');
+            toast.error(error?.data?.message || 'Failed to delete the round');
+            setIsAlertOpen(false);
+
         } finally {
             setDeleteLoading(false);  // Reset loading state
         }
@@ -98,7 +100,10 @@ const DrawsAndRounds = () => {
 
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
-            <CreateRoundDialog tournamentId={tournamentId} confirmedTeams={squads} />
+            {
+                rounds?.length === 0 &&
+                (<CreateRoundDialog tournamentId={tournamentId} confirmedTeams={squads} />)
+            }
 
             {/* Show a spinner if loading rounds */}
             {gettingRounds ? (
@@ -115,7 +120,7 @@ const DrawsAndRounds = () => {
                             className="bg-white p-4 border rounded-lg mb-4 shadow-lg"
                         >
                             {/* Round Header */}
-                            <div className="flex justify-between items-center cursor-pointer p-4 rounded-lg" onClick={() => toggleRound(round._id)}>
+                            <div className="flex justify-between items-center cursor-pointer p-4 rounded-lg" onClick={() => toggleRound(round?._id)}>
                                 <div className="flex items-center">
                                     <div className="text-left">
                                         <h2 className="text-2xl font-extrabold text-gray-600">{round?.roundName} {round?.isFinalRound && "(Final)"} </h2>
@@ -124,7 +129,7 @@ const DrawsAndRounds = () => {
 
                                 {/* Arrow icon toggles based on open/close state */}
                                 <div className="flex items-center">
-                                    <span className="text-gray-500 mr-2 text-sm">Groups: {round.groups.length}</span>
+                                    <span className="text-gray-500 mr-2 text-sm">Groups: {round?.groups?.length}</span>
                                     {activeRound === round._id ? (
                                         <IoIosArrowUp className="text-xl" />
                                     ) : (
@@ -177,9 +182,8 @@ const DrawsAndRounds = () => {
                                             </div>
                                             <div className='flex justify-end'>
                                                 <button onClick={() => handleUpdatePoints(round, group)}
-                                                    className={`flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-200 ${!round?.completed ? 'hover:from-blue-700 hover:to-indigo-700' : 'opacity-50 cursor-not-allowed'
-                                                        }`}
-                                                    disabled={round?.completed || pointtableisLoading}
+                                                    className={`flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-200 `}
+                                                    disabled={pointtableisLoading}
                                                 >                                                {pointtableisLoading ? 'Updating...' : 'Update'}
                                                 </button>
                                             </div>

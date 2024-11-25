@@ -66,7 +66,7 @@ const ScoreCard_Innings = () => {
                         {batsmen?.map((batsman, index) => (
                             <tr key={index} className="border-b dark:border-gray-700">
                                 <td className="py-2 px-4 flex items-center text-gray-800 dark:text-gray-200">
-                                    <img className="w-10 h-10 rounded-full mr-3" src={batsman?.player.profilePicture} alt={batsman?.playerName} />
+                                    <img className="w-10 h-10 rounded-full mr-3" src={batsman?.player.profilePicture || "http://res.cloudinary.com/dm01cdawj/image/upload/v1731596356/jqtqcjuezidhg3ij5mw4.png"} alt={batsman?.playerName} />
                                     {batsman?.player?._id === currentInning?.currentStriker?._id ? (
                                         <span className='px-3 py-2 font-bold'>*</span>
                                     ) : <span className='px-3 py-2 font-bold'></span>}
