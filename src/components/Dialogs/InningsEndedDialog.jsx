@@ -41,9 +41,6 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
             const roundId = matchInfo?.round;
             // const teamIds = ['team1', 'team2'];
             const teamIds = matchInfo.teams.map(team => team._id);
-            console.log(roundId, teamIds);
-
-
             // Trigger the mutation
             await updatePointsTable({ roundId, teamIds });
             toast.success('points table updated successfully')
@@ -54,10 +51,7 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
 
     const handleUpdateStats = async () => {
         try {
-            console.log("here");
-
             await updatePlayerStats({ matchId });
-
             toast.success("Player stats updated successfully.");
         } catch (error) {
             console.error("Failed to update player stats:", error);
@@ -66,10 +60,7 @@ const InningsEndedDialog = ({ matchInfo, remainingWickets, remainRuns, winingTea
 
     const handleUpdateTeamStats = async () => {
         try {
-            console.log("here");
-
             await updateTeamStats({ matchId });
-
             toast.success("Team stats updated successfully.");
         } catch (error) {
             console.error("Failed to update team stats:", error);

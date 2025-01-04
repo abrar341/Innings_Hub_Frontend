@@ -88,7 +88,10 @@ const ScoreCard_Innings = () => {
                         ))}
                     </tbody>
                 </table>
+                <div className="p-4 border-b flex justify-between bg-gray-100 text-gray-700">
+                    <p>Extras: 10 (b 1, lb 2, w 5, nb 2)</p>
 
+                </div>
                 <div className="p-4 bg-gray-50 dark:bg-gray-700">
                     <h2 className="text-xl font-bold mb-3 text-gray-800 dark:text-gray-200">Fall of Wickets</h2>
                     <div className="flex flex-wrap">

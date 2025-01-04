@@ -15,6 +15,7 @@ import CurrentStriker from '../pages/Match/ScoreCard/CurrentStriker';
 import { TypographyH2 } from './ui/typography';
 import MatchClickDialog from './MathcClickDialog';
 import PlayerRetiredDialog from './Dialogs/PlayerRetiredDialog';
+import { useUpdatePointsTableMutation } from '../slices/match/matchApiSlice';
 
 // Connect to the backend socket server
 
@@ -30,6 +31,7 @@ const Scorer = () => {
     const [fielderInvolved, setFielderInvolved] = useState(false); // State to open/close dialog
     const [playerRetired, setPlayerRetired] = useState(false); // State to open/close dialog
     console.log(matchInfo);
+    const [updatePointsTable, { isLoading: pointtableisLoading, isSuccess: pointtableisSuccess, error }] = useUpdatePointsTableMutation();
 
     const [currentInning, setCurrentInning] = useState(null); // Track current inning
     const onSubmit = (data) => {
@@ -187,7 +189,7 @@ const Scorer = () => {
             console.error("Match ID is not available for undo action");
         }
     };
-
+    9
     socket.on('NewInningsStarted', (match) => {
         console.log("Updated match data received:", match);
         if (match) {
@@ -199,7 +201,27 @@ const Scorer = () => {
         }
 
     });
+    const handleUpdatePoints = async () => {
+        try {
+            // Define the parameters you want to send in the request
+            const roundId = matchInfo?.round;
+            // const teamIds = ['team1', 'team2'];
+            const teamIds = matchInfo?.teams.map(team => team._id);
+            // Trigger the mutation
+            await updatePointsTable({ roundId, teamIds });
+            toast.success('points table updated successfully')
+        } catch (err) {
+            console.error('Failed to update points table:', err);
+        }
+    };
 
+    useEffect(() => {
+        if (matchInfo?.status === 'completed') {
+            console.log("here we go");
+
+            handleUpdatePoints()
+        }
+    }, [matchInfo?.status]);
     const currentInning2 = matchInfo?.innings?.[matchInfo?.currentInning - 1];
     const battingTeamId = currentInning2?.team?._id; // Get the team ID for this inning
     const battingTeam = matchInfo?.playing11?.find((team) => team?.team?._id === battingTeamId);
